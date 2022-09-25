@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "airbnb",
+    "airbnb-typescript"
+  ],
+  "plugins": ["react", "@typescript-eslint"],
+  "env": {
+    "jest": true,
+    "browser": true,
+    "es6": true
+  },
+  "rules": {
+    "@typescript-eslint/quotes": ["error", "double"]
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  }
+}
