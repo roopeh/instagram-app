@@ -1,0 +1,23 @@
+.appBar {
+  background-image: linear-gradient(rgb(90, 128, 162), rgb(60, 100, 136));
+  margin: -8px;
+  padding: 10px 8px;
+}
+
+.appBar .content {
+  width: 50%;
+  min-width: 500px;
+  max-width: 1000px;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.appBar .logo {
+  width: 125px;
+  height: 42px;
+}
+
+.appBar .profile {
+  margin-left: auto;
+}
