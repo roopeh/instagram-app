@@ -1,12 +1,29 @@
+:root {
+  --borderColorDark: rgb(211, 211, 211);
+  --borderColorLight: rgb(227, 227, 227);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(216, 216, 216);
+}
+
 .appBar {
   background-image: linear-gradient(rgb(90, 128, 162), rgb(60, 100, 136));
-  margin: -8px;
   padding: 10px 8px;
 }
 
 .appBar .content {
   width: 50%;
-  min-width: 500px;
+  min-width: 400px;
   max-width: 1000px;
   display: flex;
   align-items: center;
@@ -20,4 +37,79 @@
 
 .appBar .profile {
   margin-left: auto;
+}
+
+.profileBackground {
+  width: 100%;
+  min-height: 110px;
+  background-image: linear-gradient(rgb(36, 36, 36), rgb(41, 41, 41));
+}
+
+.profileCoverPhoto {
+  width: 55%;
+  min-width: 400px;
+  max-width: 1050px;
+  min-height: 80px;
+  margin: -82px auto 0;
+  border: 2px solid black;
+  border-bottom: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: rgb(68, 68, 68);
+}
+
+.profileContainer {
+  width: 55%;
+  /* 100vh - profile cover photo height - logo height - appbar padding - borders */
+  min-height: calc(100vh - 110px - 42px - (10px * 2) - (2px * 2));
+  min-width: 400px;
+  max-width: 1050px;
+  margin: 0 auto 0;
+  background-color: rgb(234, 234, 234);
+  border: 2px solid var(--borderColorDark);
+  border-top: 0;
+}
+
+.profileTopBar {
+  width: 100%;
+  min-width: 400px;
+  padding-bottom: 30px;
+  background-color: rgb(252, 252, 252);
+  border-bottom: 2px solid var(--borderColorLight);
+}
+
+.profileTopBar .profilePicture {
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 110px;
+  max-height: 135px;
+  background-color: white;
+  margin-top: -55px;
+  margin-left: 25px;
+  border: 1px solid var(--borderColorLight);
+  border-radius: 5px;
+}
+
+.profileTopBar .profilePicture .picture {
+  width: 100px;
+  height: 100px;
+  margin-top: 5px;
+  border: 1px solid var(--borderColorDark);
+  border-radius: 5px;
+}
+
+.profileTopBar .textContainer {
+  display: flex;
+  width: calc(100% - (25px + 30px));
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 0 30px;
+  padding-top: 15px;
+}
+
+.profileTopBar .textContainer .fillerFlex {
+  flex: 0 0 130px;
 }
