@@ -1,6 +1,8 @@
 :root {
   --borderColorDark: rgb(211, 211, 211);
   --borderColorLight: rgb(227, 227, 227);
+  --profileCoverPhotoHeight: 80px;
+  --profileBackgroundHeight: calc(var(--profileCoverPhotoHeight) + 30px)
 }
 
 html, body {
@@ -41,7 +43,7 @@ html, body {
 
 .profileBackground {
   width: 100%;
-  min-height: 110px;
+  min-height: var(--profileBackgroundHeight);
   background-image: linear-gradient(rgb(36, 36, 36), rgb(41, 41, 41));
 }
 
@@ -49,8 +51,8 @@ html, body {
   width: 55%;
   min-width: 400px;
   max-width: 1050px;
-  min-height: 80px;
-  margin: -82px auto 0;
+  min-height: var(--profileCoverPhotoHeight);
+  margin: calc(var(--profileCoverPhotoHeight) * -1 - 2px) auto 0;
   border: 2px solid black;
   border-bottom: 0;
   border-top-left-radius: 8px;
@@ -60,10 +62,11 @@ html, body {
 
 .profileContainer {
   width: 55%;
-  /* 100vh - profile cover photo height - logo height - appbar padding - borders */
-  min-height: calc(100vh - 110px - 42px - (10px * 2) - (2px * 2));
   min-width: 400px;
   max-width: 1050px;
+  min-height:
+    /* 100vh - profile background height - logo height - appbar padding - border */
+    calc(100vh - var(--profileBackgroundHeight) - 42px - (10px * 2) - 2px);
   margin: 0 auto 0;
   background-color: rgb(234, 234, 234);
   border: 2px solid var(--borderColorDark);
