@@ -11,7 +11,7 @@ const App = () => {
       <AppBar />
       <Routes>
         <Route path="/" element={<div>Hello from main!</div>} />
-        <Route path="/:userId" element={<ProfilePage />} />
+        <Route path="/:userId/*" element={<ProfilePage />} />
       </Routes>
     </div>
   );

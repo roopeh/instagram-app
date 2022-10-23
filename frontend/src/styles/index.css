@@ -10,6 +10,8 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
 }
 
 .background {
@@ -76,7 +78,7 @@ html, body {
 .profileTopBar {
   width: 100%;
   min-width: 400px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
   background-color: rgb(252, 252, 252);
   border-bottom: 2px solid var(--borderColorLight);
 }
@@ -92,6 +94,7 @@ html, body {
   background-color: white;
   margin-top: -55px;
   margin-left: 25px;
+  padding-bottom: 10px;
   border: 1px solid var(--borderColorLight);
   border-radius: 5px;
 }
@@ -104,7 +107,14 @@ html, body {
   border-radius: 5px;
 }
 
-.profileTopBar .textContainer {
+.profileTopBar .profilePicture .mainButton {
+  width: 100px;
+  margin-top: 5px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.profileTopBar .textFlexBox {
   display: flex;
   width: calc(100% - (25px + 30px));
   justify-content: space-evenly;
@@ -113,6 +123,77 @@ html, body {
   padding-top: 15px;
 }
 
-.profileTopBar .textContainer .fillerFlex {
+.profileTopBar .textFlexBox .fillerFlex {
   flex: 0 0 130px;
+}
+
+.profileTopBar .textFlexBox .textContainer {
+  flex: 4;
+}
+
+.profileTopBar .buttonOuterBox {
+  display: block;
+  padding: 5px;
+  background-color: rgb(249, 249, 249);
+  border: 2px solid var(--borderColorLight);
+  border-radius: 5px;
+}
+
+.profileTopBar .buttonOuterBox .buttonFlexBox {
+  display: flex;
+  flex-direction: row;
+}
+
+.profileTopBar .buttonOuterBox .buttonFlexBox .textBox {
+  padding: 0 6px;
+  padding-bottom: 5px;
+  border-right: 1px solid var(--borderColorDark);
+  text-align: center;
+}
+
+.profileTopBar .buttonOuterBox .buttonFlexBox .textBox .numbers {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(38, 38, 38);
+  margin-bottom: -2px;
+}
+
+.profileTopBar .buttonOuterBox .buttonFlexBox .textBox .label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgb(142, 142, 142);
+}
+
+.overlayModal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #FFFFFF;
+}
+
+.overlayModal div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.strongerFont {
+  font-size: larger;
+  font-weight: 600;
+}
+
+.smallerButBoldedFont {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(38, 38, 38);
+}
+
+.smallerGrayedFont {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(142, 142, 142);
 }
