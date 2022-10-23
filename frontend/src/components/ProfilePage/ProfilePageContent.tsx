@@ -22,7 +22,7 @@ const ProfilePageContent = () => {
           element={(
             <div
               aria-hidden="true"
-              className="overlayModal"
+              className="profilePage__imageModal"
               onClick={() => navigate(-1)}
               onKeyDown={() => navigate(-1)}
             >

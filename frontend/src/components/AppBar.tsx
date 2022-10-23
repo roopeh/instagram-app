@@ -3,9 +3,9 @@ import logo from "../assets/logo.png";
 
 const AppBar = () => (
   <div className="appBar">
-    <div className="content">
-      <img src={logo} alt="Instagram" className="logo" />
-      <span className="profile">
+    <div className="appBar__content">
+      <img src={logo} alt="Instagram" className="appBar__logo" />
+      <span className="appBar__profile">
         profile
       </span>
     </div>

@@ -13,10 +13,10 @@ const ProfilePage = () => {
   root.style.setProperty("--profileCoverPhotoHeight", "400px");
   return (
     <div>
-      <div className="profileBackground" />
-      <div className="profileCoverPhoto" />
+      <div className="profilePage__background" />
+      <div className="profilePage__coverPhoto" />
 
-      <div className="profileContainer">
+      <div className="profilePage__container">
         <ProfilePageTop username={username} />
         <ProfilePageContent />
       </div>

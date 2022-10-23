@@ -25,7 +25,7 @@ html, body {
   padding: 10px 8px;
 }
 
-.appBar .content {
+.appBar__content {
   width: 50%;
   min-width: 400px;
   max-width: 1000px;
@@ -34,22 +34,22 @@ html, body {
   margin: 0 auto;
 }
 
-.appBar .logo {
+.appBar__logo {
   width: 125px;
   height: 42px;
 }
 
-.appBar .profile {
+.appBar__profile {
   margin-left: auto;
 }
 
-.profileBackground {
+.profilePage__background {
   width: 100%;
   min-height: var(--profileBackgroundHeight);
   background-image: linear-gradient(rgb(36, 36, 36), rgb(41, 41, 41));
 }
 
-.profileCoverPhoto {
+.profilePage__coverPhoto {
   width: 55%;
   min-width: 400px;
   max-width: 1050px;
@@ -62,7 +62,7 @@ html, body {
   background-color: rgb(68, 68, 68);
 }
 
-.profileContainer {
+.profilePage__container {
   width: 55%;
   min-width: 400px;
   max-width: 1050px;
@@ -75,7 +75,7 @@ html, body {
   border-top: 0;
 }
 
-.profileTopBar {
+.profilePage__topBar {
   width: 100%;
   min-width: 400px;
   padding-bottom: 20px;
@@ -83,7 +83,7 @@ html, body {
   border-bottom: 2px solid var(--borderColorLight);
 }
 
-.profileTopBar .profilePicture {
+.profilePage__profilePicture {
   display: flex;
   position: absolute;
   flex-direction: row;
@@ -99,7 +99,7 @@ html, body {
   border-radius: 5px;
 }
 
-.profileTopBar .profilePicture .picture {
+.profilePage__profilePicture__picture {
   width: 100px;
   height: 100px;
   margin-top: 5px;
@@ -107,14 +107,7 @@ html, body {
   border-radius: 5px;
 }
 
-.profileTopBar .profilePicture .mainButton {
-  width: 100px;
-  margin-top: 5px;
-  font-size: 9px;
-  font-weight: 600;
-}
-
-.profileTopBar .textFlexBox {
+.profilePage__topBar__textFlexBox {
   display: flex;
   width: calc(100% - (25px + 30px));
   justify-content: space-evenly;
@@ -123,15 +116,15 @@ html, body {
   padding-top: 15px;
 }
 
-.profileTopBar .textFlexBox .fillerFlex {
+.profilePage__topBar__fillerFlex {
   flex: 0 0 130px;
 }
 
-.profileTopBar .textFlexBox .textContainer {
+.profilePage__topBar__textContainer {
   flex: 4;
 }
 
-.profileTopBar .buttonOuterBox {
+.profilePage__buttonsOuterBox {
   display: block;
   padding: 5px;
   background-color: rgb(249, 249, 249);
@@ -139,32 +132,32 @@ html, body {
   border-radius: 5px;
 }
 
-.profileTopBar .buttonOuterBox .buttonFlexBox {
+.profilePage__buttonsFlexBox {
   display: flex;
   flex-direction: row;
 }
 
-.profileTopBar .buttonOuterBox .buttonFlexBox .textBox {
+.profilePage__buttonsFlexBox__textBox {
   padding: 0 6px;
   padding-bottom: 5px;
   border-right: 1px solid var(--borderColorDark);
   text-align: center;
 }
 
-.profileTopBar .buttonOuterBox .buttonFlexBox .textBox .numbers {
+.profilePage__buttonsFlexBox__number {
   font-size: 14px;
   font-weight: 700;
   color: rgb(38, 38, 38);
   margin-bottom: -2px;
 }
 
-.profileTopBar .buttonOuterBox .buttonFlexBox .textBox .label {
+.profilePage__buttonsFlexBox__label {
   font-size: 11px;
   font-weight: 600;
   color: rgb(142, 142, 142);
 }
 
-.overlayModal {
+.profilePage__imageModal {
   position: fixed;
   left: 0;
   top: 0;
@@ -174,7 +167,7 @@ html, body {
   color: #FFFFFF;
 }
 
-.overlayModal div {
+.profilePage__imageModal div {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -6,20 +6,25 @@ interface ProfileTopProps {
 }
 
 const ProfilePageTop = ({ username }: ProfileTopProps) => (
-  <div className="profileTopBar">
-    <div className="profilePicture">
-      <div className="picture">
+  <div className="profilePage__topBar">
+    <div className="profilePage__profilePicture">
+      <div className="profilePage__profilePicture__picture">
         profile picture
       </div>
       <div>
-        <Button variant="contained" className="mainButton">
+        <Button
+          variant="contained"
+          style={{
+            width: "100px", marginTop: "5px", fontSize: "9px", fontWeight: "600",
+          }}
+        >
           Edit Profile
         </Button>
       </div>
     </div>
-    <div className="textFlexBox">
-      <div className="fillerFlex" />
-      <div className="textContainer">
+    <div className="profilePage__topBar__textFlexBox">
+      <div className="profilePage__topBar__fillerFlex" />
+      <div className="profilePage__topBar__textContainer">
         <span className="strongerFont">
           {username}
         </span>
@@ -32,19 +37,19 @@ const ProfilePageTop = ({ username }: ProfileTopProps) => (
           Founder of Tesla!
         </span>
       </div>
-      <div className="buttonOuterBox">
-        <div className="buttonFlexBox">
-          <div className="textBox">
-            <div className="numbers">1282</div>
-            <div className="label">photos</div>
+      <div className="profilePage__buttonsOuterBox">
+        <div className="profilePage__buttonsFlexBox">
+          <div className="profilePage__buttonsFlexBox__textBox">
+            <div className="profilePage__buttonsFlexBox__number">1282</div>
+            <div className="profilePage__buttonsFlexBox__label">photos</div>
           </div>
-          <div className="textBox">
-            <div className="numbers">468</div>
-            <div className="label">following</div>
+          <div className="profilePage__buttonsFlexBox__textBox">
+            <div className="profilePage__buttonsFlexBox__number">468</div>
+            <div className="profilePage__buttonsFlexBox__label">following</div>
           </div>
-          <div className="textBox" style={{ border: 0 }}>
-            <div className="numbers">388322</div>
-            <div className="label">followers</div>
+          <div className="profilePage__buttonsFlexBox__textBox" style={{ border: 0 }}>
+            <div className="profilePage__buttonsFlexBox__number">388322</div>
+            <div className="profilePage__buttonsFlexBox__label">followers</div>
           </div>
         </div>
       </div>
