@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 import AppBar from "./components/AppBar";
 import ProfilePage from "./components/ProfilePage";
 import "./styles/index.css";
@@ -8,7 +9,10 @@ const App = () => {
   return (
     <div className="background">
       <AppBar />
-      <ProfilePage />
+      <Routes>
+        <Route path="/" element={<div>Hello from main!</div>} />
+        <Route path="/:userId" element={<ProfilePage />} />
+      </Routes>
     </div>
   );
 };
