@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.png";
+import "../styles/AppBar.css";
 
 const AppBar = () => (
   <div className="appBar">

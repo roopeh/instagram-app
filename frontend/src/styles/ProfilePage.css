@@ -1,46 +1,6 @@
 :root {
-  --borderColorDark: rgb(211, 211, 211);
-  --borderColorLight: rgb(227, 227, 227);
   --profileCoverPhotoHeight: 80px;
-  --profileBackgroundHeight: calc(var(--profileCoverPhotoHeight) + 30px)
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 15px;
-}
-
-.background {
-  width: 100%;
-  height: 100%;
-  background-color: rgb(216, 216, 216);
-}
-
-.appBar {
-  background-image: linear-gradient(rgb(90, 128, 162), rgb(60, 100, 136));
-  padding: 10px 8px;
-}
-
-.appBar__content {
-  width: 50%;
-  min-width: 400px;
-  max-width: 1000px;
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
-}
-
-.appBar__logo {
-  width: 125px;
-  height: 42px;
-}
-
-.appBar__profile {
-  margin-left: auto;
+  --profileBackgroundHeight: calc(var(--profileCoverPhotoHeight) + 30px);
 }
 
 .profilePage__background {
@@ -172,21 +132,4 @@ html, body {
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.strongerFont {
-  font-size: larger;
-  font-weight: 600;
-}
-
-.smallerButBoldedFont {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgb(38, 38, 38);
-}
-
-.smallerGrayedFont {
-  font-size: 13px;
-  font-weight: 400;
-  color: rgb(142, 142, 142);
 }

@@ -1,0 +1,30 @@
+:root {
+  --borderColorDark: rgb(211, 211, 211);
+  --borderColorLight: rgb(227, 227, 227);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+.strongerFont {
+  font-size: larger;
+  font-weight: 600;
+}
+
+.smallerButBoldedFont {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(38, 38, 38);
+}
+
+.smallerGrayedFont {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(142, 142, 142);
+}

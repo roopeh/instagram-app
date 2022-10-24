@@ -2,7 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AppBar from "./components/AppBar";
 import ProfilePage from "./components/ProfilePage";
-import "./styles/index.css";
+import "./styles/shared.css";
+import "./styles/App.css";
 
 // eslint-disable-next-line arrow-body-style
 const App = () => {

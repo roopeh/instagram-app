@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import ProfilePageContent from "./ProfilePageContent";
 import ProfilePageTop from "./ProfilePageTop";
+import "../../styles/ProfilePage.css";
 
 const ProfilePage = () => {
   const username = useParams().userId;
