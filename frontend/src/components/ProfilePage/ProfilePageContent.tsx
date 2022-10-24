@@ -3,7 +3,11 @@ import {
   Routes, Route, useNavigate,
 } from "react-router-dom";
 
-const ProfilePageContent = () => {
+interface ProfileContentProps {
+  coverPhotoFunc: any
+}
+
+const ProfilePageContent = ({ coverPhotoFunc }: ProfileContentProps) => {
   const navigate = useNavigate();
   return (
     <div>
@@ -14,6 +18,13 @@ const ProfilePageContent = () => {
         onClick={() => navigate("123")}
       >
         test overlay
+      </button>
+      <br />
+      <button
+        type="button"
+        onClick={coverPhotoFunc}
+      >
+        test cover photo
       </button>
 
       <Routes>

@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
+import musk from "../../assets/placeholders/musk.jpg";
+
 interface ProfileTopProps {
   username: string
 }
@@ -9,7 +11,7 @@ const ProfilePageTop = ({ username }: ProfileTopProps) => (
   <div className="profilePage__topBar">
     <div className="profilePage__profilePicture">
       <div className="profilePage__profilePicture__picture">
-        profile picture
+        <img src={musk} alt="" />
       </div>
       <div>
         <Button
@@ -23,19 +25,19 @@ const ProfilePageTop = ({ username }: ProfileTopProps) => (
       </div>
     </div>
     <div className="profilePage__topBar__textFlexBox">
-      <div className="profilePage__topBar__fillerFlex" />
       <div className="profilePage__topBar__textContainer">
         <span className="strongerFont">
           {username}
         </span>
-        <br />
-        <span className="smallerButBoldedFont">
-          Elon Musk
-        </span>
-        <br />
-        <span className="smallerGrayedFont">
-          Founder of Tesla!
-        </span>
+        <div className="profilePage__topBar__textContainer__userInfo">
+          <span className="smallerButBoldedFont" style={{ paddingRight: "10px" }}>
+            Elon Musk
+          </span>
+          <br />
+          <span className="smallerGrayedFont">
+            Founder of Tesla!
+          </span>
+        </div>
       </div>
       <div className="profilePage__buttonsOuterBox">
         <div className="profilePage__buttonsFlexBox">
