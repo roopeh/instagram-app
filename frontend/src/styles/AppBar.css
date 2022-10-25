@@ -4,9 +4,9 @@
 }
 
 .appBar__content {
-  width: 50%;
-  min-width: 400px;
-  max-width: 1000px;
+  width: var(--appBarWidthOfScreen);
+  min-width: calc(var(--minContentWidth) * 0.9);
+  max-width: calc(var(--maxContentWidth) * 0.9);
   display: flex;
   align-items: center;
   margin: 0 auto;

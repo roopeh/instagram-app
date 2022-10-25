@@ -1,6 +1,10 @@
 :root {
   --borderColorDark: rgb(211, 211, 211);
   --borderColorLight: rgb(227, 227, 227);
+  --appBarWidthOfScreen: 80%;
+  --contentWidthOfScreen: 85%;
+  --minContentWidth: 410px;
+  --maxContentWidth: 1050px;
 }
 
 html, body {
