@@ -1,28 +1,53 @@
 :root {
-  --profileCoverPhotoHeight: 80px;
-  --profileBackgroundHeight: calc(var(--profileCoverPhotoHeight) + 30px);
-  --contentPictureWidthHeight: calc(80vw / 5);
+  /* Variables used by React*/
+  --profileEmptyCoverPhotoHeight: 80px;
+  --profileDefaultCoverPhotoHeight: 150px;
+  --profileBackgroundHeightWithoutCoverPhoto: calc(var(--profileEmptyCoverPhotoHeight) + 20px);
+  --profileBackgroundMinHeightFormula: calc(var(--minProfileCoverPhotoHeight) + 20px);
+  --profileBackgroundMaxHeightFormula: calc(var(--maxContentWidth) / 3.5 + 20px);
+  --profileBackgroundHeightFormula: min(max(calc(100vw / 4.0), var(--profileBackgroundMinHeightFormula)), var(--profileBackgroundMaxHeightFormula));
+
+  --minProfileCoverPhotoHeight: var(--profileEmptyCoverPhotoHeight);
+  --profileBackgroundHeight: var(--profileBackgroundHeightWithoutCoverPhoto);
+  --profileBackgroundMaxHeight: var(--profileBackgroundHeightWithoutCoverPhoto);
+  --contentPictureWidthHeight: calc(80vw / 4.8);
   --minContentPictureWidthHeight: 150px;
   --maxContentPictureWidthHeight: 220px;
 }
 
 .profilePage__background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  min-height: var(--profileBackgroundHeight);
+  height: var(--profileBackgroundHeight);
   background-image: linear-gradient(rgb(36, 36, 36), rgb(41, 41, 41));
 }
 
-.profilePage__coverPhoto {
-  width: var(--contentWidthOfScreen);
-  min-width: var(--minContentWidth);
-  max-width: var(--maxContentWidth);
-  min-height: var(--profileCoverPhotoHeight);
-  margin: calc(var(--profileCoverPhotoHeight) * -1 - 1px) auto 0;
+.profilePage__background__topMargin {
+  flex: 0 0 20px;
+}
+
+.profilePage__background__coverPhoto {
+  --coverPhotoWidth: min(max(var(--contentWidthOfScreen), var(--minContentWidth)), var(--maxContentWidth));
+  display: flex;
+  width: var(--coverPhotoWidth);
+  min-height: calc(var(--minProfileCoverPhotoHeight) - 1px);
+  aspect-ratio: 3.5;
+  justify-content: center;
+  align-items: center;
   border: 1px solid black;
   border-bottom: 0;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   background-color: rgb(68, 68, 68);
+}
+
+.profilePage__background__coverPhoto img {
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .profilePage__container {
@@ -167,6 +192,10 @@
 
 .profilePage__imageContainer__dateText {
   flex: 1 0 20px;
+  padding-left: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgb(142, 142, 142);
 }
 
 .profilePage__imageContainer__imageBox {
