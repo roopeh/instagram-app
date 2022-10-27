@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 
 import musk from "../../assets/placeholders/musk.jpg";
+import PhotoModal from "./PhotoModal";
 
 interface ProfileContentProps {
   coverPhotoFunc: () => void
@@ -23,24 +24,7 @@ const ProfilePageContent = ({ coverPhotoFunc }: ProfileContentProps) => {
         </button>
 
         <Routes>
-          <Route
-            path="/:photoId"
-            element={(
-              <div
-                aria-hidden="true"
-                className="profilePage__imageModal"
-                onClick={() => navigate(-1)}
-              >
-                <div
-                  aria-hidden="true"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{ width: "100px", height: "100px", border: "5px solid white" }}
-                >
-                  Test modal
-                </div>
-              </div>
-          )}
-          />
+          <Route path="/:photoId" element={<PhotoModal />} />
         </Routes>
       </div>
       <div className="profilePage__imageFlex">

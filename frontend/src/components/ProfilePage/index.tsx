@@ -8,7 +8,7 @@ import test_cover from "../../assets/placeholders/cover_photo.jpg";
 
 const ProfilePage = () => {
   const username = useParams().userId;
-  const [coverPhotoEnabled, setCoverPhoto] = useState<boolean>(true);
+  const [coverPhotoEnabled, setCoverPhoto] = useState<boolean>(false);
   if (!username) {
     return <div>404</div>;
   }
