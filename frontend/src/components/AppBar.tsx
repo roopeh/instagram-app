@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-import RegisterModal from "./Register/RegisterModal";
+import LoginModal from "./Login/LoginModal";
 import "../styles/AppBar.css";
 
 const AppBar = () => {
-  const [registerModalOpen, setRegisterModalOpen] = useState<boolean>(false);
+  const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
 
-  const toggleRegisterModal = (toggle: boolean): void => {
-    setRegisterModalOpen(toggle);
+  const toggleLoginModal = (toggle: boolean): void => {
+    setLoginModalOpen(toggle);
   };
 
   return (
@@ -17,15 +17,15 @@ const AppBar = () => {
         <Link to="/">
           <img src={logo} alt="Instagram" className="appBar__logo" />
         </Link>
-        <span className="appBar__profile" aria-hidden="true" onClick={() => toggleRegisterModal(true)}>
+        <span className="appBar__profile" aria-hidden="true" onClick={() => toggleLoginModal(true)}>
           profile
         </span>
-        <RegisterModal
-          openBoolean={registerModalOpen}
+        <LoginModal
+          openBoolean={loginModalOpen}
           hideCancelButton={false}
-          titleText="Register"
+          titleText="Login"
           showLogo={false}
-          onClose={() => toggleRegisterModal(false)}
+          onClose={() => toggleLoginModal(false)}
         />
       </div>
     </div>

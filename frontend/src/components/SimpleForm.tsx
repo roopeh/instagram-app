@@ -37,22 +37,28 @@ const SimpleForm = ({
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      {({ isValid, dirty }) => (
+      {() => (
         <Form className="form ui">
           <table>
             <tbody>
-              {inputs.map((input: FormInput) => (
-                <tr key={input.name}>
-                  <td>{`${input.label}:`}</td>
-                  <td>
-                    <FormikTextInput
-                      placeholder={input.placeholder}
-                      name={input.name}
-                      type={input.type}
-                    />
-                  </td>
-                </tr>
-              ))}
+              {inputs.map((input: FormInput) => {
+                if (input.type === "divider") {
+                  return <tr key={input.name}><td colSpan={2}><hr /></td></tr>;
+                }
+
+                return (
+                  <tr key={input.name}>
+                    <td>{`${input.label}:`}</td>
+                    <td>
+                      <FormikTextInput
+                        placeholder={input.placeholder}
+                        name={input.name}
+                        type={input.type}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
               <tr>
                 {cancelEnabled
                   ? (
@@ -72,7 +78,6 @@ const SimpleForm = ({
                   <Button
                     type="submit"
                     variant="contained"
-                    disabled={!isValid || !dirty}
                   >
                     {submitText}
                   </Button>

@@ -12,7 +12,7 @@ const FormikTextInput = ({
   name, placeholder, type,
 }: TextInputProps) => {
   const [field, meta, helpers] = useField<string>(name);
-  const showError = meta.touched && meta.error;
+  const showError: boolean = meta.touched && meta.error !== null && meta.error !== undefined;
 
   return (
     <>

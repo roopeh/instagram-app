@@ -8,14 +8,11 @@ import { FormInput } from "../../types";
 
 interface RegisterModalProps {
   openBoolean: boolean,
-  hideCancelButton: boolean,
-  showLogo: boolean,
-  titleText: string,
   onClose: () => void,
 }
 
 const RegisterModal = ({
-  openBoolean, hideCancelButton, showLogo, titleText, onClose,
+  openBoolean, onClose,
 }: RegisterModalProps) => {
   const onSubmit = (values: any) => {
     console.log(values);
@@ -43,18 +40,49 @@ const RegisterModal = ({
       initialValue: "",
       type: "password",
     },
+    {
+      name: "",
+      label: "",
+      placeholder: "",
+      initialValue: "",
+      type: "divider",
+    },
+    {
+      name: "firstname",
+      label: "First name",
+      placeholder: "First name",
+      initialValue: "",
+      type: "input",
+    },
+    {
+      name: "lastname",
+      label: "Last name",
+      placeholder: "Last name",
+      initialValue: "",
+      type: "input",
+    },
   ];
 
   const validationSchema = yup.object().shape({
     username: yup
       .string()
+      .min(5, "Username must be at least 5 characters long")
+      .max(15, "Username must be less than 15 characters long")
       .required("Username is required"),
     password: yup
       .string()
+      .min(5, "Password must be at least 5 characters long")
       .required("Password is required"),
     confirmPassword: yup
       .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match")
       .required("Confirm password is required"),
+    firstname: yup
+      .string()
+      .required("First name is required"),
+    lastname: yup
+      .string()
+      .required("Last name is required"),
   });
 
   return (
@@ -65,16 +93,14 @@ const RegisterModal = ({
       >
         <div className="loginRegister__container">
           <div className="loginRegister__topBar">
-            {showLogo
-              ? <img src={logo} alt="Instagram" className="loginRegister__topBar__content" />
-              : <span className="loginRegister__topBar__content">{titleText}</span>}
+            <img src={logo} alt="Instagram" className="loginRegister__topBar__content" />
           </div>
           <div className="loginRegister__content">
             <SimpleForm
               inputs={inputs}
               validationSchema={validationSchema}
               submitText="Register"
-              cancelEnabled={!hideCancelButton}
+              cancelEnabled={false}
               cancelText="Cancel"
               onSubmit={onSubmit}
               cancelFunc={onClose}

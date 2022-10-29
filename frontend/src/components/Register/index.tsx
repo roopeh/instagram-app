@@ -4,7 +4,7 @@ import RegisterModal from "./RegisterModal";
 // eslint-disable-next-line arrow-body-style
 const Register = () => {
   return (
-    <RegisterModal openBoolean showLogo titleText="" hideCancelButton onClose={() => null} />
+    <RegisterModal openBoolean onClose={() => null} />
   );
 };
 

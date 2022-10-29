@@ -1,11 +1,10 @@
 import React from "react";
+import LoginModal from "./LoginModal";
 
 // eslint-disable-next-line arrow-body-style
 const Login = () => {
   return (
-    <div>
-      hello
-    </div>
+    <LoginModal openBoolean hideCancelButton showLogo titleText="" onClose={() => null} />
   );
 };
 
