@@ -1,0 +1,35 @@
+.loginRegister__container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  /* approx height */
+  top: calc(50% - (270px / 2));
+  left: calc(50% - (var(--minContentWidth) / 2));
+  width: var(--minContentWidth);
+  background-color: rgb(252, 252, 252);
+}
+
+.loginRegister__topBar {
+  width: var(--minContentWidth);
+  height: calc(42px);
+  padding: 10px 0;
+  background-image: linear-gradient(rgb(90, 128, 162), rgb(60, 100, 136));
+}
+
+.loginRegister__topBar__content {
+  display: block;
+  width: 125px;
+  height: 42px;
+  font-size: x-large;
+  font-weight: 600;
+  color: white;
+  margin: auto;
+}
+
+.loginRegister__content {
+  padding: 15px;
+}
+
+.loginRegister__content table {
+  width: 100%;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import AppBar from "../AppBar";
 import ProfilePageContent from "./ProfilePageContent";
 import ProfilePageTop from "./ProfilePageTop";
 import "../../styles/ProfilePage.css";
@@ -25,6 +26,7 @@ const ProfilePage = () => {
 
   return (
     <div>
+      <AppBar />
       <div className="profilePage__background">
         <div className="profilePage__background__topMargin" />
         <div className="profilePage__background__coverPhoto">

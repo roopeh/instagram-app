@@ -1,7 +1,10 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import AppBar from "./components/AppBar";
+import Accounts from "./components/Accounts";
+import Login from "./components/Login";
+import Main from "./components/Main";
 import ProfilePage from "./components/ProfilePage";
+import Register from "./components/Register";
 import "./styles/shared.css";
 import "./styles/App.css";
 
@@ -9,9 +12,11 @@ import "./styles/App.css";
 const App = () => {
   return (
     <div className="background">
-      <AppBar />
       <Routes>
-        <Route path="/" element={<div>Hello from main!</div>} />
+        <Route path="/" element={<Main />} />
+        <Route path="/accounts" element={<Accounts />} />
+        <Route path="/accounts/register" element={<Register />} />
+        <Route path="/accounts/login" element={<Login />} />
         <Route path="/:userId/*" element={<ProfilePage />} />
       </Routes>
     </div>
