@@ -1,10 +1,16 @@
+:root {
+  --logoHeight: 42px;
+}
+
 .appBar {
+  height: calc(var(--logoHeight) + 10px * 2);
   background-image: linear-gradient(rgb(90, 128, 162), rgb(60, 100, 136));
-  padding: 10px 8px;
+  padding: 0 8px;
 }
 
 .appBar__content {
   width: var(--appBarWidthOfScreen);
+  height: 100%;
   min-width: calc(var(--minContentWidth) * 0.9);
   max-width: calc(var(--maxContentWidth) * 0.9);
   display: flex;
@@ -14,9 +20,36 @@
 
 .appBar__logo {
   width: 125px;
-  height: 42px;
+  height: var(--logoHeight);
+  margin: 10px 0;
 }
 
 .appBar__profile {
+  display: flex;
+  height: 100%;
+  align-items: center;
   margin-left: auto;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+}
+
+.appbar__profile__defaultProfilePicture {
+  width: 20px;
+  height: 20px;
+  padding-right: 5px;
+}
+
+.appbar__profile__profilePicture {
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgb(74, 105, 132);
+  border-radius: 5px;
+  margin-right: 10px;
 }

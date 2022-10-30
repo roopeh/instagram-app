@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+import Logo from "../assets/logo.png";
+import EmptyProfilePic from "../assets/empty_profile.png";
 import LoginModal from "./Login/LoginModal";
 import "../styles/AppBar.css";
 
+import Musk from "../assets/placeholders/musk.jpg";
+
 const AppBar = () => {
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
+  const loggedIn: boolean = false;
 
   const toggleLoginModal = (toggle: boolean): void => {
     setLoginModalOpen(toggle);
@@ -15,11 +19,20 @@ const AppBar = () => {
     <div className="appBar">
       <div className="appBar__content">
         <Link to="/">
-          <img src={logo} alt="Instagram" className="appBar__logo" />
+          <img src={Logo} alt="Instagram" className="appBar__logo" />
         </Link>
-        <span className="appBar__profile" aria-hidden="true" onClick={() => toggleLoginModal(true)}>
-          profile
-        </span>
+        {loggedIn
+          ? (
+            <div className="appBar__profile" aria-hidden="true">
+              <img src={Musk} alt="" className="appbar__profile__profilePicture" />
+              profile
+            </div>
+          ) : (
+            <div className="appBar__profile" aria-hidden="true" onClick={() => toggleLoginModal(true)}>
+              <img src={EmptyProfilePic} alt="" className="appbar__profile__defaultProfilePicture" />
+              Login
+            </div>
+          )}
         <LoginModal
           openBoolean={loginModalOpen}
           hideCancelButton={false}
