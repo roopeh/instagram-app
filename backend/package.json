@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/mongoose": "^5.11.97",
     "apollo-server": "^3.10.4",
+    "argon2": "^0.30.1",
     "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
     "mongoose": "^6.7.0"

@@ -34,7 +34,13 @@ const SimpleForm = ({
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={onSubmit}
+      onSubmit={(values) => {
+        // Remove possible divider item from values
+        const filteredMap = Object.fromEntries(
+          Object.entries(values).filter(([k, v]) => k.length !== 0 && v.length !== 0),
+        );
+        onSubmit(filteredMap);
+      }}
       validationSchema={validationSchema}
     >
       {() => (

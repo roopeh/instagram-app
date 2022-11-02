@@ -27,11 +27,16 @@ export interface IUser {
   followers: Array<Types.ObjectId>
 }
 
+export interface DbUser extends IUser {
+  encryptPassword: () => Promise<void>,
+  isValidPassword: (password: string) => Promise<boolean>,
+}
+
 export type UserRegisterInput = {
   username: string,
   password: string,
   firstName: string,
   lastName: string
-}
+};
 
 export type UserLoginInput = Omit<UserRegisterInput, "firstName" | "lastName">;

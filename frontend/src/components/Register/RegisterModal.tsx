@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import logo from "../../assets/logo.png";
 import "../../styles/LoginRegisterModal.css";
 import SimpleForm from "../SimpleForm";
 import { FormInput } from "../../types";
+import useRegister from "../../hooks/useRegister";
 
 interface RegisterModalProps {
   openBoolean: boolean,
@@ -14,8 +16,24 @@ interface RegisterModalProps {
 const RegisterModal = ({
   openBoolean, onClose,
 }: RegisterModalProps) => {
-  const onSubmit = (values: any) => {
-    console.log(values);
+  const [register] = useRegister();
+  const [error, setError] = useState<string>("");
+
+  const root = document.querySelector(":root") as HTMLElement;
+  root.style.setProperty("--modalTopValue", "var(--modalTopRegister)");
+
+  const onSubmit = async (values: any) => {
+    setError("");
+    try {
+      await register({
+        username: values.username,
+        password: values.password,
+        firstName: values.firstname,
+        lastName: values.lastname,
+      });
+    } catch (err) {
+      setError(String(err));
+    }
   };
 
   const inputs: Array<FormInput> = [
@@ -93,7 +111,9 @@ const RegisterModal = ({
       >
         <div className="loginRegister__container">
           <div className="loginRegister__topBar">
-            <img src={logo} alt="Instagram" className="loginRegister__topBar__content" />
+            <Link to="/">
+              <img src={logo} alt="Instagram" className="loginRegister__topBar__content" />
+            </Link>
           </div>
           <div className="loginRegister__content">
             <SimpleForm
@@ -105,6 +125,12 @@ const RegisterModal = ({
               onSubmit={onSubmit}
               cancelFunc={onClose}
             />
+            <br />
+            {error && (
+              <div className="errorText" style={{ fontSize: "15px" }}>
+                {error}
+              </div>
+            )}
           </div>
         </div>
       </Modal>

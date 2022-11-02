@@ -1,26 +1,27 @@
-import { Schema, model } from "mongoose";
-import { IUser } from "../types";
+import { Schema, model, mongo } from "mongoose";
+import crypto from "crypto";
+import argon2 from "argon2";
+import { DbUser } from "../types";
 
-const schema = new Schema<IUser>({
+const schema = new Schema<DbUser>({
   username: {
     type: String,
-    minlength: 5,
-    maxlength: 15,
-    required: true,
+    minlength: [5, "Username must be at least 5 characters long"],
+    maxlength: [15, "Username must be less than 15 characters long"],
+    required: [true, "Missing username"],
     unique: true,
   },
   password: {
     type: String,
-    minlength: 5,
-    required: true,
+    required: [true, "Missing password"],
   },
   firstName: {
     type: String,
-    required: true,
+    required: [true, "Missing firstname"],
   },
   lastName: {
     type: String,
-    required: true,
+    required: [true, "Missing lastname"],
   },
   bioText: {
     type: String,
@@ -56,4 +57,27 @@ const schema = new Schema<IUser>({
   ],
 });
 
-export default model("User", schema);
+const argonHashConfig: argon2.Options = {
+  parallelism: 1,
+  memoryCost: 32000, // 32mb
+  timeCost: 3, //       Number of iterations
+};
+
+schema.methods.encryptPassword = async function encryptPassword(): Promise<void> {
+  const salt = crypto.randomBytes(32);
+  try {
+    this.password = await argon2.hash(this.password, {
+      ...argonHashConfig as any,
+      salt,
+    });
+  } catch (error) {
+    throw new mongo.MongoError("Unknown failure in password hashing");
+  }
+};
+
+schema.methods.isValidPassword = async function isValidPass(password: string): Promise<boolean> {
+  const passwordMatches = await argon2.verify(this.password, password, argonHashConfig);
+  return passwordMatches;
+};
+
+export default model<DbUser>("User", schema);

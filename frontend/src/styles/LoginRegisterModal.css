@@ -1,13 +1,16 @@
 :root {
   --modalWidth: calc(var(--minContentWidth) - 20px);
+  --modalTopLogin: calc(50% - 140px);
+  --modalTopRegister: calc(50% - 250px);
+  /* Use login by default */
+  --modalTopValue: var(--modalTopLogin);
 }
 
 .loginRegister__container {
   display: flex;
   flex-direction: column;
   position: absolute;
-  /* approx height */
-  top: calc(50% - (270px / 2));
+  top: var(--modalTopValue);
   left: calc(50% - (var(--modalWidth) / 2));
   width: var(--modalWidth);
   background-color: rgb(252, 252, 252);
