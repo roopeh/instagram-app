@@ -1,3 +1,4 @@
+import { CookieOptions } from "express";
 import { Types } from "mongoose";
 
 export interface IComment {
@@ -40,3 +41,21 @@ export type UserRegisterInput = {
 };
 
 export type UserLoginInput = Omit<UserRegisterInput, "firstName" | "lastName">;
+
+export type Tokens = {
+  accessToken: string,
+  refreshToken: string
+};
+
+export type Cookies = {
+  access: [
+    type: string,
+    token: string,
+    options: CookieOptions,
+  ],
+  refresh: [
+    type: string,
+    token: string,
+    options: CookieOptions,
+  ]
+};

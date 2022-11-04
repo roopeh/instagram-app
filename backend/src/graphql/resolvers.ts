@@ -1,8 +1,12 @@
 import { ApolloError, UserInputError } from "apollo-server";
 import { mongo, Error } from "mongoose";
 import User from "../models/User";
-import { IUser, UserRegisterInput } from "../types";
+import {
+  IUser, UserLoginInput, UserRegisterInput,
+} from "../types";
+import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
+import { setTokens } from "../utils/tokens";
 
 const resolvers = {
   User: {
@@ -13,6 +17,14 @@ const resolvers = {
   Query: {
     userCount: async (): Promise<number> => User.collection.countDocuments(),
     allUsers: async (): Promise<Array<IUser>> => User.find({}),
+    me: async (_root: any, _args: any, context: any): Promise<IUser | null> => {
+      if (!context.req.user) {
+        return null;
+      }
+
+      const user = await User.findById(context.req.user.id);
+      return user;
+    },
   },
   Mutation: {
     createUser: async (_root: any, args: { input: UserRegisterInput }): Promise<IUser> => {
@@ -38,16 +50,51 @@ const resolvers = {
           // Send only the first error
           const firstError = Object.values(error.errors)[0];
           throw new UserInputError(firstError.message);
-        } else if (error instanceof mongo.MongoError) {
+        } else if (error instanceof mongo.MongoError || error instanceof Error) {
           throw new UserInputError(error.message, { invalidArgs: args });
-        } else if (error instanceof Error) {
-          throw new ApolloError(error.message);
         } else {
           logError(error);
           throw new ApolloError("Unknown server error");
         }
       }
       return user;
+    },
+    login: async (_root: any, args: { input: UserLoginInput }, context: any): Promise<IUser> => {
+      const user = await User.findOne({ username: args.input.username });
+      if (!user) {
+        throw new UserInputError("Invalid username or password");
+      }
+
+      try {
+        const passwordMatches = await user.isValidPassword(args.input.password);
+        if (!passwordMatches) {
+          throw new UserInputError("Invalid username or password");
+        }
+
+        // eslint-disable-next-line no-underscore-dangle
+        const tokens = setTokens({ id: user._id.toString(), user });
+        const cookies = setTokenCookies(tokens);
+        context.res.cookie(...cookies.access);
+        context.res.cookie(...cookies.refresh);
+        return user;
+      } catch (error) {
+        if (error instanceof Error.ValidationError
+        && Object.values(error.errors).length > 0) {
+          // Send only the first error
+          const firstError = Object.values(error.errors)[0];
+          throw new UserInputError(firstError.message);
+        } else if (error instanceof mongo.MongoError || error instanceof Error) {
+          throw new UserInputError(error.message, { invalidArgs: args });
+        } else {
+          logError(error);
+          throw new ApolloError("Unknown server error");
+        }
+      }
+    },
+    logout: async (_root: any, _args: any, context: any): Promise<boolean> => {
+      context.res.clearCookie("access");
+      context.res.clearCookie("refresh");
+      return true;
     },
   },
 };

@@ -51,10 +51,6 @@ const typeDefs = gql`
     messages: [Conversation!]!
   }
 
-  type Token {
-    value: String!
-  }
-
   type Query {
     userCount: Int!
     allUsers: [User!]!
@@ -68,8 +64,15 @@ const typeDefs = gql`
     lastName: String!
   }
 
+  input UserLoginInput {
+    username: String!
+    password: String!
+  }
+
   type Mutation {
     createUser(input: UserRegisterInput): User
+    login(input: UserLoginInput): User
+    logout: Boolean
   }
 `;
 
