@@ -29,7 +29,7 @@ const resolvers = {
   Mutation: {
     createUser: async (_root: any, args: { input: UserRegisterInput }): Promise<IUser> => {
       // Check if username already exists
-      const existingUsername = await User.findOne({ username: args.input.username });
+      const existingUsername = await User.findOne({ username: args.input.username.toLowerCase() });
       if (existingUsername) {
         throw new UserInputError("Username already exists");
       }
@@ -39,7 +39,25 @@ const resolvers = {
         throw new UserInputError("Password must be at least 5 characters long");
       }
 
-      const user = new User(args.input);
+      // Check name fields
+      if (!args.input.firstName.match(/^[A-Za-z\s]*$/)) {
+        throw new UserInputError("First name must contain only letters");
+      }
+      if (!args.input.lastName.match(/^[A-Za-z\s]*$/)) {
+        throw new UserInputError("Last name must contain only letters");
+      }
+
+      // Format fields
+      const formattedInputs: UserRegisterInput = {
+        username: args.input.username.toLowerCase(),
+        password: args.input.password,
+        firstName: args.input.firstName.charAt(0).toUpperCase()
+          + args.input.firstName.slice(1).toLowerCase(),
+        lastName: args.input.lastName.charAt(0).toUpperCase()
+          + args.input.lastName.slice(1).toLowerCase(),
+      };
+
+      const user = new User(formattedInputs);
       await user.encryptPassword();
 
       try {
@@ -60,7 +78,7 @@ const resolvers = {
       return user;
     },
     login: async (_root: any, args: { input: UserLoginInput }, context: any): Promise<IUser> => {
-      const user = await User.findOne({ username: args.input.username });
+      const user = await User.findOne({ username: args.input.username.toLowerCase() });
       if (!user) {
         throw new UserInputError("Invalid username or password");
       }
