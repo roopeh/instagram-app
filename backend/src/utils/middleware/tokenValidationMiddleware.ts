@@ -15,7 +15,7 @@ interface UserRequest extends Request {
 }
 
 const tokenValidation = async (req: UserRequest, res: Response, next: NextFunction) => {
-  const logCookies: boolean = false;
+  const logCookies: boolean = true;
 
   const accessToken = req.cookies.access;
   const refreshToken = req.cookies.refresh;
@@ -56,9 +56,11 @@ const tokenValidation = async (req: UserRequest, res: Response, next: NextFuncti
     return next();
   }
 
-  if (logCookies) logInfo("invalid cookies and tokens");
+  // Both tokens have expired, clear them
+  if (logCookies) logInfo("both tokens are expired");
+  res.clearCookie("access");
+  res.clearCookie("refresh");
 
-  // Tokens are invalid
   return next();
 };
 

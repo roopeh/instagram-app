@@ -4,7 +4,8 @@ import { Cookies, Tokens } from "../types";
 const setTokenCookies = (tokens: Tokens): Cookies => {
   const cookieOptions: CookieOptions = {
     httpOnly: true,
-    // SameSite: None,
+    secure: true,
+    sameSite: "lax",
   };
 
   return {

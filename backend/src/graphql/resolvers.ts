@@ -8,6 +8,22 @@ import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
 import { setTokens } from "../utils/tokens";
 
+const handleCatchError = (error: unknown, args: any) => {
+  if (error instanceof Error.ValidationError
+  && Object.values(error.errors).length > 0) {
+    // Send only the first error
+    const firstError = Object.values(error.errors)[0];
+    throw new UserInputError(firstError.message);
+  } else if (error instanceof UserInputError) {
+    throw new UserInputError(error.message);
+  } else if (error instanceof mongo.MongoError || error instanceof Error) {
+    throw new UserInputError(error.message, { invalidArgs: args });
+  } else {
+    logError(error);
+    throw new ApolloError("Unknown server error");
+  }
+};
+
 const resolvers = {
   User: {
     photoCount: (root: IUser): number => root.photos.length,
@@ -58,22 +74,12 @@ const resolvers = {
       };
 
       const user = new User(formattedInputs);
-      await user.encryptPassword();
 
       try {
+        await user.encryptPassword();
         await user.save();
       } catch (error) {
-        if (error instanceof Error.ValidationError
-        && Object.values(error.errors).length > 0) {
-          // Send only the first error
-          const firstError = Object.values(error.errors)[0];
-          throw new UserInputError(firstError.message);
-        } else if (error instanceof mongo.MongoError || error instanceof Error) {
-          throw new UserInputError(error.message, { invalidArgs: args });
-        } else {
-          logError(error);
-          throw new ApolloError("Unknown server error");
-        }
+        return handleCatchError(error, args);
       }
       return user;
     },
@@ -96,17 +102,7 @@ const resolvers = {
         context.res.cookie(...cookies.refresh);
         return user;
       } catch (error) {
-        if (error instanceof Error.ValidationError
-        && Object.values(error.errors).length > 0) {
-          // Send only the first error
-          const firstError = Object.values(error.errors)[0];
-          throw new UserInputError(firstError.message);
-        } else if (error instanceof mongo.MongoError || error instanceof Error) {
-          throw new UserInputError(error.message, { invalidArgs: args });
-        } else {
-          logError(error);
-          throw new ApolloError("Unknown server error");
-        }
+        return handleCatchError(error, args);
       }
     },
     logout: async (_root: any, _args: any, context: any): Promise<boolean> => {
