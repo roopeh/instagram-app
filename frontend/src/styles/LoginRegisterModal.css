@@ -36,6 +36,7 @@
 
 .loginRegister__content {
   padding: 15px;
+  font-size: 14px;
 }
 
 .loginRegister__content table {
@@ -46,4 +47,14 @@
   width: calc(100% - 20px);
   color: var(--borderColorLight);
   opacity: 0.4;
+}
+
+.loginRegister__content__linkItem {
+  padding-top: 10px;
+  font-size: 12px;
+}
+
+.loginRegister__content__submitItem {
+  padding-top: 10px;
+  text-align: right;
 }

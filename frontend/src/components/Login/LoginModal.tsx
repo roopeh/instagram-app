@@ -1,25 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import logo from "../../assets/logo.png";
 import "../../styles/LoginRegisterModal.css";
 import SimpleForm from "../SimpleForm";
 import { FormInput } from "../../types";
+import useLogin from "../../hooks/useLogin";
+import { saveUserData } from "../../userdata";
 
 interface LoginModalProps {
   openBoolean: boolean,
-  hideCancelButton: boolean,
   showLogo: boolean,
   titleText: string,
   onClose: () => void,
 }
 
 const LoginModal = ({
-  openBoolean, hideCancelButton, showLogo, titleText, onClose,
+  openBoolean, showLogo, titleText, onClose,
 }: LoginModalProps) => {
-  const onSubmit = (values: any) => {
-    console.log("Logging in");
-    console.log(values);
+  const [login] = useLogin();
+  const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
+
+  const onSubmit = async (values: any) => {
+    setError("");
+    try {
+      const { data } = await login({
+        username: values.username,
+        password: values.password,
+      });
+      if (data && data.login) {
+        saveUserData({
+          id: data.login.id,
+          username: data.login.username,
+          firstName: data.login.firstName,
+          profilePhoto: data.login.profilePhoto,
+        });
+      }
+      navigate("/");
+    } catch (err) {
+      setError(String(err));
+    }
   };
 
   const inputs: Array<FormInput> = [
@@ -57,7 +79,11 @@ const LoginModal = ({
         <div className="loginRegister__container">
           <div className="loginRegister__topBar">
             {showLogo
-              ? <img src={logo} alt="Instagram" className="loginRegister__topBar__content" />
+              ? (
+                <Link to="/">
+                  <img src={logo} alt="Instagram" className="loginRegister__topBar__content" />
+                </Link>
+              )
               : <span className="loginRegister__topBar__content">{titleText}</span>}
           </div>
           <div className="loginRegister__content">
@@ -65,11 +91,15 @@ const LoginModal = ({
               inputs={inputs}
               validationSchema={validationSchema}
               submitText="Login"
-              cancelEnabled={!hideCancelButton}
-              cancelText="Cancel"
+              isRegisterModal={false}
               onSubmit={onSubmit}
-              cancelFunc={onClose}
             />
+            <br />
+            {error && (
+              <div className="errorText" style={{ fontSize: "15px" }}>
+                {error}
+              </div>
+            )}
           </div>
         </div>
       </Modal>

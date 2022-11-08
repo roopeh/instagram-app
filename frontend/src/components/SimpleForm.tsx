@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import Button from "@mui/material/Button";
 import FormikTextInput from "./FormikTextInput";
@@ -8,28 +9,17 @@ interface FormProps {
   inputs: Array<FormInput>,
   validationSchema: any,
   submitText: string,
-  cancelEnabled: boolean,
-  cancelText: string,
+  isRegisterModal: boolean,
   onSubmit: (values: Object) => void,
-  cancelFunc: () => void,
 }
 
 const SimpleForm = ({
-  inputs, validationSchema, submitText, onSubmit, cancelEnabled, cancelText, cancelFunc,
+  inputs, validationSchema, submitText, onSubmit, isRegisterModal,
 }: FormProps) => {
   const initialValues: { [field: string]: string } = {};
   inputs.forEach((input: FormInput) => {
     initialValues[input.name] = input.initialValue;
   });
-
-  const twoButtonsStyle: React.CSSProperties = {
-    textAlign: "right",
-    paddingTop: "10px",
-  };
-
-  const singleButtonStyle: React.CSSProperties = {
-    paddingTop: "10px",
-  };
 
   return (
     <Formik
@@ -65,22 +55,28 @@ const SimpleForm = ({
                   </tr>
                 );
               })}
+            </tbody>
+          </table>
+          <table>
+            <tbody>
               <tr>
-                {cancelEnabled
-                  ? (
-                    <td style={singleButtonStyle}>
-                      <Button
-                        color="error"
-                        variant="contained"
-                        type="button"
-                        onClick={cancelFunc}
-                      >
-                        {cancelText}
-                      </Button>
-                    </td>
-                  )
-                  : <td />}
-                <td style={cancelEnabled ? twoButtonsStyle : singleButtonStyle}>
+                <td className="loginRegister__content__linkItem">
+                  {isRegisterModal
+                    ? (
+                      <>
+                        Already have an account?
+                        <br />
+                        <Link to="/accounts/login" style={{ textDecoration: "none" }}>Login</Link>
+                      </>
+                    ) : (
+                      <>
+                        Don&apos;t have an account?
+                        <br />
+                        <Link to="/accounts/register" style={{ textDecoration: "none" }}>Register</Link>
+                      </>
+                    )}
+                </td>
+                <td className="loginRegister__content__submitItem">
                   <Button
                     type="submit"
                     variant="contained"

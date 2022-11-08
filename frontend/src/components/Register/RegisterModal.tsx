@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import logo from "../../assets/logo.png";
 import "../../styles/LoginRegisterModal.css";
@@ -18,6 +18,7 @@ const RegisterModal = ({
 }: RegisterModalProps) => {
   const [register] = useRegister();
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const root = document.querySelector(":root") as HTMLElement;
   root.style.setProperty("--modalTopValue", "var(--modalTopRegister)");
@@ -31,6 +32,7 @@ const RegisterModal = ({
         firstName: values.firstname,
         lastName: values.lastname,
       });
+      navigate("/accounts/login");
     } catch (err) {
       setError(String(err));
     }
@@ -120,10 +122,8 @@ const RegisterModal = ({
               inputs={inputs}
               validationSchema={validationSchema}
               submitText="Register"
-              cancelEnabled={false}
-              cancelText="Cancel"
+              isRegisterModal
               onSubmit={onSubmit}
-              cancelFunc={onClose}
             />
             <br />
             {error && (

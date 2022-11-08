@@ -35,7 +35,6 @@ const AppBar = () => {
           )}
         <LoginModal
           openBoolean={loginModalOpen}
-          hideCancelButton={false}
           titleText="Login"
           showLogo={false}
           onClose={() => toggleLoginModal(false)}
