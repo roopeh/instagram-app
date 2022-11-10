@@ -22,6 +22,7 @@ const startServer = async (): Promise<void> => {
   const app = express();
   const httpServer = http.createServer(app);
 
+  app.use(express.json({ limit: "50mb" }));
   app.use(express.static(
     process.env.NODE_ENV === "production"
       ? "build/frontend"

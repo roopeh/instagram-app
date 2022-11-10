@@ -25,7 +25,8 @@ export interface IUser {
   coverPhoto: Types.ObjectId,
   photos: Array<Types.ObjectId>,
   following: Array<Types.ObjectId>,
-  followers: Array<Types.ObjectId>
+  followers: Array<Types.ObjectId>,
+  messages: Array<Types.ObjectId>
 }
 
 export interface DbUser extends IUser {
@@ -58,4 +59,10 @@ export type Cookies = {
     token: string,
     options: CookieOptions,
   ]
+};
+
+export type PictureInput = {
+  type: string,
+  size: number,
+  base64: string,
 };

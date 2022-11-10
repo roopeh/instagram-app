@@ -1,8 +1,11 @@
-import { ApolloError, UserInputError } from "apollo-server";
+/* eslint-disable no-underscore-dangle */
+import { ApolloError, AuthenticationError, UserInputError } from "apollo-server";
 import { mongo, Error } from "mongoose";
+import Photo from "../models/Photo";
 import User from "../models/User";
 import {
-  IUser, UserLoginInput, UserRegisterInput,
+  IPhoto,
+  IUser, PictureInput, UserLoginInput, UserRegisterInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -24,6 +27,11 @@ const handleCatchError = (error: unknown, args: any) => {
   }
 };
 
+const findUser = async (variables: any) => User
+  .findOne(variables)
+  .populate(["profilePhoto", "coverPhoto", "photos", "following",
+    "followers"/* , "messages" */]);
+
 const resolvers = {
   User: {
     photoCount: (root: IUser): number => root.photos.length,
@@ -38,7 +46,7 @@ const resolvers = {
         return null;
       }
 
-      const user = await User.findById(context.req.user.id);
+      const user = await findUser({ _id: context.req.user.id });
       return user;
     },
   },
@@ -84,7 +92,7 @@ const resolvers = {
       return user;
     },
     login: async (_root: any, args: { input: UserLoginInput }, context: any): Promise<IUser> => {
-      const user = await User.findOne({ username: args.input.username.toLowerCase() });
+      const user = await findUser({ username: args.input.username.toLowerCase() });
       if (!user) {
         throw new UserInputError("Invalid username or password");
       }
@@ -95,7 +103,6 @@ const resolvers = {
           throw new UserInputError("Invalid username or password");
         }
 
-        // eslint-disable-next-line no-underscore-dangle
         const tokens = setTokens({ id: user._id.toString(), user });
         const cookies = setTokenCookies(tokens);
         context.res.cookie(...cookies.access);
@@ -109,6 +116,50 @@ const resolvers = {
       context.res.clearCookie("access");
       context.res.clearCookie("refresh");
       return true;
+    },
+    setProfilePicture:
+    async (_root: any, args: { input: PictureInput }, context: any): Promise<IPhoto | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const fileType = args.input.type.toLowerCase().split("/");
+      if (fileType[0] !== "image") {
+        throw new UserInputError("File must be an image file");
+      }
+
+      if (args.input.size > (5 * 1024 * 1024)) {
+        throw new UserInputError("Image must be less than 5 MB");
+      }
+
+      // Delete existing profile photo
+      if (user.profilePhoto) {
+        try {
+          await Photo.findByIdAndDelete(user.profilePhoto);
+        } catch (err) {
+          logError(err);
+        }
+      }
+
+      const profilePicture = new Photo({
+        imageString: args.input.base64,
+        publishDate: Date.now() / 1000,
+      });
+
+      try {
+        await profilePicture.save();
+        user.profilePhoto = profilePicture._id;
+        await user.save();
+      } catch (err) {
+        return handleCatchError(err, args);
+      }
+
+      return profilePicture;
     },
   },
 };

@@ -7,7 +7,7 @@ import "../../styles/LoginRegisterModal.css";
 import SimpleForm from "../SimpleForm";
 import { FormInput } from "../../types";
 import useLogin from "../../hooks/useLogin";
-import { saveUserData } from "../../userdata";
+import { saveUserData } from "../../utils/userdata";
 
 interface LoginModalProps {
   openBoolean: boolean,
@@ -35,9 +35,12 @@ const LoginModal = ({
           id: data.login.id,
           username: data.login.username,
           firstName: data.login.firstName,
-          profilePhoto: data.login.profilePhoto,
+          profilePhoto: data.login.profilePhoto
+            ? data.login.profilePhoto.imageString
+            : null,
         });
       }
+      onClose();
       navigate("/");
     } catch (err) {
       setError(String(err));

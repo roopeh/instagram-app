@@ -56,6 +56,12 @@ const schema = new Schema<DbUser>({
       ref: "User",
     },
   ],
+  messages: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Conversation",
+    },
+  ],
 });
 
 const argonHashConfig: argon2.Options = {

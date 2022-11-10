@@ -69,10 +69,18 @@ const typeDefs = gql`
     password: String!
   }
 
+  input PictureInput {
+    type: String!
+    size: Int!
+    base64: String!
+  }
+
   type Mutation {
     createUser(input: UserRegisterInput): User
     login(input: UserLoginInput): User
     logout: Boolean
+
+    setProfilePicture(input: PictureInput): Photo
   }
 `;
 

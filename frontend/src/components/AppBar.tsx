@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import EmptyProfilePic from "../assets/empty_profile.png";
 import LoginModal from "./Login/LoginModal";
+import { getUserData } from "../utils/userdata";
 import "../styles/AppBar.css";
-
-import Musk from "../assets/placeholders/musk.jpg";
 
 const AppBar = () => {
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
-  const loggedIn: boolean = false;
+  const navigate = useNavigate();
+
+  // Get user data from local storage
+  const userData = getUserData();
 
   const toggleLoginModal = (toggle: boolean): void => {
     setLoginModalOpen(toggle);
@@ -21,15 +23,23 @@ const AppBar = () => {
         <Link to="/">
           <img src={Logo} alt="Instagram" className="appBar__logo" />
         </Link>
-        {loggedIn
+        {userData
           ? (
-            <div className="appBar__profile" aria-hidden="true">
-              <img src={Musk} alt="" className="appbar__profile__profilePicture" />
-              profile
+            <div className="appBar__profile" aria-hidden="true" onClick={() => navigate("/accounts")}>
+              <img
+                src={userData.profilePhoto
+                  ? userData.profilePhoto
+                  : EmptyProfilePic}
+                alt=""
+                className={userData.profilePhoto
+                  ? "appBar__profile__profilePicture"
+                  : "appBar__profile__defaultProfilePicture"}
+              />
+              {userData.username}
             </div>
           ) : (
             <div className="appBar__profile" aria-hidden="true" onClick={() => toggleLoginModal(true)}>
-              <img src={EmptyProfilePic} alt="" className="appbar__profile__defaultProfilePicture" />
+              <img src={EmptyProfilePic} alt="" className="appBar__profile__defaultProfilePicture" />
               Login
             </div>
           )}
