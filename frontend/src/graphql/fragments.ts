@@ -6,7 +6,12 @@ export const USER_BASIC_INFO_FRAGMENT = gql`
     id
     username
     firstName
+    lastName
     profilePhoto {
+      id
+      imageString
+    }
+    coverPhoto {
       id
       imageString
     }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import Button from "@mui/material/Button";
 import FormikTextInput from "./FormikTextInput";
@@ -9,12 +8,12 @@ interface FormProps {
   inputs: Array<FormInput>,
   validationSchema: any,
   submitText: string,
-  isRegisterModal: boolean,
+  leftItem: JSX.Element | null,
   onSubmit: (values: Object) => void,
 }
 
 const SimpleForm = ({
-  inputs, validationSchema, submitText, onSubmit, isRegisterModal,
+  inputs, validationSchema, submitText, onSubmit, leftItem,
 }: FormProps) => {
   const initialValues: { [field: string]: string } = {};
   inputs.forEach((input: FormInput) => {
@@ -61,20 +60,7 @@ const SimpleForm = ({
             <tbody>
               <tr>
                 <td className="loginRegister__content__linkItem">
-                  {isRegisterModal
-                    ? (
-                      <>
-                        Already have an account?
-                        <br />
-                        <Link to="/accounts/login" style={{ textDecoration: "none" }}>Login</Link>
-                      </>
-                    ) : (
-                      <>
-                        Don&apos;t have an account?
-                        <br />
-                        <Link to="/accounts/register" style={{ textDecoration: "none" }}>Register</Link>
-                      </>
-                    )}
+                  {leftItem}
                 </td>
                 <td className="loginRegister__content__submitItem">
                   <Button

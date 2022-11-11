@@ -2,12 +2,22 @@ interface TokenUser {
   id: string,
   username: string,
   firstName: string,
-  profilePhoto?: string
+  lastName: string,
+  profilePhoto?: string,
+  coverPhoto?: string,
 }
 
 const USER_KEY = "clientuserdata";
 
-export const saveUserData = (userData: TokenUser): void => {
+export const saveUserData = (data: any): void => {
+  const userData: TokenUser = {
+    id: data.id,
+    username: data.username,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    profilePhoto: data.profilePhoto ? data.profilePhoto.imageString : null,
+    coverPhoto: data.coverPhoto ? data.coverPhoto.imageString : null,
+  };
   localStorage.setItem(USER_KEY, JSON.stringify(userData));
 };
 

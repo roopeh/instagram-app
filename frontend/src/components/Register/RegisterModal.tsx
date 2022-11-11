@@ -105,6 +105,14 @@ const RegisterModal = ({
       .required("Last name is required"),
   });
 
+  const formLeftItem: JSX.Element = (
+    <>
+      Already have an account?
+      <br />
+      <Link to="/accounts/login" style={{ textDecoration: "none" }}>Login</Link>
+    </>
+  );
+
   return (
     <div>
       <Modal
@@ -122,7 +130,7 @@ const RegisterModal = ({
               inputs={inputs}
               validationSchema={validationSchema}
               submitText="Register"
-              isRegisterModal
+              leftItem={formLeftItem}
               onSubmit={onSubmit}
             />
             <br />

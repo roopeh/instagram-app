@@ -31,14 +31,7 @@ const LoginModal = ({
         password: values.password,
       });
       if (data && data.login) {
-        saveUserData({
-          id: data.login.id,
-          username: data.login.username,
-          firstName: data.login.firstName,
-          profilePhoto: data.login.profilePhoto
-            ? data.login.profilePhoto.imageString
-            : null,
-        });
+        saveUserData(data.login);
       }
       onClose();
       navigate("/");
@@ -73,6 +66,14 @@ const LoginModal = ({
       .required("Password is required"),
   });
 
+  const formLeftItem: JSX.Element = (
+    <>
+      Don&apos;t have an account?
+      <br />
+      <Link to="/accounts/register" style={{ textDecoration: "none" }}>Register</Link>
+    </>
+  );
+
   return (
     <div>
       <Modal
@@ -94,7 +95,7 @@ const LoginModal = ({
               inputs={inputs}
               validationSchema={validationSchema}
               submitText="Login"
-              isRegisterModal={false}
+              leftItem={formLeftItem}
               onSubmit={onSubmit}
             />
             <br />

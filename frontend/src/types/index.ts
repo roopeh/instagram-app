@@ -5,9 +5,3 @@ export type FormInput = {
   initialValue: string,
   type: string,
 };
-
-export type ImageFile = {
-  type: string,
-  size: number,
-  base64: string,
-};
