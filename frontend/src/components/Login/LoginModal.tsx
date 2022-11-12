@@ -21,9 +21,11 @@ const LoginModal = ({
 }: LoginModalProps) => {
   const [login] = useLogin();
   const [error, setError] = useState<string>("");
+  const [loggingIn, setLoggingIn] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const onSubmit = async (values: any) => {
+    setLoggingIn(true);
     setError("");
     try {
       const { data } = await login({
@@ -33,9 +35,11 @@ const LoginModal = ({
       if (data && data.login) {
         saveUserData(data.login);
       }
+      setLoggingIn(false);
       onClose();
       navigate("/");
     } catch (err) {
+      setLoggingIn(false);
       setError(String(err));
     }
   };
@@ -96,6 +100,8 @@ const LoginModal = ({
               validationSchema={validationSchema}
               submitText="Login"
               leftItem={formLeftItem}
+              useLoadingButton
+              loadingButtonAction={loggingIn}
               onSubmit={onSubmit}
             />
             <br />

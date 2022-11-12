@@ -18,12 +18,14 @@ const RegisterModal = ({
 }: RegisterModalProps) => {
   const [register] = useRegister();
   const [error, setError] = useState<string>("");
+  const [registering, setRegistering] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const root = document.querySelector(":root") as HTMLElement;
   root.style.setProperty("--modalTopValue", "var(--modalTopRegister)");
 
   const onSubmit = async (values: any) => {
+    setRegistering(true);
     setError("");
     try {
       await register({
@@ -32,8 +34,10 @@ const RegisterModal = ({
         firstName: values.firstname,
         lastName: values.lastname,
       });
+      setRegistering(false);
       navigate("/accounts/login");
     } catch (err) {
+      setRegistering(false);
       setError(String(err));
     }
   };
@@ -131,6 +135,8 @@ const RegisterModal = ({
               validationSchema={validationSchema}
               submitText="Register"
               leftItem={formLeftItem}
+              useLoadingButton
+              loadingButtonAction={registering}
               onSubmit={onSubmit}
             />
             <br />

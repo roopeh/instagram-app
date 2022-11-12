@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 import React from "react";
 import { useField, Field } from "formik";
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 interface TextInputProps {
   name: string,

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as yup from "yup";
 import { Form, Formik } from "formik";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { getUserData } from "../../utils/userdata";
 import FormikTextInput from "../FormikTextInput";
 

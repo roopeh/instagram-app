@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Formik } from "formik";
-import { Button, IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import LoadingButton from "@mui/lab/LoadingButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useSetProfilePicture from "../../hooks/useSetProfilePicture";
 import getBase64 from "../../utils/getBase64";
@@ -19,6 +20,7 @@ interface PhotoFormProps {
 const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
   const [imageFile, setImageFile] = useState<FileInfo | null>(null);
   const [errorText, setErrorText] = useState<string>("");
+  const [uploading, setUploading] = useState<boolean>(false);
   const [setProfilePicture] = useSetProfilePicture();
 
   const userData = getUserData()!;
@@ -39,6 +41,7 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
       return;
     }
 
+    setUploading(true);
     const base64 = await getBase64(imageFile.file);
 
     try {
@@ -54,8 +57,10 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
         });
       }
       setImageFile(null);
+      setUploading(false);
     } catch (err) {
       setErrorText(String(err));
+      setUploading(false);
     }
   };
 
@@ -82,20 +87,22 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
                 onChange={changeImageInput}
               />
               <PhotoCamera />
+              <span className="accounts__imageUploadFlex__fileName">
+                {imageFile ? imageFile.name : <i>Choose image</i>}
+              </span>
             </IconButton>
-            <span className="accounts__imageUploadFlex__fileName">
-              {imageFile ? imageFile.name : <i>Choose image</i>}
-            </span>
             <br />
-            <Button
+            <LoadingButton
               type="submit"
               variant="contained"
               size="small"
+              endIcon={uploading && <div style={{ width: "15px" }} />}
+              loading={uploading}
+              loadingPosition={uploading ? "end" : undefined}
               style={{ marginTop: "10px" }}
             >
               Upload
-            </Button>
-            <br />
+            </LoadingButton>
             {errorText && (
               <div className="errorText" style={{ marginTop: "15px" }}>
                 {errorText}

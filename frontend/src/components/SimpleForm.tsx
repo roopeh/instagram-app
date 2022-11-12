@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import FormikTextInput from "./FormikTextInput";
 import { FormInput } from "../types";
 
@@ -9,11 +10,14 @@ interface FormProps {
   validationSchema: any,
   submitText: string,
   leftItem: JSX.Element | null,
+  useLoadingButton: boolean,
+  // eslint-disable-next-line react/require-default-props
+  loadingButtonAction?: boolean,
   onSubmit: (values: Object) => void,
 }
 
 const SimpleForm = ({
-  inputs, validationSchema, submitText, onSubmit, leftItem,
+  inputs, validationSchema, submitText, onSubmit, leftItem, useLoadingButton, loadingButtonAction,
 }: FormProps) => {
   const initialValues: { [field: string]: string } = {};
   inputs.forEach((input: FormInput) => {
@@ -63,12 +67,25 @@ const SimpleForm = ({
                   {leftItem}
                 </td>
                 <td className="loginRegister__content__submitItem">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                  >
-                    {submitText}
-                  </Button>
+                  {useLoadingButton
+                    ? (
+                      <LoadingButton
+                        type="submit"
+                        variant="contained"
+                        endIcon={loadingButtonAction && <div style={{ width: "15px" }} />}
+                        loading={loadingButtonAction}
+                        loadingPosition={loadingButtonAction ? "end" : undefined}
+                      >
+                        {submitText}
+                      </LoadingButton>
+                    ) : (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                      >
+                        {submitText}
+                      </Button>
+                    )}
                 </td>
               </tr>
             </tbody>
