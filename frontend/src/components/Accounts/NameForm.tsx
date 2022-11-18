@@ -45,7 +45,7 @@ const NameForm = () => {
       >
         {() => (
           <Form className="form ui">
-            <span className="accounts__content__formLabel">Firstname</span>
+            <span className="accounts__formLabel">Firstname</span>
             <br />
             <FormikTextInput
               placeholder="Firstname"
@@ -56,7 +56,7 @@ const NameForm = () => {
             />
             <br />
             <span
-              className="accounts__content__formLabel"
+              className="accounts__formLabel"
               style={{ marginTop: "10px" }}
             >
               Lastname

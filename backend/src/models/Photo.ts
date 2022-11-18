@@ -10,6 +10,9 @@ const schema = new Schema<IPhoto>({
     type: String,
     required: true,
   },
+  captionText: {
+    type: String,
+  },
   likes: [
     {
       type: Schema.Types.ObjectId,

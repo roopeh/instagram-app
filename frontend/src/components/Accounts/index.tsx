@@ -10,10 +10,10 @@ import { getUserData, saveUserData } from "../../utils/userdata";
 import "../../styles/Accounts.css";
 
 const DefaultAccountsContent = ({ children }: any) => (
-  <div className="accounts">
+  <div className="main">
     <AppBar />
-    <div className="accounts__container">
-      <div className="accounts__content">
+    <div className="main__container">
+      <div className="main__content">
         {children}
       </div>
     </div>
@@ -56,7 +56,7 @@ const Accounts = () => {
   return (
     <DefaultAccountsContent>
       <NameForm />
-      <hr />
+      <hr className="accounts__divider" />
       <div className="accounts__imageUploadFlex">
         <div className="accounts__imageUploadFlex__item">
           <PhotoForm

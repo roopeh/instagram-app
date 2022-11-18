@@ -5,7 +5,7 @@ import Photo from "../models/Photo";
 import User from "../models/User";
 import {
   IPhoto,
-  IUser, PictureInput, UserLoginInput, UserRegisterInput,
+  IUser, PictureInput, UserInput, UserLoginInput, UserRegisterInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -40,6 +40,10 @@ const resolvers = {
   },
   Query: {
     userCount: async (): Promise<number> => User.collection.countDocuments(),
+    getUser: async (_root: any, args: { input: UserInput }): Promise<IUser | null> => {
+      const user = await findUser({ username: args.input.username.toLowerCase() });
+      return user;
+    },
     allUsers: async (): Promise<Array<IUser>> => User.find({}),
     me: async (_root: any, _args: any, context: any): Promise<IUser | null> => {
       if (!context.req.user) {

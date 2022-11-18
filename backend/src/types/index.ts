@@ -10,6 +10,7 @@ export interface IComment {
 export interface IPhoto {
   imageString: string,
   publishDate: string,
+  captionText: string,
   likes: Array<Types.ObjectId>,
   comments: Array<Types.ObjectId>
 }
@@ -43,6 +44,10 @@ export type UserRegisterInput = {
 
 export type UserLoginInput = Omit<UserRegisterInput, "firstName" | "lastName">;
 
+export type UserInput = {
+  username: string,
+};
+
 export type Tokens = {
   accessToken: string,
   refreshToken: string
@@ -63,6 +68,7 @@ export type Cookies = {
 
 export type PictureInput = {
   type: string,
+  captionText: string,
   size: number,
   base64: string,
 };

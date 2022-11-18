@@ -3,6 +3,7 @@ import { SET_PROFILE_PICTURE } from "../graphql/mutations";
 
 type ImageFile = {
   type: string,
+  captionText: string,
   size: number,
   base64: string,
 };

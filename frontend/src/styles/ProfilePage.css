@@ -55,8 +55,8 @@
   min-width: var(--minContentWidth);
   max-width: var(--maxContentWidth);
   min-height:
-    /* 100vh - profile background height - logo height - appbar padding - border */
-    calc(100vh - var(--profileBackgroundHeight) - 42px - (10px * 2) - 2px);
+    /* 100vh - profile background height - appbar height - border */
+    calc(100vh - var(--profileBackgroundHeight) - var(--appBarHeight) - 2px);
   margin: 0 auto 0;
   background-color: rgb(234, 234, 234);
   border: 2px solid var(--borderColorDark);
@@ -83,7 +83,7 @@
   background-color: white;
   margin-top: -55px;
   margin-left: 25px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   border: 1px solid var(--borderColorLight);
   border-radius: 5px;
 }
@@ -165,7 +165,6 @@
   margin: 25px 0 25px 25px;
 }
 
-/* todo: remove this div when test functions are removed */
 .profilePage__imageFlex {
   display: flex;
   flex-direction: row;
@@ -220,6 +219,12 @@
   min-width: var(--minContentPictureWidthHeight);
   min-height: var(--minContentPictureWidthHeight);
   border: 1px solid black;
+}
+
+.profilePage__loading {
+  margin-top: 5vh;
+  text-align: center;
+  font-size: larger;
 }
 
 .profilePage__imageModal {

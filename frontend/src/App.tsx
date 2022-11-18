@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Main from "./components/Main";
 import ProfilePage from "./components/ProfilePage";
 import Register from "./components/Register";
+import NotFound from "./components/NotFound";
 import "./styles/shared.css";
 import "./styles/App.css";
 
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/accounts" element={<Accounts />} />
         <Route path="/accounts/register" element={<Register />} />
         <Route path="/accounts/login" element={<Login />} />
+        <Route path="/accounts/*" element={<NotFound />} />
         <Route path="/:userId/*" element={<ProfilePage />} />
       </Routes>
     </div>

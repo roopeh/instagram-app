@@ -47,6 +47,7 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
     try {
       const { data } = await setProfilePicture({
         type: imageFile.file.type,
+        captionText: "",
         size: imageFile.file.size,
         base64,
       });

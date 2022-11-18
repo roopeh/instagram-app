@@ -26,6 +26,7 @@ const typeDefs = gql`
     id: ID!
     imageString: String!
     publishDate: String!
+    captionText: String
     likes: [User!]
     likesCount: Int!
     comments: [Comment!]
@@ -51,12 +52,6 @@ const typeDefs = gql`
     messages: [Conversation!]!
   }
 
-  type Query {
-    userCount: Int!
-    allUsers: [User!]!
-    me: User
-  }
-
   input UserRegisterInput {
     username: String!
     password: String!
@@ -71,8 +66,20 @@ const typeDefs = gql`
 
   input PictureInput {
     type: String!
+    captionText: String!
     size: Int!
     base64: String!
+  }
+
+  input UserInput {
+    username: String!
+  }
+
+  type Query {
+    userCount: Int!
+    getUser(input: UserInput): User
+    allUsers: [User!]!
+    me: User
   }
 
   type Mutation {

@@ -5,6 +5,13 @@
   --contentWidthOfScreen: 85%;
   --minContentWidth: 410px;
   --maxContentWidth: 1050px;
+  --logoHeight: 42px;
+
+  --appBarHeight: calc(var(--logoHeight) + 10px * 2);
+  --mainContainerMinWidth: calc(var(--minContentWidth));
+  --mainContainerMaxWidth: calc(var(--minContentWidth) + 150px);
+  --mainContainerWidth: min(max(calc(100vw * 0.8), var(--mainContainerMinWidth)), var(--mainContainerMaxWidth));
+  --mainContainerPadding: 20px;
 }
 
 html, body {
@@ -37,6 +44,35 @@ html, body {
   font-size: 12px;
   padding-left: 5px;
   color: #d73a4a;
+}
+
+.main {
+  background-color: rgb(236, 236, 236);
+}
+
+.main__container {
+  width: var(--mainContainerWidth);
+  /* 100vh - appbar height */
+  min-height: calc(100vh - var(--appBarHeight));
+  background-color: rgb(224, 224, 224);
+  border-left: 2px solid var(--borderColorDark);
+  border-right: 2px solid var(--borderColorDark);
+  margin: 0 auto;
+}
+
+.main__content {
+  width: 100%;
+  padding: var(--mainContainerPadding);
+}
+
+.notFound__container {
+  /* 100vh - appbar height - content margin */
+  min-height: calc(100vh - var(--appBarHeight) - 10vh);
+  text-align: center;
+}
+
+.notFound__content {
+  margin-top: 10vh;
 }
 
 .errorModal {
