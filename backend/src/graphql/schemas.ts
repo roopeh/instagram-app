@@ -75,6 +75,15 @@ const typeDefs = gql`
     username: String!
   }
 
+  input NameInput {
+    firstName: String!
+    lastName: String!
+  }
+
+  input BioTextInput {
+    bioText: String!
+  }
+
   type Query {
     userCount: Int!
     getUser(input: UserInput): User
@@ -87,7 +96,10 @@ const typeDefs = gql`
     login(input: UserLoginInput): User
     logout: Boolean
 
+    setNames(input: NameInput): User
+    setBioText(input: BioTextInput): User
     setProfilePicture(input: PictureInput): Photo
+    setCoverPicture(input: PictureInput): Photo
   }
 `;
 

@@ -26,6 +26,7 @@ const schema = new Schema<DbUser>({
   },
   bioText: {
     type: String,
+    maxlength: [100, "Bio text must be less than 100 characters long"],
   },
   lastOnline: {
     type: String,

@@ -35,6 +35,24 @@ export interface DbUser extends IUser {
   isValidPassword: (password: string) => Promise<boolean>,
 }
 
+export type Cookies = {
+  access: [
+    type: string,
+    token: string,
+    options: CookieOptions,
+  ],
+  refresh: [
+    type: string,
+    token: string,
+    options: CookieOptions,
+  ]
+};
+
+export type Tokens = {
+  accessToken: string,
+  refreshToken: string
+};
+
 export type UserRegisterInput = {
   username: string,
   password: string,
@@ -48,22 +66,13 @@ export type UserInput = {
   username: string,
 };
 
-export type Tokens = {
-  accessToken: string,
-  refreshToken: string
+export type NameInput = {
+  firstName: string,
+  lastName: string,
 };
 
-export type Cookies = {
-  access: [
-    type: string,
-    token: string,
-    options: CookieOptions,
-  ],
-  refresh: [
-    type: string,
-    token: string,
-    options: CookieOptions,
-  ]
+export type BioTextInput = {
+  bioText: string,
 };
 
 export type PictureInput = {

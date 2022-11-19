@@ -4,8 +4,9 @@ import { mongo, Error } from "mongoose";
 import Photo from "../models/Photo";
 import User from "../models/User";
 import {
+  BioTextInput,
   IPhoto,
-  IUser, PictureInput, UserInput, UserLoginInput, UserRegisterInput,
+  IUser, NameInput, PictureInput, UserInput, UserLoginInput, UserRegisterInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -25,6 +26,11 @@ const handleCatchError = (error: unknown, args: any) => {
     logError(error);
     throw new ApolloError("Unknown server error");
   }
+};
+
+// eslint-disable-next-line arrow-body-style
+const firstCharUpperRestLower = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
 const findUser = async (variables: any) => User
@@ -79,10 +85,8 @@ const resolvers = {
       const formattedInputs: UserRegisterInput = {
         username: args.input.username.toLowerCase(),
         password: args.input.password,
-        firstName: args.input.firstName.charAt(0).toUpperCase()
-          + args.input.firstName.slice(1).toLowerCase(),
-        lastName: args.input.lastName.charAt(0).toUpperCase()
-          + args.input.lastName.slice(1).toLowerCase(),
+        firstName: firstCharUpperRestLower(args.input.firstName),
+        lastName: firstCharUpperRestLower(args.input.lastName),
       };
 
       const user = new User(formattedInputs);
@@ -120,6 +124,57 @@ const resolvers = {
       context.res.clearCookie("access");
       context.res.clearCookie("refresh");
       return true;
+    },
+    setNames:
+    async (_root: any, args: { input: NameInput }, context: any): Promise<IUser> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      // Check name fields
+      if (!args.input.firstName.match(/^[A-Za-z\s]*$/)) {
+        throw new UserInputError("First name must contain only letters");
+      }
+      if (!args.input.lastName.match(/^[A-Za-z\s]*$/)) {
+        throw new UserInputError("Last name must contain only letters");
+      }
+
+      user.firstName = firstCharUpperRestLower(args.input.firstName);
+      user.lastName = firstCharUpperRestLower(args.input.lastName);
+
+      try {
+        await user.save();
+      } catch (err) {
+        return handleCatchError(err, args);
+      }
+
+      return user;
+    },
+    setBioText:
+    async (_root: any, args: { input: BioTextInput }, context: any): Promise<IUser> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      user.bioText = args.input.bioText;
+
+      try {
+        await user.save();
+      } catch (err) {
+        return handleCatchError(err, args);
+      }
+
+      return user;
     },
     setProfilePicture:
     async (_root: any, args: { input: PictureInput }, context: any): Promise<IPhoto | null> => {
@@ -164,6 +219,50 @@ const resolvers = {
       }
 
       return profilePicture;
+    },
+    setCoverPicture:
+    async (_root: any, args: { input: PictureInput }, context: any): Promise<IPhoto | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const fileType = args.input.type.toLowerCase().split("/");
+      if (fileType[0] !== "image") {
+        throw new UserInputError("File must be an image file");
+      }
+
+      if (args.input.size > (5 * 1024 * 1024)) {
+        throw new UserInputError("Image must be less than 5 MB");
+      }
+
+      // Delete existing cover photo
+      if (user.coverPhoto) {
+        try {
+          await Photo.findByIdAndDelete(user.coverPhoto);
+        } catch (err) {
+          logError(err);
+        }
+      }
+
+      const coverPicture = new Photo({
+        imageString: args.input.base64,
+        publishDate: Date.now() / 1000,
+      });
+
+      try {
+        await coverPicture.save();
+        user.coverPhoto = coverPicture._id;
+        await user.save();
+      } catch (err) {
+        return handleCatchError(err, args);
+      }
+
+      return coverPicture;
     },
   },
 };
