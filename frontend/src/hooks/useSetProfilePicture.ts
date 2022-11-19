@@ -1,12 +1,6 @@
 import { FetchResult, MutationResult, useMutation } from "@apollo/client";
 import { SET_PROFILE_PICTURE } from "../graphql/mutations";
-
-type ImageFile = {
-  type: string,
-  captionText: string,
-  size: number,
-  base64: string,
-};
+import { ImageFile } from "../types";
 
 const useSetProfilePicture = (): [(props: ImageFile) => Promise<FetchResult>, MutationResult] => {
   const [mutate, result] = useMutation(SET_PROFILE_PICTURE);

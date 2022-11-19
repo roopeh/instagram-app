@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AppBar from "../AppBar";
 import NameForm from "./NameForm";
+import BioTextForm from "./BioTextForm";
 import PhotoForm from "./PhotoForm";
 import ErrorModal from "../ErrorModal";
 import useLogout from "../../hooks/useLogout";
@@ -55,7 +56,15 @@ const Accounts = () => {
 
   return (
     <DefaultAccountsContent>
-      <NameForm />
+      <h3>Edit profile details</h3>
+      <div className="accounts__textInputFlex">
+        <div className="accounts__textInputFlex__item">
+          <NameForm />
+        </div>
+        <div className="accounts__textInputFlex__item">
+          <BioTextForm />
+        </div>
+      </div>
       <hr className="accounts__divider" />
       <div className="accounts__imageUploadFlex">
         <div className="accounts__imageUploadFlex__item">

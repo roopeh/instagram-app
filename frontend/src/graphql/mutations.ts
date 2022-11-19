@@ -33,3 +33,31 @@ export const SET_PROFILE_PICTURE = gql`
     }
   }
 `;
+
+export const SET_NAMES = gql`
+  mutation Mutation($input: NameInput) {
+    setNames(input: $input) {
+      id
+      firstName
+      lastName
+    }
+  }
+`;
+
+export const SET_BIOTEXT = gql`
+  mutation Mutation($input: BioTextInput) {
+    setBioText(input: $input) {
+      id
+      bioText
+    }
+  }
+`;
+
+export const SET_COVER_PICTURE = gql`
+mutation Mutation($input: PictureInput) {
+  setCoverPicture(input: $input) {
+      id
+      imageString
+    }
+  }
+`;

@@ -3,6 +3,7 @@ interface TokenUser {
   username: string,
   firstName: string,
   lastName: string,
+  bioText: string,
   profilePhoto?: string,
   coverPhoto?: string,
 }
@@ -15,6 +16,7 @@ export const saveUserData = (data: any): void => {
     username: data.username,
     firstName: data.firstName,
     lastName: data.lastName,
+    bioText: data.bioText,
     profilePhoto: data.profilePhoto ? data.profilePhoto.imageString : null,
     coverPhoto: data.coverPhoto ? data.coverPhoto.imageString : null,
   };

@@ -7,6 +7,7 @@ export const USER_BASIC_INFO_FRAGMENT = gql`
     username
     firstName
     lastName
+    bioText
     profilePhoto {
       id
       imageString

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import IconButton from "@mui/material/IconButton";
-import LoadingButton from "@mui/lab/LoadingButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import LoadingButton from "../LoadingButton";
 import useSetProfilePicture from "../../hooks/useSetProfilePicture";
+import useSetCoverPicture from "../../hooks/useSetCoverPicture";
 import getBase64 from "../../utils/getBase64";
 import { getUserData, saveUserData } from "../../utils/userdata";
 
@@ -22,6 +23,7 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
   const [errorText, setErrorText] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
   const [setProfilePicture] = useSetProfilePicture();
+  const [setCoverPicture] = useSetCoverPicture();
 
   const userData = getUserData()!;
 
@@ -45,17 +47,32 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
     const base64 = await getBase64(imageFile.file);
 
     try {
-      const { data } = await setProfilePicture({
-        type: imageFile.file.type,
-        captionText: "",
-        size: imageFile.file.size,
-        base64,
-      });
-      if (data && data.setProfilePicture) {
-        saveUserData({
-          ...userData,
-          profilePhoto: data.setProfilePicture,
+      if (isCoverPhoto) {
+        const { data } = await setCoverPicture({
+          type: imageFile.file.type,
+          captionText: "",
+          size: imageFile.file.size,
+          base64,
         });
+        if (data && data.setCoverPicture) {
+          saveUserData({
+            ...userData,
+            coverPhoto: data.setCoverPicture,
+          });
+        }
+      } else {
+        const { data } = await setProfilePicture({
+          type: imageFile.file.type,
+          captionText: "",
+          size: imageFile.file.size,
+          base64,
+        });
+        if (data && data.setProfilePicture) {
+          saveUserData({
+            ...userData,
+            profilePhoto: data.setProfilePicture,
+          });
+        }
       }
       setImageFile(null);
       setUploading(false);
@@ -94,16 +111,12 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
             </IconButton>
             <br />
             <LoadingButton
-              type="submit"
               variant="contained"
               size="small"
-              endIcon={uploading && <div style={{ width: "15px" }} />}
-              loading={uploading}
-              loadingPosition={uploading ? "end" : undefined}
+              uploading={uploading}
+              buttonText="Upload"
               style={{ marginTop: "10px" }}
-            >
-              Upload
-            </LoadingButton>
+            />
             {errorText && (
               <div className="errorText" style={{ marginTop: "15px" }}>
                 {errorText}

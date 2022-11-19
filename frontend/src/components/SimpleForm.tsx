@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
+import LoadingButton from "./LoadingButton";
 import FormikTextInput from "./FormikTextInput";
 import { FormInput } from "../types";
 
@@ -70,14 +70,10 @@ const SimpleForm = ({
                   {useLoadingButton
                     ? (
                       <LoadingButton
-                        type="submit"
                         variant="contained"
-                        endIcon={loadingButtonAction && <div style={{ width: "15px" }} />}
-                        loading={loadingButtonAction}
-                        loadingPosition={loadingButtonAction ? "end" : undefined}
-                      >
-                        {submitText}
-                      </LoadingButton>
+                        uploading={loadingButtonAction}
+                        buttonText={submitText}
+                      />
                     ) : (
                       <Button
                         type="submit"

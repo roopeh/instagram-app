@@ -7,8 +7,6 @@ import ProfilePageContent from "./ProfilePageContent";
 import ProfilePageTop from "./ProfilePageTop";
 import "../../styles/ProfilePage.css";
 
-import test_cover from "../../assets/placeholders/cover_photo.jpg";
-
 const ProfilePage = () => {
   const [coverPhotoEnabled, setCoverPhoto] = useState<boolean>(false);
   const username = useParams().userId;
@@ -49,9 +47,11 @@ const ProfilePage = () => {
   }
 
   const userInfo = getUserQuery.user;
-  console.log(userInfo);
 
-  const toggleCoverPhoto = () => setCoverPhoto(!coverPhotoEnabled);
+  // Set cover photo only once
+  if (!coverPhotoEnabled && userInfo.coverPhoto) {
+    setCoverPhoto(userInfo.coverPhoto);
+  }
 
   const root = document.querySelector(":root") as HTMLElement;
   root.style.setProperty("--minProfileCoverPhotoHeight", coverPhotoEnabled
@@ -67,7 +67,7 @@ const ProfilePage = () => {
       <div className="profilePage__background">
         <div className="profilePage__background__topMargin" />
         <div className="profilePage__background__coverPhoto">
-          {coverPhotoEnabled && (<img src={test_cover} alt="" />)}
+          {coverPhotoEnabled && (<img src={userInfo.coverPhoto.imageString} alt="" />)}
         </div>
       </div>
 
@@ -82,7 +82,7 @@ const ProfilePage = () => {
           followingCount={userInfo.followingCount}
           followersCount={userInfo.followersCount}
         />
-        <ProfilePageContent coverPhotoFunc={toggleCoverPhoto} />
+        <ProfilePageContent coverPhotoFunc={() => null} />
       </div>
     </div>
   );

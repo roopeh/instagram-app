@@ -15,7 +15,6 @@ export const GET_USER = gql`
   query GetUser($input: UserInput) {
     getUser(input: $input) {
       ...UserBasicInfoFragment
-      bioText
       photos {
         id
         imageString
