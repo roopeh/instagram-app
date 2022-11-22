@@ -1,5 +1,5 @@
 :root {
-  /* Variables used by React*/
+  /* Variables used by React */
   --profileEmptyCoverPhotoHeight: 80px;
   --profileDefaultCoverPhotoHeight: 150px;
   --profileBackgroundHeightWithoutCoverPhoto: calc(var(--profileEmptyCoverPhotoHeight) + 20px);
@@ -101,6 +101,13 @@
   height: 100%;
 }
 
+.profilePage__profilePicture__button {
+  width: 100px;
+  margin-top: 5px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
 .profilePage__topBar__textFlexBox {
   display: flex;
   /* width - margin right - margin left - "filler" margin */
@@ -171,6 +178,11 @@
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
+}
+
+.profilePage__imageFlex__postContainer {
+  flex: 0 0 40px;
+  margin-left: 10px;
 }
 
 .profilePage__imageFlex__rowDivider {

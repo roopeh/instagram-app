@@ -5,13 +5,9 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import LoadingButton from "../LoadingButton";
 import useSetProfilePicture from "../../hooks/useSetProfilePicture";
 import useSetCoverPicture from "../../hooks/useSetCoverPicture";
+import { FileInfo } from "../../types";
 import getBase64 from "../../utils/getBase64";
 import { getUserData, saveUserData } from "../../utils/userdata";
-
-interface FileInfo {
-  name: string,
-  file: File,
-}
 
 interface PhotoFormProps {
   title: string,

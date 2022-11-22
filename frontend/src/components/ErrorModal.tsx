@@ -1,15 +1,22 @@
+/* eslint-disable react/require-default-props */
 import React from "react";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 
 interface ModalProps {
   text: string,
+  openBoolean: boolean,
+  buttonText: string,
+  buttonVariant?: "contained" | "outlined",
+  buttonColor?: "info" | "error" | "success" | "warning",
   onClose: () => void,
 }
 
-const ErrorModal = ({ text, onClose }: ModalProps) => (
+const ErrorModal = ({
+  text, openBoolean, buttonText, buttonVariant, buttonColor, onClose,
+}: ModalProps) => (
   <Modal
-    open
+    open={openBoolean}
     onClose={onClose}
   >
     <div className="errorModal">
@@ -17,11 +24,12 @@ const ErrorModal = ({ text, onClose }: ModalProps) => (
       <div className="errorModal__return__content">
         <Button
           type="button"
-          variant="contained"
+          variant={buttonVariant || "contained"}
+          color={buttonColor || "primary"}
           size="small"
           onClick={onClose}
         >
-          Return
+          {buttonText}
         </Button>
       </div>
     </div>

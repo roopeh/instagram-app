@@ -7,12 +7,15 @@ interface TextInputProps {
   name: string,
   placeholder: string,
   type: string,
+  variant?: "outlined" | "filled" | "standard",
   size?: string,
+  multiline?: boolean,
+  rows?: number,
   style?: React.CSSProperties,
 }
 
 const FormikTextInput = ({
-  name, placeholder, type, size, style,
+  name, placeholder, type, variant, size, multiline, rows, style,
 }: TextInputProps) => {
   const [field, meta, helpers] = useField<string>(name);
   const showError: boolean = meta.touched && meta.error !== null && meta.error !== undefined;
@@ -30,6 +33,9 @@ const FormikTextInput = ({
         onBlur={() => helpers.setTouched(true)}
         component={TextField}
         style={inputStyle}
+        variant={variant}
+        multiline={multiline}
+        rows={rows}
         size={size}
       />
       {showError && <div className="errorText">{meta.error}</div>}

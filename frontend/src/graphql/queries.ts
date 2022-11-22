@@ -18,6 +18,27 @@ export const GET_USER = gql`
       photos {
         id
         imageString
+        publishDate
+        captionText
+        likes {
+          id
+          username
+        }
+        likesCount
+        comments {
+          id
+          author {
+            id
+            username
+            profilePhoto {
+              id
+              imageString
+            }
+          }
+          date
+          message
+        }
+        commentsCount
       }
       photoCount
       following {

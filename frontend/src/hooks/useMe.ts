@@ -3,11 +3,10 @@ import { ME } from "../graphql/queries";
 
 const useMe = () => {
   const { data, error, loading } = useQuery(ME, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   const me = data && data.me ? data.me : null;
-
   return { me, error, loading };
 };
 

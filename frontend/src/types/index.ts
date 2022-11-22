@@ -6,6 +6,11 @@ export type FormInput = {
   type: string,
 };
 
+export type FileInfo = {
+  name: string,
+  file: File,
+};
+
 export type ImageFile = {
   type: string,
   captionText: string,

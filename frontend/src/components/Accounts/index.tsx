@@ -30,24 +30,38 @@ const Accounts = () => {
     await logout();
   };
 
-  if (meQuery.error || (!meQuery.me && !meQuery.loading)) {
-    if (getUserData() && !meQuery.error) {
+  if (meQuery.error) {
+    return (
+      <DefaultAccountsContent>
+        <ErrorModal
+          text="Internal server error"
+          openBoolean
+          buttonText="Return"
+          onClose={() => navigate("/")}
+        />
+      </DefaultAccountsContent>
+    );
+  }
+
+  if (!meQuery.me) {
+    if (meQuery.loading) {
+      return <DefaultAccountsContent>Loading...</DefaultAccountsContent>;
+    }
+
+    if (getUserData()) {
       handleLogout();
     }
 
     return (
       <DefaultAccountsContent>
         <ErrorModal
-          text={meQuery.error
-            ? "Internal server error"
-            : "You must be logged in to access this page"}
+          text="You must be logged in to access this page"
+          openBoolean
+          buttonText="Return"
           onClose={() => navigate("/")}
         />
       </DefaultAccountsContent>
     );
-  }
-  if (meQuery.loading) {
-    return <DefaultAccountsContent>Loading...</DefaultAccountsContent>;
   }
 
   if (meQuery.me) {

@@ -20,8 +20,7 @@ const BioTextForm = () => {
     borderRadius: "5px",
   };
 
-  const updateBioText = async (values: BioTextFields, { resetForm }: any): Promise<void> => {
-    resetForm();
+  const updateBioText = async (values: BioTextFields): Promise<void> => {
     setUpdating(true);
     try {
       const { data } = await setBioText(values);
@@ -46,7 +45,6 @@ const BioTextForm = () => {
       {() => (
         <Form className="form ui">
           <span className="accounts__formLabel">Bio text</span>
-          <br />
           <FormikTextInput
             placeholder="Your bio text"
             name="bioText"

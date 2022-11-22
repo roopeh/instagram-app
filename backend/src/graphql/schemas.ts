@@ -100,6 +100,8 @@ const typeDefs = gql`
     setBioText(input: BioTextInput): User
     setProfilePicture(input: PictureInput): Photo
     setCoverPicture(input: PictureInput): Photo
+
+    createPost(input: PictureInput): Photo
   }
 `;
 

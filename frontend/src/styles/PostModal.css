@@ -1,0 +1,114 @@
+:root {
+  /* Variables used by React */
+  --postModalFlexDirection: row;
+  --postModalTextFlexDirection: column;
+  --postModalTextFlexContent: normal;
+  --postModalTextRows: 4;
+  --postmodalProfilePicMargin: 0 10px 0 0;
+}
+
+.postModal {
+  --postModalMinWidth: 500px;
+  --postModalWidth: min(max(80%, calc(var(--minContentWidth)) - 5%), calc(var(--maxContentWidth) - 5%));
+  --postModalBorderRadius: 15px;
+  display: flex;
+  flex-direction: column;
+  width: var(--postModalWidth);
+  position: absolute;
+  top: calc(50% - (var(--postModalWidth) / 1.2 / 2));
+  left: calc(50% - (var(--postModalWidth) / 2));
+  background-color: rgb(255, 255, 255);
+  border: 1px solid var(--borderColorDark);
+  border-radius: var(--postModalBorderRadius);
+}
+
+.postModal__topBar {
+  display: flex;
+  /* 100% - padding */
+  width: calc(100% - 8px * 2);
+  justify-content: space-evenly;
+  align-items: center;
+  border-bottom: 1px solid var(--borderColorDark);
+  padding: 8px;
+}
+
+.postModal__topBar__title {
+  flex: 1;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.postModal__topBar__closeButtonContainer {
+  flex: 1;
+  text-align: end;
+}
+
+.postModal__content {
+  display: flex;
+  flex-direction: var(--postModalFlexDirection);
+  flex: 1;
+  width: 100%;
+}
+
+.postModal__pictureDefault {
+  display: flex;
+  flex: 0 0 74%;
+  aspect-ratio: 1.2;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: -1px;
+  margin-bottom: -1px;
+  border-bottom-left-radius: var(--postModalBorderRadius);
+}
+
+.postModal__pictureDefault img {
+  width: calc(100% + 1px);
+  height: calc(100% + 1px);
+  border-bottom-left-radius: var(--postModalBorderRadius);
+}
+
+.postModal__pictureSmaller {
+  display: flex;
+  width: calc(100% + 2px);
+  aspect-ratio: 1.2;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: -1px;
+  margin-bottom: -1px;
+  border-bottom-left-radius: var(--postModalBorderRadius);
+}
+
+.postModal__pictureSmaller img {
+  width: 100%;
+  height: 100%;
+  border-bottom-left-radius: var(--postModalBorderRadius);
+  border-bottom-right-radius: var(--postModalBorderRadius);
+}
+
+.postModal__textFlex {
+  display: flex;
+  flex: 0 0 24%;
+  flex-direction: var(--postModalTextFlexDirection);
+  justify-content: var(--postModalTextFlexContent);
+  padding: 0 15px;
+  border-bottom-right-radius: var(--postModalBorderRadius);
+}
+
+.postModal__textFlex__username {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 0 10%;
+  align-items: center;
+}
+
+.postModal__textFlex__profilePic {
+  width: 40px;
+  height: 40px;
+  background-color: var(--borderColorLight);
+  border: 1px solid var(--borderColorDark);
+  border-radius: 50%;
+  margin: var(--postmodalProfilePicMargin);
+}

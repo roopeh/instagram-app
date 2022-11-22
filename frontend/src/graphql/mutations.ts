@@ -61,3 +61,12 @@ mutation Mutation($input: PictureInput) {
     }
   }
 `;
+
+export const CREATE_POST = gql`
+  mutation Mutation($input: PictureInput) {
+    createPost(input: $input) {
+      id
+      imageString
+    }
+  }
+`;

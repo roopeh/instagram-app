@@ -39,6 +39,10 @@ const findUser = async (variables: any) => User
     "followers"/* , "messages" */]);
 
 const resolvers = {
+  Photo: {
+    likesCount: (root: IPhoto): number => root.likes.length,
+    commentsCount: (root: IPhoto): number => root.comments.length,
+  },
   User: {
     photoCount: (root: IUser): number => root.photos.length,
     followingCount: (root: IUser): number => root.following.length,
@@ -263,6 +267,46 @@ const resolvers = {
       }
 
       return coverPicture;
+    },
+    createPost:
+    async (_root: any, args: { input: PictureInput }, context: any): Promise<IPhoto | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const fileType = args.input.type.toLowerCase().split("/");
+      if (fileType[0] !== "image") {
+        throw new UserInputError("File must be an image file");
+      }
+
+      if (args.input.size > (5 * 1024 * 1024)) {
+        throw new UserInputError("Image must be less than 5 MB");
+      }
+
+      if (args.input.captionText.length > 150) {
+        throw new UserInputError("Caption text must be less than 150 characters");
+      }
+
+      const newPicture = new Photo({
+        imageString: args.input.base64,
+        publishDate: Date.now() / 1000,
+        captionText: args.input.captionText,
+      });
+
+      try {
+        await newPicture.save();
+        user.photos = user.photos.concat(newPicture._id);
+        await user.save();
+      } catch (err) {
+        return handleCatchError(err, args);
+      }
+
+      return newPicture;
     },
   },
 };

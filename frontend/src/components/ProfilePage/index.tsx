@@ -11,45 +11,49 @@ const ProfilePage = () => {
   const [coverPhotoEnabled, setCoverPhoto] = useState<boolean>(false);
   const username = useParams().userId;
   if (!username) {
-    return <div>404</div>;
+    return <NotFound />;
   }
 
   const getUserQuery = useGetUser({ username });
-  if (getUserQuery.error || (!getUserQuery.user && !getUserQuery.loading)) {
+  if (getUserQuery.error) {
     return <NotFound />;
   }
-  if (getUserQuery.loading) {
-    return (
-      <div>
-        <AppBar />
-        <div className="profilePage__background">
-          <div className="profilePage__background__topMargin" />
-          <div className="profilePage__background__coverPhoto" />
-        </div>
 
-        <div className="profilePage__container">
-          <ProfilePageTop
-            username=""
-            firstName=""
-            lastName=""
-            bioText=""
-            profilePhoto=""
-            photoCount={0}
-            followingCount={0}
-            followersCount={0}
-          />
-          <div className="profilePage__loading">
-            Loading...
+  if (!getUserQuery.user) {
+    if (getUserQuery.loading) {
+      return (
+        <div>
+          <AppBar />
+          <div className="profilePage__background">
+            <div className="profilePage__background__topMargin" />
+            <div className="profilePage__background__coverPhoto" />
+          </div>
+
+          <div className="profilePage__container">
+            <ProfilePageTop
+              username=""
+              firstName=""
+              lastName=""
+              bioText=""
+              profilePhoto=""
+              photoCount={0}
+              followingCount={0}
+              followersCount={0}
+            />
+            <div className="profilePage__loading">
+              Loading...
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    return <NotFound />;
   }
 
   const userInfo = getUserQuery.user;
-
-  // Set cover photo only once
   if (!coverPhotoEnabled && userInfo.coverPhoto) {
+    // Set cover photo only once
     setCoverPhoto(userInfo.coverPhoto);
   }
 
@@ -82,7 +86,7 @@ const ProfilePage = () => {
           followingCount={userInfo.followingCount}
           followersCount={userInfo.followersCount}
         />
-        <ProfilePageContent coverPhotoFunc={() => null} />
+        <ProfilePageContent username={userInfo.username} />
       </div>
     </div>
   );
