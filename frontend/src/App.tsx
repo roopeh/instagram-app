@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Accounts from "./components/Accounts";
 import Login from "./components/Login";
@@ -9,8 +9,17 @@ import NotFound from "./components/NotFound";
 import "./styles/shared.css";
 import "./styles/App.css";
 
-// eslint-disable-next-line arrow-body-style
 const App = () => {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      return () => null;
+    }
+
+    const handleContextMenu = (e: MouseEvent) => { e.preventDefault(); };
+    document.addEventListener("contextmenu", handleContextMenu);
+    return () => document.removeEventListener("contextmenu", handleContextMenu);
+  }, []);
+
   return (
     <div className="background">
       <Routes>
