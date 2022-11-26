@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "../graphql/queries";
+import { User } from "../types";
 
 interface UserProps {
   username: string,
@@ -11,7 +12,7 @@ const useGetUser = (props: UserProps) => {
     fetchPolicy: "cache-and-network",
   });
 
-  const user = data && data.getUser ? data.getUser : null;
+  const user: User | null = data && data.getUser ? data.getUser : null;
   return { user, error, loading };
 };
 

@@ -54,7 +54,12 @@ const ProfilePage = () => {
   const userInfo = getUserQuery.user;
   if (!coverPhotoEnabled && userInfo.coverPhoto) {
     // Set cover photo only once
-    setCoverPhoto(userInfo.coverPhoto);
+    setCoverPhoto(true);
+    return null;
+  }
+  if (coverPhotoEnabled && !userInfo.coverPhoto) {
+    setCoverPhoto(false);
+    return null;
   }
 
   const root = document.querySelector(":root") as HTMLElement;
@@ -71,7 +76,7 @@ const ProfilePage = () => {
       <div className="profilePage__background">
         <div className="profilePage__background__topMargin" />
         <div className="profilePage__background__coverPhoto">
-          {coverPhotoEnabled && (<img src={userInfo.coverPhoto.imageString} alt="" />)}
+          {coverPhotoEnabled && (<img src={userInfo.coverPhoto!.imageString} alt="" />)}
         </div>
       </div>
 
@@ -86,7 +91,10 @@ const ProfilePage = () => {
           followingCount={userInfo.followingCount}
           followersCount={userInfo.followersCount}
         />
-        <ProfilePageContent username={userInfo.username} />
+        <ProfilePageContent
+          username={userInfo.username}
+          photos={userInfo.photos}
+        />
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ const typeDefs = gql`
   type Photo {
     id: ID!
     imageString: String!
+    author: User!
     publishDate: String!
     captionText: String
     likes: [User!]
@@ -84,9 +85,15 @@ const typeDefs = gql`
     bioText: String!
   }
 
+  input PictureQueryInput {
+    username: String!,
+    photoId: String!,
+  }
+
   type Query {
     userCount: Int!
     getUser(input: UserInput): User
+    getPhoto(input: PictureQueryInput): Photo
     allUsers: [User!]!
     me: User
   }

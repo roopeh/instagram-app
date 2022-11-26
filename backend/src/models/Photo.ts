@@ -6,8 +6,12 @@ const schema = new Schema<IPhoto>({
     type: String,
     required: true,
   },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   publishDate: {
-    type: String,
+    type: Number,
     required: true,
   },
   captionText: {

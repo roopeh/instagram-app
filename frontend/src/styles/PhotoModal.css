@@ -1,0 +1,200 @@
+:root {
+  /* Variables used by React */
+  --photoModalFlexDirection: row;
+  --photoModalLikeFlexSize: 40%;
+
+  --photoModalWidth: min(max(80%, calc(var(--minContentWidth)) - 5%), calc(var(--maxContentWidth) - 5%));
+  --photoModalAspectRatio: 1.1;
+  --photoModalFlexItemHeight: calc(var(--photoModalWidth) / var(--photoModalAspectRatio) / 10);
+  --avatarSize: 35px;
+}
+
+.photoModal {
+  display: flex;
+  flex-direction: var(--photoModalFlexDirection);
+  position: absolute;
+  top: calc(50% - (var(--photoModalWidth) / 2));
+  left: calc(50% - (var(--photoModalWidth) / 2));
+  width: var(--photoModalWidth);
+  height: calc(var(--photoModalWidth) * 0.75 * var(--photoModalAspectRatio));
+  outline: 0;
+}
+
+.photoModal__loading {
+  display: flex;
+  position: absolute;
+  top: calc(50% - (var(--photoModalWidth) / 2));
+  left: calc(50% - (var(--photoModalWidth) / 2));
+  width: var(--photoModalWidth);
+  height: calc(var(--photoModalWidth) * var(--photoModalAspectRatio));
+  justify-content: center;
+  align-items: center;
+}
+
+.photoModal__imageFlex {
+  display: flex;
+  flex: 0 0 75%;
+  aspect-ratio: var(--photoModalAspectRatio);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  align-items: flex-end;
+}
+
+.photoModal__imageFlexSmaller {
+  display: flex;
+  width: 100%;
+  aspect-ratio: var(--photoModalAspectRatio);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  align-items: flex-end;
+}
+
+.photoModal__imageFlex__deleteContainer {
+  padding: 5px;
+}
+
+.photoModal__avatar {
+  width: var(--avatarSize);
+  height: var(--avatarSize);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border: 1px solid var(--borderColorDark);
+  border-radius: 5px;
+}
+
+.photoModal__textFlex {
+  display: flex;
+  flex: 0 0 25%;
+  flex-direction: column;
+  background-color: rgb(252, 252, 252);
+}
+
+.photoModal__textFlexSmaller {
+  max-height: calc(var(--photoModalWidth) * 0.5 * var(--photoModalAspectRatio));
+}
+
+.photoModal__textFlex__item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--borderColorDark);
+  padding: 5px;
+}
+
+.photoModal__topFlex {
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 var(--photoModalFlexItemHeight);
+  border-bottom: 1px solid var(--borderColorDark);
+  padding: 2px 0;
+}
+
+.photoModal__topFlex__likeContainer {
+  display: flex;
+  flex: 0 0 var(--photoModalLikeFlexSize);
+  justify-content: center;
+  align-items: center;
+  border-left: 1px solid var(--borderColorDark);
+  border-right: 1px solid var(--borderColorDark);
+}
+
+.photoModal__topFlex__likeText {
+  margin-top: -1px;
+  margin-left: 2px;
+  font-weight: 600;
+  color: #0000EE;
+  font-size: small;
+}
+
+.photoModal__topFlex__likes div {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.photoModal__topFlex__likers {
+  flex: 0 0 60%;
+  display: flex;
+  align-self: center;
+  justify-content: space-evenly;
+}
+
+.photoModal__userInfo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.photoModal__userInfo__top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.photoModal__userInfo__username {
+  font-size: smaller;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.photoModal__userInfo__date {
+  align-self: center;
+  color: rgb(187, 187, 187);
+  font-size: smaller;
+  font-weight: 600;
+}
+
+.photoModal__userInfo__content {
+  font-size: smaller;
+}
+
+.photoModal__comments {
+  flex: 1;
+  background-color: rgb(246, 246, 246);
+  border-bottom: 1px solid var(--borderColorDark);
+  overflow-y: auto;
+
+  -ms-overflow-style: none; /* Hide scrollbar on IE / Edge */
+  scrollbar-width: none; /* Hide scrollbar on Firefox */
+}
+
+/* Hide scrollbar on Chrome/Safari/Opera */
+.photoModal__comments::-webkit-scrollbar {
+  display: none;
+}
+
+.photoModal__comments table {
+  width: 100%;
+  border-spacing: 0px;
+}
+
+.photoModal__comments td {
+  vertical-align: text-top;
+}
+
+.photoModal__commentFlex {
+  flex: 0 0 var(--photoModalFlexItemHeight);
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px 5px;
+}
+
+.photoModal__commentFlex__avatar {
+  flex: 0 0 var(--avatarSize);
+}
+
+.photoModal__commentFlex__input {
+  /* 100% - avatar size - buttonFlex - margins */
+  width: calc(100% - var(--avatarSize) - 20px - 5px - 10px);
+  margin-left: 5px;
+  margin-right: 10px;
+  border: 1px solid var(--borderColorDark);
+  border-radius: 5px;
+}
+
+.photoModal__commentFlex__buttonFlex {
+  flex: 0 0 20px;
+}

@@ -3,13 +3,14 @@ import { Types } from "mongoose";
 
 export interface IComment {
   author: Types.ObjectId,
-  date: string,
+  date: number,
   message: string
 }
 
 export interface IPhoto {
   imageString: string,
-  publishDate: string,
+  author: Types.ObjectId,
+  publishDate: number,
   captionText: string,
   likes: Array<Types.ObjectId>,
   comments: Array<Types.ObjectId>
@@ -80,4 +81,9 @@ export type PictureInput = {
   captionText: string,
   size: number,
   base64: string,
+};
+
+export type PictureQueryInput = {
+  username: string,
+  photoId: string,
 };

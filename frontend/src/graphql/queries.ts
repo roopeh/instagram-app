@@ -19,26 +19,6 @@ export const GET_USER = gql`
         id
         imageString
         publishDate
-        captionText
-        likes {
-          id
-          username
-        }
-        likesCount
-        comments {
-          id
-          author {
-            id
-            username
-            profilePhoto {
-              id
-              imageString
-            }
-          }
-          date
-          message
-        }
-        commentsCount
       }
       photoCount
       following {
@@ -51,6 +31,44 @@ export const GET_USER = gql`
         username
       }
       followersCount
+    }
+  }
+`;
+
+export const GET_PHOTO = gql`
+  query Query($input: PictureQueryInput) {
+    getPhoto(input: $input) {
+      id
+      imageString
+      author {
+        id
+        username
+        profilePhoto {
+          id
+          imageString
+        }
+      }
+      publishDate
+      captionText
+      likes {
+        id
+        username
+      }
+      likesCount
+      comments {
+        id
+        author {
+          id
+          username
+          profilePhoto {
+            id
+            imageString
+          }
+        }
+        date
+        message
+      }
+      commentsCount
     }
   }
 `;

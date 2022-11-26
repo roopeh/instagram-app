@@ -8,7 +8,7 @@ const schema = new Schema<IComment>({
     required: true,
   },
   date: {
-    type: String,
+    type: Number,
     required: true,
   },
   message: {

@@ -8,7 +8,6 @@
 }
 
 .postModal {
-  --postModalMinWidth: 500px;
   --postModalWidth: min(max(80%, calc(var(--minContentWidth)) - 5%), calc(var(--maxContentWidth) - 5%));
   --postModalBorderRadius: 15px;
   display: flex;

@@ -9,7 +9,7 @@ const setTokenCookies = (tokens: Tokens): Cookies => {
       sameSite: "lax",
     } : {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
     };
 
   return {

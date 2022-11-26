@@ -28,6 +28,7 @@ const App = () => {
         <Route path="/accounts/register" element={<Register />} />
         <Route path="/accounts/login" element={<Login />} />
         <Route path="/accounts/*" element={<NotFound />} />
+        <Route path="/notfound" element={<NotFound />} />
         <Route path="/:userId/*" element={<ProfilePage />} />
       </Routes>
     </div>

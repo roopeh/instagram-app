@@ -17,3 +17,38 @@ export type ImageFile = {
   size: number,
   base64: string,
 };
+
+export type User = {
+  id: string,
+  username: string,
+  firstName: string,
+  lastName: string,
+  bioText: string,
+  profilePhoto: Photo,
+  coverPhoto: Photo,
+  photos: Array<Photo>,
+  photoCount: number,
+  following: Array<User>,
+  followingCount: number,
+  followers: Array<User>,
+  followersCount: number,
+};
+
+export type Comment = {
+  id: string,
+  author: User,
+  date: number,
+  message: string,
+};
+
+export type Photo = {
+  id: string,
+  imageString: string,
+  author: User,
+  publishDate: number,
+  captionText: string,
+  likes: Array<User>,
+  likesCount: number,
+  comments: Array<Comment>,
+  commentsCount: number,
+};

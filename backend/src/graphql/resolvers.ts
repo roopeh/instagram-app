@@ -4,9 +4,8 @@ import { mongo, Error } from "mongoose";
 import Photo from "../models/Photo";
 import User from "../models/User";
 import {
-  BioTextInput,
-  IPhoto,
-  IUser, NameInput, PictureInput, UserInput, UserLoginInput, UserRegisterInput,
+  BioTextInput, IPhoto, IUser, NameInput, PictureInput,
+  UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -35,8 +34,14 @@ const firstCharUpperRestLower = (str: string): string => {
 
 const findUser = async (variables: any) => User
   .findOne(variables)
-  .populate(["profilePhoto", "coverPhoto", "photos", "following",
-    "followers"/* , "messages" */]);
+  .populate(["profilePhoto", "coverPhoto", "following",
+    "followers"/* , "messages" */])
+  .populate({ path: "photos", options: { sort: { publishDate: -1 } } });
+
+const findPhoto = async (variables: any) => Photo
+  .findOne(variables)
+  .populate(["likes"/* , "comments" */])
+  .populate({ path: "author", populate: { path: "profilePhoto" } });
 
 const resolvers = {
   Photo: {
@@ -54,6 +59,19 @@ const resolvers = {
       const user = await findUser({ username: args.input.username.toLowerCase() });
       return user;
     },
+    getPhoto: async (_root: any, args: { input: PictureQueryInput }): Promise<IPhoto | null> => {
+      const user = await User.findOne({ username: args.input.username.toLowerCase() });
+      if (!user) {
+        return null;
+      }
+
+      const photo = await findPhoto({ _id: args.input.photoId, author: user._id });
+      if (!photo) {
+        return null;
+      }
+
+      return photo;
+    },
     allUsers: async (): Promise<Array<IUser>> => User.find({}),
     me: async (_root: any, _args: any, context: any): Promise<IUser | null> => {
       if (!context.req.user) {
@@ -66,10 +84,15 @@ const resolvers = {
   },
   Mutation: {
     createUser: async (_root: any, args: { input: UserRegisterInput }): Promise<IUser> => {
+      const lowCaseUsername = args.input.username.toLowerCase();
       // Check if username already exists
-      const existingUsername = await User.findOne({ username: args.input.username.toLowerCase() });
+      const existingUsername = await User.findOne({ username: lowCaseUsername });
       if (existingUsername) {
         throw new UserInputError("Username already exists");
+      }
+
+      if (lowCaseUsername === "accounts" || lowCaseUsername === "notfound") {
+        throw new UserInputError("Invalid username");
       }
 
       // Check password length
@@ -87,7 +110,7 @@ const resolvers = {
 
       // Format fields
       const formattedInputs: UserRegisterInput = {
-        username: args.input.username.toLowerCase(),
+        username: lowCaseUsername,
         password: args.input.password,
         firstName: firstCharUpperRestLower(args.input.firstName),
         lastName: firstCharUpperRestLower(args.input.lastName),
@@ -211,7 +234,8 @@ const resolvers = {
 
       const profilePicture = new Photo({
         imageString: args.input.base64,
-        publishDate: Date.now() / 1000,
+        author: user._id,
+        publishDate: Date.now(),
       });
 
       try {
@@ -255,7 +279,8 @@ const resolvers = {
 
       const coverPicture = new Photo({
         imageString: args.input.base64,
-        publishDate: Date.now() / 1000,
+        author: user._id,
+        publishDate: Date.now(),
       });
 
       try {
@@ -294,7 +319,8 @@ const resolvers = {
 
       const newPicture = new Photo({
         imageString: args.input.base64,
-        publishDate: Date.now() / 1000,
+        author: user._id,
+        publishDate: Date.now(),
         captionText: args.input.captionText,
       });
 
