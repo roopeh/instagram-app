@@ -1,26 +1,43 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState } from "react";
-import { Form, Formik } from "formik";
+import { ApolloQueryResult } from "@apollo/client";
+import { Field, Form, Formik } from "formik";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import EmptyProfilePic from "../../assets/empty_profile.png";
+import useAddComment from "../../hooks/useAddComment";
 import { Photo } from "../../types";
 import { getUserData } from "../../utils/userdata";
 
 interface CommentProps {
   photo: Photo,
+  refetchFunc: () => Promise<ApolloQueryResult<any>>,
+  setError: (err: string) => void,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PhotoComments = ({ photo }: CommentProps) => {
+const PhotoComments = ({ photo, refetchFunc, setError }: CommentProps) => {
+  const [addComment] = useAddComment();
   const [uploading, setUploading] = useState<boolean>(false);
   const userData = getUserData()!;
 
-  const postComment = async () => {
-    console.log("foo");
-  };
+  const postComment = async (values: any, { resetForm }: any) => {
+    const { comment } = values;
+    if (!comment || !comment.length) {
+      return;
+    }
 
-  const toggleUploading = () => setUploading(!uploading);
+    setUploading(true);
+
+    try {
+      await addComment({ photoId: photo.id, message: comment });
+      await refetchFunc();
+      setUploading(false);
+    } catch (err) {
+      setError(String(err));
+      setUploading(false);
+    }
+    resetForm();
+  };
 
   return (
     <Formik
@@ -31,29 +48,28 @@ const PhotoComments = ({ photo }: CommentProps) => {
         <Form className="form ui photoModal__textFlex__item photoModal__commentFlex">
           <div
             className="photoModal__avatar photoModal__commentFlex__avatar"
-            onClick={toggleUploading}
-            onKeyDown={toggleUploading}
             style={{
               backgroundImage: `url(${userData.profilePhoto
                 ? userData.profilePhoto
                 : EmptyProfilePic})`,
             }}
           />
-          <input
-            type="text"
+          <Field
+            type="input"
             name="comment"
             className="photoModal__commentFlex__input"
           />
           <div className="photoModal__commentFlex__buttonFlex">
             {!uploading ? (
-              <SendIcon
-                color="primary"
-                fontSize="small"
-                onClick={() => console.log("test")}
-              />
+              <IconButton type="submit" size="small">
+                <SendIcon
+                  color="primary"
+                  fontSize="small"
+                />
+              </IconButton>
             ) : (
               <CircularProgress
-                size="17px"
+                size="20px"
               />
             )}
           </div>

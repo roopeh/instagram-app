@@ -1,54 +1,64 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import { ApolloQueryResult } from "@apollo/client";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-// import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
+import CloseIcon from "@mui/icons-material/Close";
+import PhotoLikes from "./PhotoLikes";
 import PhotoPostComment from "./PhotoPostComment";
 import PhotoItem from "./PhotoItem";
-import useGetPhoto from "../../hooks/useGetPhoto";
+import PhotoComments from "./PhotoComments";
+import ErrorModal from "../ErrorModal";
+import { useGetPhoto, useGetPhotoComments } from "../../hooks/useGetPhoto";
+import useDeletePost from "../../hooks/useDeletePost";
 import { getUserData } from "../../utils/userdata";
+import { Comment } from "../../types";
 import "../../styles/PhotoModal.css";
 
 interface PhotoModalProps {
   username: string,
+  refetchProfile: () => Promise<ApolloQueryResult<any>>,
 }
 
-const PhotoModal = ({ username }: PhotoModalProps) => {
+const PhotoModal = ({ username, refetchProfile }: PhotoModalProps) => {
+  const [comments, setComments] = useState<Array<Comment>>([]);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth * 0.8);
-  const [comments, setComments] = useState<Array<number>>([]);
-  const commentsBottom = useRef<HTMLDivElement>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
   const navigate = useNavigate();
   const { photoId } = useParams();
 
   const getPhotoQuery = useGetPhoto({ username, photoId });
+  const getCommentsQuery = useGetPhotoComments({ username, photoId });
+  const [deletePost] = useDeletePost();
 
   useEffect(() => {
-    if (!photoId || getPhotoQuery.error) {
-      if (getPhotoQuery.error) console.log(getPhotoQuery.error);
+    if ((!photoId || getPhotoQuery.error || getCommentsQuery.error)
+    || (!getPhotoQuery.photo && !getPhotoQuery.loading)
+    || (!getCommentsQuery.photo && !getCommentsQuery.loading)) {
       navigate("/notfound");
     }
-    if (!getPhotoQuery.photo && !getPhotoQuery.loading) {
+  }, [
+    navigate, photoId, getPhotoQuery.error, getPhotoQuery.photo, getPhotoQuery.loading,
+    getCommentsQuery.error, getCommentsQuery.photo, getCommentsQuery.loading,
+  ]);
+
+  useEffect(() => {
+    if (getCommentsQuery.error || (!getCommentsQuery.photo && !getCommentsQuery.loading)) {
       navigate("/notfound");
     }
-  }, [navigate, photoId, getPhotoQuery.error, getPhotoQuery.photo, getPhotoQuery.loading]);
-
-  // Load comments when page is fully rendered
-  // so modal won't hang when there are over 100 comments
-  // TODO: pagination
-  useEffect(() => {
-    if (getPhotoQuery.photo) {
-      const arr: Array<number> = [];
-      [...Array(40)].map((e, i) => arr.push(i));
-      setComments(arr);
+    // Load comments when page is fully rendered
+    // so modal won't hang when there are over 100 comments
+    // TODO: pagination
+    if (getCommentsQuery.photo) {
+      setComments(getCommentsQuery.photo.comments);
     }
-  }, [getPhotoQuery.photo]);
-
-  // Scroll to bottom when comments are loaded
-  useEffect(() => {
-    commentsBottom.current?.scrollIntoView();
-  }, [comments]);
+  }, [getCommentsQuery.error, getCommentsQuery.photo]);
 
   useEffect(() => {
     const handleResize: () => void = () => setWindowWidth(window.innerWidth * 0.8);
@@ -71,7 +81,6 @@ const PhotoModal = ({ username }: PhotoModalProps) => {
 
   const userData = getUserData();
   const { photo } = getPhotoQuery;
-  const { likesCount } = photo;
   const isOwnPage: boolean = userData ? userData.username === photo.author.username : false;
 
   const root = document.querySelector(":root") as HTMLElement;
@@ -82,28 +91,78 @@ const PhotoModal = ({ username }: PhotoModalProps) => {
   root.style.setProperty("--photoModalLikeFlexSize", smallerThanThreshold
     ? "12%" : "40%");
 
-  const likeIcon: React.CSSProperties = {
-    width: "calc(100% * 0.3)", aspectRatio: "1.0", color: "#0000EE",
+  const handleError = (err: string): void => {
+    setErrorText(err);
   };
 
-  // eslint-disable-next-line arrow-body-style
-  const formatLikes = (like: number): string => {
-    return like >= 1000 ? `${Math.sign(like) * Number((like / 1000).toFixed(1))}k` : like.toString();
+  const closeModal = (): void => {
+    navigate(-1);
+  };
+
+  const confirmDelete = async (): Promise<void> => {
+    setConfirmDialogOpen(false);
+    try {
+      closeModal();
+      await deletePost({ photoId: photo.id });
+      refetchProfile();
+    } catch (err) {
+      handleError(String(err));
+    }
   };
 
   return (
     <Modal
       open
-      onClose={() => navigate(-1)}
+      onClose={closeModal}
       style={{ overflow: "scroll" }}
     >
       <div className="photoModal">
+        <ErrorModal
+          text={errorText}
+          openBoolean={errorText.length > 0}
+          buttonText="Close"
+          onClose={() => setErrorText("")}
+        />
+        <Dialog
+          open={confirmDialogOpen}
+          onClose={() => setConfirmDialogOpen(false)}
+        >
+          <DialogContent>Are you sure you want to delete this picture?</DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setConfirmDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="error"
+              onClick={confirmDelete}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
         <div
           className={smallerThanThreshold ? "photoModal__imageFlexSmaller" : "photoModal__imageFlex"}
           style={{ backgroundImage: `url(${photo.imageString})` }}
         >
-          <div className="photoModal__imageFlex__deleteContainer" style={!isOwnPage ? { display: "none" } : {}}>
-            <DeleteIcon fontSize="large" />
+          <div className="photoModal__imageFlex__buttonFlex">
+            <div
+              className="photoModal__button__flex"
+              onClick={closeModal}
+              aria-hidden
+            >
+              <CloseIcon style={{ color: "white", width: "15px", height: "15px" }} />
+            </div>
+            {isOwnPage && (
+              <div
+                className="photoModal__button__flex"
+                onClick={() => setConfirmDialogOpen(true)}
+                aria-hidden
+              >
+                <DeleteIcon style={{ color: "white", width: "25px", height: "25px" }} />
+              </div>
+            )}
           </div>
         </div>
         <div className={smallerThanThreshold
@@ -118,17 +177,12 @@ const PhotoModal = ({ username }: PhotoModalProps) => {
                 style={{ flex: "0 0 40%", borderBottom: "0px" }}
               />
             )}
-            <div
-              className="photoModal__topFlex__likeContainer"
-              style={!smallerThanThreshold ? { borderLeft: "0px" } : {}}
-            >
-              <FavoriteBorderIcon style={likeIcon} />
-              <span className="photoModal__topFlex__likeText">{formatLikes(likesCount)}</span>
-            </div>
-            <div className="photoModal__topFlex__likers">
-              <div />
-              <div />
-            </div>
+            <PhotoLikes
+              username={username}
+              photoId={photoId!}
+              smallerThanThreshold={smallerThanThreshold}
+              setError={handleError}
+            />
           </div>
           {!smallerThanThreshold && (
             <PhotoItem
@@ -138,28 +192,15 @@ const PhotoModal = ({ username }: PhotoModalProps) => {
             />
           )}
           <div className="photoModal__comments">
-            <table>
-              <tbody>
-                {comments.map((e, i) => {
-                  const someVal = i + 1;
-                  return (
-                    <tr key={someVal}>
-                      <td>
-                        <PhotoItem
-                          author={photo.author}
-                          content={`${someVal}st comment`}
-                          unixDate={0}
-                          style={{ borderBottom: 0 }}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div ref={commentsBottom} />
+            <PhotoComments comments={comments} />
           </div>
-          {userData && <PhotoPostComment photo={photo} />}
+          {userData && (
+            <PhotoPostComment
+              photo={photo}
+              refetchFunc={getCommentsQuery.refetch}
+              setError={handleError}
+            />
+          )}
         </div>
       </div>
     </Modal>

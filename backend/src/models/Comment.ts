@@ -7,6 +7,11 @@ const schema = new Schema<IComment>({
     ref: "User",
     required: true,
   },
+  photo: {
+    type: Schema.Types.ObjectId,
+    ref: "Photo",
+    required: true,
+  },
   date: {
     type: Number,
     required: true,

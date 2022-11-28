@@ -20,7 +20,7 @@ const schema = new Schema<IPhoto>({
   likes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Like",
     },
   ],
   comments: [

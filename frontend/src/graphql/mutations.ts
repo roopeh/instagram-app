@@ -70,3 +70,27 @@ export const CREATE_POST = gql`
     }
   }
 `;
+
+export const DELETE_POST = gql`
+  mutation Mutation($input: PictureIdInput) {
+    deletePost(input: $input)
+  }
+`;
+
+export const TOGGLE_LIKE = gql`
+  mutation Mutation($input: PictureIdInput) {
+    toggleLike(input: $input) {
+      id
+      likeDate
+    }
+  }
+`;
+
+export const ADD_COMMENT = gql`
+  mutation Mutation($input: CommentInput) {
+    addComment(input: $input) {
+      id
+      date
+    }
+  }
+`;

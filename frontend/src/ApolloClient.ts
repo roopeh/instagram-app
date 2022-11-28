@@ -12,7 +12,28 @@ const httpLink = new HttpLink({
 });
 
 const createApolloClient = (): ApolloClient<NormalizedCacheObject> => new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      User: {
+        fields: {
+          photos: {
+            merge(_, incoming: any[]) {
+              return [...incoming];
+            },
+          },
+        },
+      },
+      Photo: {
+        fields: {
+          likes: {
+            merge(_, incoming: any[]) {
+              return [...incoming];
+            },
+          },
+        },
+      },
+    },
+  }),
   link: httpLink,
 });
 

@@ -41,13 +41,20 @@ export type Comment = {
   message: string,
 };
 
+export type Like = {
+  id: string,
+  user: User,
+  photo: Photo,
+  likeDate: number,
+};
+
 export type Photo = {
   id: string,
   imageString: string,
   author: User,
   publishDate: number,
   captionText: string,
-  likes: Array<User>,
+  likes: Array<Like>,
   likesCount: number,
   comments: Array<Comment>,
   commentsCount: number,

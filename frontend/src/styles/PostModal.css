@@ -92,7 +92,7 @@
   flex: 0 0 24%;
   flex-direction: var(--postModalTextFlexDirection);
   justify-content: var(--postModalTextFlexContent);
-  padding: 0 15px;
+  padding: 5px 15px 0px;
   border-bottom-right-radius: var(--postModalBorderRadius);
 }
 

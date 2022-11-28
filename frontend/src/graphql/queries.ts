@@ -50,11 +50,34 @@ export const GET_PHOTO = gql`
       }
       publishDate
       captionText
+    }
+  }
+`;
+
+export const GET_PHOTO_LIKES = gql`
+  query Query($input: PictureQueryInput) {
+    getPhoto(input: $input) {
+      id
       likes {
         id
-        username
+        user {
+          id
+          username
+          profilePhoto {
+            id
+            imageString
+          }
+        }
       }
       likesCount
+    }
+  }
+`;
+
+export const GET_PHOTO_COMMENTS = gql`
+  query Query($input: PictureQueryInput) {
+    getPhoto(input: $input) {
+      id
       comments {
         id
         author {

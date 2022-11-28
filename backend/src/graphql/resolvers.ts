@@ -3,13 +3,16 @@ import { ApolloError, AuthenticationError, UserInputError } from "apollo-server"
 import { mongo, Error } from "mongoose";
 import Photo from "../models/Photo";
 import User from "../models/User";
+import Like from "../models/Like";
 import {
   BioTextInput, IPhoto, IUser, NameInput, PictureInput,
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
+  PictureIdInput, IPhotoLike, IComment, CommentInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
 import { setTokens } from "../utils/tokens";
+import Comment from "../models/Comment";
 
 const handleCatchError = (error: unknown, args: any) => {
   if (error instanceof Error.ValidationError
@@ -40,8 +43,17 @@ const findUser = async (variables: any) => User
 
 const findPhoto = async (variables: any) => Photo
   .findOne(variables)
-  .populate(["likes"/* , "comments" */])
-  .populate({ path: "author", populate: { path: "profilePhoto" } });
+  .populate({ path: "author", populate: { path: "profilePhoto" } })
+  .populate({
+    path: "likes",
+    populate: { path: "user", populate: { path: "profilePhoto" } },
+    options: { sort: { likeDate: -1 } },
+  })
+  .populate({
+    path: "comments",
+    populate: { path: "author", populate: { path: "profilePhoto" } },
+    options: { sort: { date: 1 } },
+  });
 
 const resolvers = {
   Photo: {
@@ -333,6 +345,122 @@ const resolvers = {
       }
 
       return newPicture;
+    },
+    deletePost:
+    async (_root: any, args: { input: PictureIdInput }, context: any): Promise<boolean> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const photo = await Photo.findById(args.input.photoId);
+      if (!photo) {
+        throw new UserInputError("Photo does not exist");
+      }
+
+      if (!photo.author.equals(user._id)) {
+        throw new UserInputError("You cannot delete that photo");
+      }
+
+      try {
+        if (user.profilePhoto && user.profilePhoto.equals(photo._id)) {
+          await User.updateOne({ _id: user._id }, { $unset: { profilePhoto: "" } });
+        }
+        if (user.coverPhoto && user.coverPhoto.equals(photo._id)) {
+          await User.updateOne({ _id: user._id }, { $unset: { coverPhoto: "" } });
+        }
+        user.photos = user.photos.filter((itr) => !itr.equals(photo._id));
+        await user.save();
+        await Like.deleteMany({ photo: photo._id });
+        await Comment.deleteMany({ photo: photo._id });
+        await Photo.findByIdAndDelete(photo._id);
+      } catch (err) {
+        handleCatchError(err, args);
+      }
+
+      return true;
+    },
+    toggleLike:
+    async (_: any, args: { input: PictureIdInput }, context: any): Promise<IPhotoLike | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const photo = await Photo.findById(args.input.photoId);
+      if (!photo) {
+        throw new UserInputError("Photo does not exist");
+      }
+
+      const findUserLike = await Like.findOne({ photo: photo._id, user: user._id });
+      if (findUserLike) {
+        // User has already liked the photo => remove like
+        try {
+          photo.likes = photo.likes.filter((like) => !like.equals(findUserLike._id));
+          await photo.save();
+          await Like.findByIdAndDelete(findUserLike._id);
+        } catch (err) {
+          handleCatchError(err, args);
+        }
+        return null;
+      }
+
+      const newLike = new Like({
+        user: user._id,
+        photo: photo._id,
+        likeDate: Date.now(),
+      });
+
+      try {
+        await newLike.save();
+        photo.likes = photo.likes.concat(newLike._id);
+        await photo.save();
+      } catch (err) {
+        handleCatchError(err, args);
+      }
+
+      return newLike;
+    },
+    addComment:
+    async (_root: any, args: { input: CommentInput }, context: any): Promise<IComment | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const photo = await Photo.findById(args.input.photoId);
+      if (!photo) {
+        throw new UserInputError("Photo does not exist");
+      }
+
+      const newComment = new Comment({
+        author: user._id,
+        photo: photo._id,
+        date: Date.now(),
+        message: args.input.message,
+      });
+
+      try {
+        await newComment.save();
+        photo.comments = photo.comments.concat(newComment._id);
+        await photo.save();
+      } catch (err) {
+        handleCatchError(err, args);
+      }
+
+      return newComment;
     },
   },
 };

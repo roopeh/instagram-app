@@ -37,7 +37,6 @@
   aspect-ratio: var(--photoModalAspectRatio);
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  align-items: flex-end;
 }
 
 .photoModal__imageFlexSmaller {
@@ -46,7 +45,24 @@
   aspect-ratio: var(--photoModalAspectRatio);
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  align-items: flex-end;
+}
+
+.photoModal__imageFlex__buttonFlex {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.photoModal__button__flex {
+  display: flex;
+  aspect-ratio: 1.0;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  margin: 15px;
+  padding: 2px;
+  cursor: pointer;
 }
 
 .photoModal__imageFlex__deleteContainer {
@@ -115,10 +131,17 @@
 }
 
 .photoModal__topFlex__likers {
-  flex: 0 0 60%;
+  flex: 1;
   display: flex;
-  align-self: center;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.photoModal__topFlex__likers div {
+  width: 20px;
+  height: 20px;
+  background-color: var(--borderColorLight);
 }
 
 .photoModal__userInfo {
@@ -196,5 +219,8 @@
 }
 
 .photoModal__commentFlex__buttonFlex {
-  flex: 0 0 20px;
+  display: flex;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
 }

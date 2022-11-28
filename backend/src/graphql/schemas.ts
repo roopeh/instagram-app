@@ -1,6 +1,8 @@
 import { gql } from "apollo-server";
 
 // TODO: paging
+// Message usersRead => usersUnread?
+// FollowInfo type with date?
 const typeDefs = gql`
   type Message {
     id: ID!
@@ -18,8 +20,16 @@ const typeDefs = gql`
   type Comment {
     id: ID!
     author: User!
+    photo: Photo!
     date: String!
     message: String!
+  }
+
+  type Like {
+    id: ID!
+    user: User!
+    photo: Photo!
+    likeDate: String!
   }
 
   type Photo {
@@ -28,7 +38,7 @@ const typeDefs = gql`
     author: User!
     publishDate: String!
     captionText: String
-    likes: [User!]
+    likes: [Like!]
     likesCount: Int!
     comments: [Comment!]
     commentsCount: Int!
@@ -90,6 +100,15 @@ const typeDefs = gql`
     photoId: String!,
   }
 
+  input PictureIdInput {
+    photoId: String!,
+  }
+
+  input CommentInput {
+    photoId: String!,
+    message: String!,
+  }
+
   type Query {
     userCount: Int!
     getUser(input: UserInput): User
@@ -109,6 +128,9 @@ const typeDefs = gql`
     setCoverPicture(input: PictureInput): Photo
 
     createPost(input: PictureInput): Photo
+    deletePost(input: PictureIdInput): Boolean
+    toggleLike(input: PictureIdInput): Like
+    addComment(input: CommentInput): Comment
   }
 `;
 
