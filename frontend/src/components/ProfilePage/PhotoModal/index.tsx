@@ -13,12 +13,12 @@ import PhotoLikes from "./PhotoLikes";
 import PhotoPostComment from "./PhotoPostComment";
 import PhotoItem from "./PhotoItem";
 import PhotoComments from "./PhotoComments";
-import ErrorModal from "../ErrorModal";
-import { useGetPhoto, useGetPhotoComments } from "../../hooks/useGetPhoto";
-import useDeletePost from "../../hooks/useDeletePost";
-import { getUserData } from "../../utils/userdata";
-import { Comment } from "../../types";
-import "../../styles/PhotoModal.css";
+import ErrorModal from "../../ErrorModal";
+import { useGetPhoto, useGetPhotoComments } from "../../../hooks/useGetPhoto";
+import useDeletePost from "../../../hooks/useDeletePost";
+import { getUserData } from "../../../utils/userdata";
+import { Comment } from "../../../types";
+import "../../../styles/PhotoModal.css";
 
 interface PhotoModalProps {
   username: string,

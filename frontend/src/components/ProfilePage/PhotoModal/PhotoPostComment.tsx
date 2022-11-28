@@ -4,10 +4,10 @@ import { Field, Form, Formik } from "formik";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
-import EmptyProfilePic from "../../assets/empty_profile.png";
-import useAddComment from "../../hooks/useAddComment";
-import { Photo } from "../../types";
-import { getUserData } from "../../utils/userdata";
+import EmptyProfilePic from "../../../assets/empty_profile.png";
+import useAddComment from "../../../hooks/useAddComment";
+import { Photo } from "../../../types";
+import { getUserData } from "../../../utils/userdata";
 
 interface CommentProps {
   photo: Photo,

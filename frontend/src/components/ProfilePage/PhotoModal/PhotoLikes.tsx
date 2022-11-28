@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import EmptyProfilePic from "../../assets/empty_profile.png";
-import { useGetPhotoLikes } from "../../hooks/useGetPhoto";
-import useToggleLike from "../../hooks/useToggleLike";
-import { getUserData } from "../../utils/userdata";
-import { Like } from "../../types";
+import EmptyProfilePic from "../../../assets/empty_profile.png";
+import { useGetPhotoLikes } from "../../../hooks/useGetPhoto";
+import useToggleLike from "../../../hooks/useToggleLike";
+import { getUserData } from "../../../utils/userdata";
+import { Like } from "../../../types";
 
 interface LikesProps {
   username: string,

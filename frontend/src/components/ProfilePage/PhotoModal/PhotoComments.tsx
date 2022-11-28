@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import PhotoItem from "./PhotoItem";
-import { Comment } from "../../types";
+import { Comment } from "../../../types";
 
 interface CommentsProps {
   comments: Array<Comment>,

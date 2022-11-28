@@ -1,9 +1,9 @@
 /* eslint-disable react/require-default-props */
 import React from "react";
 import { Link } from "react-router-dom";
-import EmptyProfilePic from "../../assets/empty_profile.png";
-import { formatDateForPhoto } from "../../utils/dateFormatter";
-import { User } from "../../types";
+import EmptyProfilePic from "../../../assets/empty_profile.png";
+import { formatDateForPhoto } from "../../../utils/dateFormatter";
+import { User } from "../../../types";
 
 interface PhotoItemProps {
   author: User,
