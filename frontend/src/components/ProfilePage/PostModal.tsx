@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { ApolloQueryResult } from "@apollo/client";
 import * as yup from "yup";
 import { Form, Formik } from "formik";
 import Modal from "@mui/material/Modal";
@@ -19,7 +18,6 @@ import "../../styles/PostModal.css";
 interface PostProps {
   open: boolean,
   onClose: () => void,
-  refetchProfile: () => Promise<ApolloQueryResult<any>>,
 }
 
 type Base64Info = {
@@ -28,7 +26,7 @@ type Base64Info = {
 
 type Base64FileInfo = FileInfo & Base64Info;
 
-const PostModal = ({ open, onClose, refetchProfile }: PostProps) => {
+const PostModal = ({ open, onClose }: PostProps) => {
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth * 0.8);
   const [imageFile, setImageFile] = useState<Base64FileInfo | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -100,7 +98,6 @@ const PostModal = ({ open, onClose, refetchProfile }: PostProps) => {
       });
       if (data && data.createPost) {
         closeModal();
-        refetchProfile();
       }
     } catch (err) {
       setErrorText(String(err));

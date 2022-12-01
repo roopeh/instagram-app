@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ApolloQueryResult } from "@apollo/client";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Dialog from "@mui/material/Dialog";
@@ -22,10 +21,9 @@ import "../../../styles/PhotoModal.css";
 
 interface PhotoModalProps {
   username: string,
-  refetchProfile: () => Promise<ApolloQueryResult<any>>,
 }
 
-const PhotoModal = ({ username, refetchProfile }: PhotoModalProps) => {
+const PhotoModal = ({ username }: PhotoModalProps) => {
   const [comments, setComments] = useState<Array<Comment>>([]);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth * 0.8);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
@@ -104,7 +102,6 @@ const PhotoModal = ({ username, refetchProfile }: PhotoModalProps) => {
     try {
       closeModal();
       await deletePost({ photoId: photo.id });
-      refetchProfile();
     } catch (err) {
       handleError(String(err));
     }
@@ -197,7 +194,6 @@ const PhotoModal = ({ username, refetchProfile }: PhotoModalProps) => {
           {userData && (
             <PhotoPostComment
               photo={photo}
-              refetchFunc={getCommentsQuery.refetch}
               setError={handleError}
             />
           )}

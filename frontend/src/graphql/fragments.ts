@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 
-// eslint-disable-next-line import/prefer-default-export
 export const USER_BASIC_INFO_FRAGMENT = gql`
   fragment UserBasicInfoFragment on User {
     id
@@ -16,5 +15,69 @@ export const USER_BASIC_INFO_FRAGMENT = gql`
       id
       imageString
     }
+  }
+`;
+
+export const FOLLOWER_FRAGMENT = gql`
+  fragment FollowerFragment on User {
+    followers {
+      id
+      username
+      firstName
+      lastName
+      profilePhoto {
+        id
+        imageString
+      }
+    }
+    followersCount
+  }
+`;
+
+export const PHOTOS_FRAGMENT = gql`
+  fragment PhotosFragment on User {
+    photos {
+      id
+      imageString
+      publishDate
+    }
+    photoCount
+  }
+`;
+export const LIKES_FRAGMENT = gql`
+  fragment LikesFragment on Photo {
+    id
+    likes {
+      id
+      user {
+        id
+        username
+        profilePhoto {
+          id
+          imageString
+        }
+      }
+    }
+    likesCount
+  }
+`;
+
+export const COMMENTS_FRAGMENT = gql`
+  fragment CommentsFragment on Photo {
+    id
+    comments {
+      id
+      author {
+        id
+        username
+        profilePhoto {
+          id
+          imageString
+        }
+      }
+      date
+      message
+    }
+    commentsCount
   }
 `;

@@ -80,7 +80,6 @@ const ProfilePage = () => {
         <ProfilePageContent
           username={userInfo.username}
           photos={userInfo.photos}
-          refetchProfile={() => getUserQuery.refetch()}
         />
       </div>
     </div>

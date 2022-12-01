@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ApolloQueryResult } from "@apollo/client";
 import {
   Routes, Route, useNavigate,
 } from "react-router-dom";
@@ -14,10 +13,9 @@ import { Photo } from "../../types";
 interface ProfileContentProps {
   username: string,
   photos: Array<Photo>,
-  refetchProfile: () => Promise<ApolloQueryResult<any>>,
 }
 
-const ProfilePageContent = ({ username, photos, refetchProfile }: ProfileContentProps) => {
+const ProfilePageContent = ({ username, photos }: ProfileContentProps) => {
   const [postModalOpen, setPostModalOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const userData = getUserData();
@@ -52,11 +50,10 @@ const ProfilePageContent = ({ username, photos, refetchProfile }: ProfileContent
         <PostModal
           open={postModalOpen}
           onClose={() => setPostModalOpen(false)}
-          refetchProfile={refetchProfile}
         />
 
         <Routes>
-          <Route path="/:photoId" element={<PhotoModal username={username} refetchProfile={refetchProfile} />} />
+          <Route path="/:photoId" element={<PhotoModal username={username} />} />
         </Routes>
       </div>
       <div className="profilePage__imageFlex">

@@ -7,7 +7,7 @@ import Like from "../models/Like";
 import {
   BioTextInput, IPhoto, IUser, NameInput, PictureInput,
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
-  PictureIdInput, IPhotoLike, IComment, CommentInput, FollowInput,
+  PictureIdInput, CommentInput, FollowInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -35,34 +35,43 @@ const firstCharUpperRestLower = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
+const PopulateProfileAndCoverPhoto = ["profilePhoto", "coverPhoto"];
+const PopulatePhotos = { path: "photos", options: { sort: { publishDate: -1 } } };
+const PopulateFollowing = {
+  path: "following",
+  populate: { path: "profilePhoto" },
+  options: { sort: { username: 1 } },
+};
+const PopulateFollowers = {
+  path: "followers",
+  populate: { path: "profilePhoto" },
+  options: { sort: { username: 1 } },
+};
+const PopulateAuthor = { path: "author", populate: { path: "profilePhoto" } };
+const PopulateLikes = {
+  path: "likes",
+  populate: { path: "user", populate: { path: "profilePhoto" } },
+  options: { sort: { likeDate: -1 } },
+};
+const PopulateComments = {
+  path: "comments",
+  populate: { path: "author", populate: { path: "profilePhoto" } },
+  options: { sort: { date: 1 } },
+};
+
 const findUser = async (variables: any) => User
   .findOne(variables)
-  .populate(["profilePhoto", "coverPhoto"/* , "messages" */])
-  .populate({ path: "photos", options: { sort: { publishDate: -1 } } })
-  .populate({
-    path: "following",
-    populate: { path: "profilePhoto" },
-    options: { sort: { username: 1 } },
-  })
-  .populate({
-    path: "followers",
-    populate: { path: "profilePhoto" },
-    options: { sort: { username: 1 } },
-  });
+  // todo: messages
+  .populate(PopulateProfileAndCoverPhoto)
+  .populate(PopulatePhotos)
+  .populate(PopulateFollowing)
+  .populate(PopulateFollowers);
 
 const findPhoto = async (variables: any): Promise<IPhoto | null> => Photo
   .findOne(variables)
-  .populate({ path: "author", populate: { path: "profilePhoto" } })
-  .populate({
-    path: "likes",
-    populate: { path: "user", populate: { path: "profilePhoto" } },
-    options: { sort: { likeDate: -1 } },
-  })
-  .populate({
-    path: "comments",
-    populate: { path: "author", populate: { path: "profilePhoto" } },
-    options: { sort: { date: 1 } },
-  });
+  .populate(PopulateAuthor)
+  .populate(PopulateLikes)
+  .populate(PopulateComments);
 
 const resolvers = {
   Photo: {
@@ -315,7 +324,7 @@ const resolvers = {
       return coverPicture;
     },
     createPost:
-    async (_root: any, args: { input: PictureInput }, context: any): Promise<IPhoto | null> => {
+    async (_root: any, args: { input: PictureInput }, context: any): Promise<IUser | null> => {
       if (!context.req.user) {
         throw new AuthenticationError("You must be logged in");
       }
@@ -353,10 +362,11 @@ const resolvers = {
         return handleCatchError(err, args);
       }
 
-      return newPicture;
+      await user.populate(PopulatePhotos);
+      return user;
     },
     deletePost:
-    async (_root: any, args: { input: PictureIdInput }, context: any): Promise<boolean> => {
+    async (_root: any, args: { input: PictureIdInput }, context: any): Promise<IUser | null> => {
       if (!context.req.user) {
         throw new AuthenticationError("You must be logged in");
       }
@@ -391,10 +401,12 @@ const resolvers = {
         handleCatchError(err, args);
       }
 
-      return true;
+      await user.populate(PopulateProfileAndCoverPhoto);
+      await user.populate(PopulatePhotos);
+      return user;
     },
     toggleLike:
-    async (_: any, args: { input: PictureIdInput }, context: any): Promise<IPhotoLike | null> => {
+    async (_: any, args: { input: PictureIdInput }, context: any): Promise<IPhoto | null> => {
       if (!context.req.user) {
         throw new AuthenticationError("You must be logged in");
       }
@@ -419,7 +431,9 @@ const resolvers = {
         } catch (err) {
           handleCatchError(err, args);
         }
-        return null;
+
+        await photo.populate(PopulateLikes);
+        return photo;
       }
 
       const newLike = new Like({
@@ -436,10 +450,11 @@ const resolvers = {
         handleCatchError(err, args);
       }
 
-      return newLike;
+      await photo.populate(PopulateLikes);
+      return photo;
     },
     addComment:
-    async (_root: any, args: { input: CommentInput }, context: any): Promise<IComment | null> => {
+    async (_root: any, args: { input: CommentInput }, context: any): Promise<IPhoto | null> => {
       if (!context.req.user) {
         throw new AuthenticationError("You must be logged in");
       }
@@ -469,7 +484,8 @@ const resolvers = {
         handleCatchError(err, args);
       }
 
-      return newComment;
+      await photo.populate(PopulateComments);
+      return photo;
     },
     followUser:
     async (_root: any, args: { input: FollowInput }, context: any): Promise<IUser | null> => {

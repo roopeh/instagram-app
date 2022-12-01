@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
-import { USER_BASIC_INFO_FRAGMENT } from "./fragments";
+import {
+  COMMENTS_FRAGMENT, FOLLOWER_FRAGMENT, LIKES_FRAGMENT, PHOTOS_FRAGMENT,
+  USER_BASIC_INFO_FRAGMENT,
+} from "./fragments";
 
 export const ME = gql`
   ${USER_BASIC_INFO_FRAGMENT}
@@ -12,15 +15,12 @@ export const ME = gql`
 
 export const GET_USER = gql`
   ${USER_BASIC_INFO_FRAGMENT}
+  ${PHOTOS_FRAGMENT}
+  ${FOLLOWER_FRAGMENT}
   query GetUser($input: UserInput) {
     getUser(input: $input) {
       ...UserBasicInfoFragment
-      photos {
-        id
-        imageString
-        publishDate
-      }
-      photoCount
+      ...PhotosFragment
       following {
         id
         username
@@ -32,17 +32,7 @@ export const GET_USER = gql`
         }
       }
       followingCount
-      followers {
-        id
-        username
-        firstName
-        lastName
-        profilePhoto {
-          id
-          imageString
-        }
-      }
-      followersCount
+      ...FollowerFragment
     }
   }
 `;
@@ -67,43 +57,19 @@ export const GET_PHOTO = gql`
 `;
 
 export const GET_PHOTO_LIKES = gql`
+  ${LIKES_FRAGMENT}
   query Query($input: PictureQueryInput) {
     getPhoto(input: $input) {
-      id
-      likes {
-        id
-        user {
-          id
-          username
-          profilePhoto {
-            id
-            imageString
-          }
-        }
-      }
-      likesCount
+      ...LikesFragment
     }
   }
 `;
 
 export const GET_PHOTO_COMMENTS = gql`
+  ${COMMENTS_FRAGMENT}
   query Query($input: PictureQueryInput) {
     getPhoto(input: $input) {
-      id
-      comments {
-        id
-        author {
-          id
-          username
-          profilePhoto {
-            id
-            imageString
-          }
-        }
-        date
-        message
-      }
-      commentsCount
+      ...CommentsFragment
     }
   }
 `;

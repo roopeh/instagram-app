@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
-import { USER_BASIC_INFO_FRAGMENT } from "./fragments";
+import {
+  COMMENTS_FRAGMENT, FOLLOWER_FRAGMENT, LIKES_FRAGMENT, PHOTOS_FRAGMENT,
+  USER_BASIC_INFO_FRAGMENT,
+} from "./fragments";
 
 export const REGISTER = gql`
   mutation Mutation($input: UserRegisterInput) {
@@ -63,53 +66,57 @@ mutation Mutation($input: PictureInput) {
 `;
 
 export const CREATE_POST = gql`
+  ${PHOTOS_FRAGMENT}
   mutation Mutation($input: PictureInput) {
     createPost(input: $input) {
       id
-      imageString
+      ...PhotosFragment
     }
   }
 `;
 
 export const DELETE_POST = gql`
+  ${PHOTOS_FRAGMENT}
   mutation Mutation($input: PictureIdInput) {
-    deletePost(input: $input)
+    deletePost(input: $input) {
+      id
+      ...PhotosFragment
+      profilePhoto {
+        id
+        imageString
+      }
+      coverPhoto {
+        id
+        imageString
+      }
+    }
   }
 `;
 
 export const TOGGLE_LIKE = gql`
+  ${LIKES_FRAGMENT}
   mutation Mutation($input: PictureIdInput) {
     toggleLike(input: $input) {
-      id
-      likeDate
+      ...LikesFragment
     }
   }
 `;
 
 export const ADD_COMMENT = gql`
+  ${COMMENTS_FRAGMENT}
   mutation Mutation($input: CommentInput) {
     addComment(input: $input) {
-      id
-      date
+      ...CommentsFragment
     }
   }
 `;
 
 export const FOLLOW_USER = gql`
+  ${FOLLOWER_FRAGMENT}
   mutation Mutation($input: FollowInput) {
     followUser(input: $input) {
       id
-      followers {
-        id
-        username
-        firstName
-        lastName
-        profilePhoto {
-          id
-          imageString
-        }
-      }
-      followersCount
+      ...FollowerFragment
     }
   }
 `;

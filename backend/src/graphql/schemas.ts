@@ -131,10 +131,10 @@ const typeDefs = gql`
     setProfilePicture(input: PictureInput): Photo
     setCoverPicture(input: PictureInput): Photo
 
-    createPost(input: PictureInput): Photo
-    deletePost(input: PictureIdInput): Boolean
-    toggleLike(input: PictureIdInput): Like
-    addComment(input: CommentInput): Comment
+    createPost(input: PictureInput): User
+    deletePost(input: PictureIdInput): User
+    toggleLike(input: PictureIdInput): Photo
+    addComment(input: CommentInput): Photo
 
     followUser(input: FollowInput): User
   }

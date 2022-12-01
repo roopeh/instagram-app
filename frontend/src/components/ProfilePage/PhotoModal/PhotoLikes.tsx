@@ -45,7 +45,6 @@ const PhotoLikes = ({
 
     try {
       await toggleLike({ photoId: photo.id });
-      getLikesQuery.refetch();
     } catch (err) {
       setError(String(err));
     }

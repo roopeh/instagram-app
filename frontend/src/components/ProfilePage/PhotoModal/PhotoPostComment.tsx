@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ApolloQueryResult } from "@apollo/client";
 import { Field, Form, Formik } from "formik";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
@@ -11,11 +10,10 @@ import { getUserData } from "../../../utils/userdata";
 
 interface CommentProps {
   photo: Photo,
-  refetchFunc: () => Promise<ApolloQueryResult<any>>,
   setError: (err: string) => void,
 }
 
-const PhotoComments = ({ photo, refetchFunc, setError }: CommentProps) => {
+const PhotoComments = ({ photo, setError }: CommentProps) => {
   const [addComment] = useAddComment();
   const [uploading, setUploading] = useState<boolean>(false);
   const userData = getUserData()!;
@@ -30,7 +28,6 @@ const PhotoComments = ({ photo, refetchFunc, setError }: CommentProps) => {
 
     try {
       await addComment({ photoId: photo.id, message: comment });
-      await refetchFunc();
       setUploading(false);
     } catch (err) {
       setError(String(err));

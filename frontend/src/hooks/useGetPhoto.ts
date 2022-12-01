@@ -19,30 +19,28 @@ export const useGetPhoto = (props: PhotoProps) => {
 
 export const useGetPhotoLikes = (props: PhotoProps) => {
   const {
-    data, error, loading, refetch,
+    data, error, loading,
   } = useQuery(GET_PHOTO_LIKES, {
     variables: { input: props },
     fetchPolicy: "cache-and-network",
-    notifyOnNetworkStatusChange: true,
   });
 
   const photo: Photo | null = data && data.getPhoto ? data.getPhoto : null;
   return {
-    photo, error, loading, refetch,
+    photo, error, loading,
   };
 };
 
 export const useGetPhotoComments = (props: PhotoProps) => {
   const {
-    data, error, loading, refetch,
+    data, error, loading,
   } = useQuery(GET_PHOTO_COMMENTS, {
     variables: { input: props },
     fetchPolicy: "cache-and-network",
-    notifyOnNetworkStatusChange: true,
   });
 
   const photo: Photo | null = data && data.getPhoto ? data.getPhoto : null;
   return {
-    photo, error, loading, refetch,
+    photo, error, loading,
   };
 };
