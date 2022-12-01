@@ -92,7 +92,7 @@ const PhotoLikes = ({
               title={like.user.username}
               style={{
                 backgroundImage: `url(${like.user.profilePhoto
-                  ? like.user.profilePhoto
+                  ? like.user.profilePhoto.imageString
                   : EmptyProfilePic})`,
               }}
             />

@@ -1,0 +1,82 @@
+:root {
+  --followModalWidth: calc(min(max(50vw, 300px), 400px));
+}
+
+.followModal {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: calc(50% - (var(--followModalWidth) / 2));
+  left: calc(50% - (var(--followModalWidth) / 2));
+  width: var(--followModalWidth);
+  height: calc(var(--followModalWidth) * 1.4);
+  background-color: rgb(252, 252, 252);
+  border-radius: 8px;
+}
+
+.followModal__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border-bottom: 1px solid var(--borderColorDark);
+  padding: 10px;
+  font-weight: 600;
+  font-size: large;
+}
+
+.followModal__header__buttonContainer {
+  display: flex;
+  flex: 0 0 calc(15%);
+  justify-content: flex-end;
+}
+
+.followModal__header__content {
+  height: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.followModal__container {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.followModal__container table {
+  width: 100%;
+  border-spacing: 0px;
+}
+
+.followModal__item {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 0;
+}
+
+.followModal__item__avatar {
+  --avatarWidth: 35px;
+  flex: 0 0 var(--avatarWidth);
+  width: var(--avatarWidth);
+  height: var(--avatarWidth);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border-radius: 50%;
+}
+
+.followModal__item__textContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.followModal__item__textContainer__username {
+  font-weight: 600;
+}
+
+.followModal__item__textContainer__personname {
+  color: rgb(175, 175, 175);
+}

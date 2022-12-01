@@ -44,6 +44,24 @@ const AppBar = () => {
     navigate("/");
   };
 
+  const handleClick = (page: string, value?: string): void => {
+    setMenuOpen(false);
+    switch (page) {
+      case "logout":
+        handleLogout();
+        break;
+      case "profile":
+        navigate(`/${value}`);
+        break;
+      case "messages":
+        navigate(`/accounts/${page}`);
+        break;
+      default:
+        navigate(`/${page}`);
+        break;
+    }
+  };
+
   return (
     <div className="appBar">
       <div className="appBar__content">
@@ -98,27 +116,27 @@ const AppBar = () => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem onClick={() => navigate(`/${userData.username}`)}>
+                <MenuItem onClick={() => handleClick("profile", `${userData.username}`)}>
                   <ListItemIcon>
                     <PersonIcon fontSize="small" />
                   </ListItemIcon>
                   View profile
                 </MenuItem>
-                <MenuItem onClick={() => navigate("/accounts")}>
+                <MenuItem onClick={() => handleClick("accounts")}>
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
                   Edit profile
                 </MenuItem>
                 <Divider />
-                <MenuItem>
+                <MenuItem onClick={() => handleClick("messages")}>
                   <ListItemIcon>
                     <MessageIcon fontSize="small" />
                   </ListItemIcon>
                   Messages
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleLogout}>
+                <MenuItem onClick={() => handleClick("logout")}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

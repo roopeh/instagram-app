@@ -7,7 +7,7 @@ import Like from "../models/Like";
 import {
   BioTextInput, IPhoto, IUser, NameInput, PictureInput,
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
-  PictureIdInput, IPhotoLike, IComment, CommentInput,
+  PictureIdInput, IPhotoLike, IComment, CommentInput, FollowInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -37,11 +37,20 @@ const firstCharUpperRestLower = (str: string): string => {
 
 const findUser = async (variables: any) => User
   .findOne(variables)
-  .populate(["profilePhoto", "coverPhoto", "following",
-    "followers"/* , "messages" */])
-  .populate({ path: "photos", options: { sort: { publishDate: -1 } } });
+  .populate(["profilePhoto", "coverPhoto"/* , "messages" */])
+  .populate({ path: "photos", options: { sort: { publishDate: -1 } } })
+  .populate({
+    path: "following",
+    populate: { path: "profilePhoto" },
+    options: { sort: { username: 1 } },
+  })
+  .populate({
+    path: "followers",
+    populate: { path: "profilePhoto" },
+    options: { sort: { username: 1 } },
+  });
 
-const findPhoto = async (variables: any) => Photo
+const findPhoto = async (variables: any): Promise<IPhoto | null> => Photo
   .findOne(variables)
   .populate({ path: "author", populate: { path: "profilePhoto" } })
   .populate({
@@ -461,6 +470,63 @@ const resolvers = {
       }
 
       return newComment;
+    },
+    followUser:
+    async (_root: any, args: { input: FollowInput }, context: any): Promise<IUser | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const followUser = await User.findById(args.input.userId);
+      if (!followUser) {
+        throw new UserInputError("User does not exist");
+      }
+
+      const findFollowing = user.following.find((itr) => itr._id.equals(followUser._id));
+      if (findFollowing) {
+        // User is already following this user => unfollow
+        user.following = user.following.filter((following) => !following.equals(followUser._id));
+        followUser.followers = followUser.followers.filter((itr) => !itr.equals(user._id));
+
+        try {
+          await user.save();
+          await followUser.save();
+        } catch (err) {
+          handleCatchError(err, args);
+        }
+
+        await followUser.populate({
+          path: "followers",
+          populate: { path: "profilePhoto" },
+          options: { sort: { username: 1 } },
+        });
+        return followUser;
+      }
+
+      if (followUser._id.equals(user._id)) {
+        throw new UserInputError("You cannot follow yourself");
+      }
+
+      user.following = user.following.concat(followUser._id);
+      followUser.followers = followUser.followers.concat(user._id);
+      try {
+        await user.save();
+        await followUser.save();
+      } catch (err) {
+        handleCatchError(err, args);
+      }
+
+      await followUser.populate({
+        path: "followers",
+        populate: { path: "profilePhoto" },
+        options: { sort: { username: 1 } },
+      });
+      return followUser;
     },
   },
 };

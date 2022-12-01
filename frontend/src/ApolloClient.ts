@@ -21,6 +21,16 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => new Apollo
               return [...incoming];
             },
           },
+          followers: {
+            merge(_, incoming: any[]) {
+              return [...incoming];
+            },
+          },
+          following: {
+            merge(_, incoming: any[]) {
+              return [...incoming];
+            },
+          },
         },
       },
       Photo: {

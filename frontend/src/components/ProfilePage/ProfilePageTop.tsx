@@ -1,64 +1,124 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
+import FollowModal from "./FollowModal";
+import FollowButton from "./FollowButton";
 import EmptyProfilePic from "../../assets/empty_profile.png";
 import { getUserData } from "../../utils/userdata";
+import { User } from "../../types";
+import useFollowUser from "../../hooks/useFollowUser";
+import ErrorModal from "../ErrorModal";
 
 interface ProfileTopProps {
-  username: string,
-  firstName: string,
-  lastName: string,
-  bioText: string,
-  profilePhoto: string,
-  photoCount: number,
-  followingCount: number,
-  followersCount: number,
+  user: Omit<User, "photos" | "coverPhoto"> | undefined,
 }
 
-const ProfilePageTop = ({
-  username, firstName, lastName, bioText, profilePhoto, photoCount, followingCount, followersCount,
-}: ProfileTopProps) => {
+type FollowModalType = "Following" | "Followers";
+
+const ProfilePageTop = ({ user }: ProfileTopProps) => {
+  const [followModalOpen, setFollowModalOpen] = useState<boolean>(false);
+  const [followModalType, setFollowModalType] = useState<FollowModalType>("Following");
+  const [errorText, setErrorText] = useState<string>("");
+  const [followUser] = useFollowUser();
   const navigate = useNavigate();
 
-  const renderProfileButton: boolean = getUserData() !== null && username.length > 0;
+  const {
+    id, username, firstName, lastName, bioText, profilePhoto, photoCount,
+    following, followingCount, followers, followersCount,
+  } = { ...user };
+
+  useEffect(() => {
+    if (followModalOpen) {
+      setFollowModalOpen(false);
+    }
+  }, [id]);
+
+  const openFollowingModal = () => {
+    if (!user || !following) {
+      return;
+    }
+    setFollowModalType("Following");
+    setFollowModalOpen(true);
+  };
+
+  const openFollowersModal = () => {
+    if (!user || !followers) {
+      return;
+    }
+    setFollowModalType("Followers");
+    setFollowModalOpen(true);
+  };
+
+  const handleFollowUser = async (userId: string): Promise<void> => {
+    try {
+      await followUser({ userId });
+    } catch (err) {
+      setErrorText(String(err));
+    }
+  };
+
+  const closeFollowModal = () => {
+    setFollowModalOpen(false);
+  };
+
+  const userData = getUserData();
+  const renderProfileButton: boolean = userData !== null && !!username && username.length > 0;
+  const isFollowing: User | null | undefined = renderProfileButton && followers
+    ? followers.find((itr) => itr.id === userData!.id)
+    : null;
 
   return (
     <div className="profilePage__topBar">
+      <FollowModal
+        title={followModalType}
+        data={followModalType === "Followers" ? followers || [] : following || []}
+        showFollowButton={renderProfileButton}
+        follow={handleFollowUser}
+        openBoolean={followModalOpen}
+        closeModal={closeFollowModal}
+      />
+      <ErrorModal
+        text={errorText}
+        openBoolean={errorText.length > 0}
+        buttonText="Close"
+        onClose={() => setErrorText("")}
+      />
       <div
         className="profilePage__profilePicture"
         style={renderProfileButton ? { paddingBottom: "11px" } : {}}
       >
         <div className="profilePage__profilePicture__picture">
           <img
-            src={profilePhoto.length > 0 ? profilePhoto : EmptyProfilePic}
+            src={profilePhoto ? profilePhoto.imageString : EmptyProfilePic}
             alt=""
             style={
-              !profilePhoto.length ? { backgroundColor: "var(--borderColorLight" } : {}
+              !profilePhoto ? { backgroundColor: "var(--borderColorLight" } : {}
             }
           />
         </div>
         <div>
           {renderProfileButton && (
-            <Button
-              variant="contained"
-              style={{
+            <FollowButton
+              userId={id!}
+              loggedUserId={userData!.id}
+              isFollowing={!!isFollowing}
+              showProfileButton
+              editProfile={() => navigate("/accounts")}
+              follow={handleFollowUser}
+              buttonStyle={{
                 width: "100px", marginTop: "5px", fontSize: "9px", fontWeight: "600",
               }}
-              onClick={() => navigate("/accounts")}
-            >
-              Edit Profile
-            </Button>
+            />
           )}
         </div>
       </div>
       <div className="profilePage__topBar__textFlexBox">
         <div className="profilePage__topBar__textContainer">
           <span className="strongerFont">
-            {username}
+            {username || ""}
           </span>
           <div className="profilePage__topBar__textContainer__userInfo">
             <span className="smallerButBoldedFont" style={{ paddingRight: "10px" }}>
-              {`${firstName} ${lastName}`}
+              {`${firstName || ""} ${lastName || ""}`}
             </span>
             <br />
             <span className="smallerGrayedFont">
@@ -69,15 +129,25 @@ const ProfilePageTop = ({
         <div className="profilePage__buttonsOuterBox">
           <div className="profilePage__buttonsFlexBox">
             <div className="profilePage__buttonsFlexBox__textBox">
-              <div className="profilePage__buttonsFlexBox__number">{photoCount}</div>
+              <div className="profilePage__buttonsFlexBox__number">{photoCount || 0}</div>
               <div className="profilePage__buttonsFlexBox__label">photos</div>
             </div>
-            <div className="profilePage__buttonsFlexBox__textBox">
-              <div className="profilePage__buttonsFlexBox__number">{followingCount}</div>
+            <div
+              className="profilePage__buttonsFlexBox__textBox"
+              onClick={openFollowingModal}
+              aria-hidden
+              style={{ cursor: "pointer" }}
+            >
+              <div className="profilePage__buttonsFlexBox__number">{followingCount || 0}</div>
               <div className="profilePage__buttonsFlexBox__label">following</div>
             </div>
-            <div className="profilePage__buttonsFlexBox__textBox" style={{ border: 0 }}>
-              <div className="profilePage__buttonsFlexBox__number">{followersCount}</div>
+            <div
+              className="profilePage__buttonsFlexBox__textBox"
+              onClick={openFollowersModal}
+              aria-hidden
+              style={{ border: 0, cursor: "pointer" }}
+            >
+              <div className="profilePage__buttonsFlexBox__number">{followersCount || 0}</div>
               <div className="profilePage__buttonsFlexBox__label">followers</div>
             </div>
           </div>

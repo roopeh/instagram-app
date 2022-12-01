@@ -31,14 +31,7 @@ const ProfilePage = () => {
 
           <div className="profilePage__container">
             <ProfilePageTop
-              username=""
-              firstName=""
-              lastName=""
-              bioText=""
-              profilePhoto=""
-              photoCount={0}
-              followingCount={0}
-              followersCount={0}
+              user={undefined}
             />
             <div className="profilePage__loading">
               Loading...
@@ -82,14 +75,7 @@ const ProfilePage = () => {
 
       <div className="profilePage__container">
         <ProfilePageTop
-          username={userInfo.username}
-          firstName={userInfo.firstName}
-          lastName={userInfo.lastName}
-          bioText={userInfo.bioText}
-          profilePhoto={userInfo.profilePhoto ? userInfo.profilePhoto.imageString : ""}
-          photoCount={userInfo.photoCount}
-          followingCount={userInfo.followingCount}
-          followersCount={userInfo.followersCount}
+          user={userInfo}
         />
         <ProfilePageContent
           username={userInfo.username}

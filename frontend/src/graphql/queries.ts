@@ -24,11 +24,23 @@ export const GET_USER = gql`
       following {
         id
         username
+        firstName
+        lastName
+        profilePhoto {
+          id
+          imageString
+        }
       }
       followingCount
       followers {
         id
         username
+        firstName
+        lastName
+        profilePhoto {
+          id
+          imageString
+        }
       }
       followersCount
     }

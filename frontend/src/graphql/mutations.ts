@@ -94,3 +94,22 @@ export const ADD_COMMENT = gql`
     }
   }
 `;
+
+export const FOLLOW_USER = gql`
+  mutation Mutation($input: FollowInput) {
+    followUser(input: $input) {
+      id
+      followers {
+        id
+        username
+        firstName
+        lastName
+        profilePhoto {
+          id
+          imageString
+        }
+      }
+      followersCount
+    }
+  }
+`;

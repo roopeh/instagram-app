@@ -103,3 +103,7 @@ export type CommentInput = {
   photoId: string,
   message: string,
 };
+
+export type FollowInput = {
+  userId: string,
+};

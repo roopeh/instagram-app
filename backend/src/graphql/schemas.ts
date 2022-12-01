@@ -109,6 +109,10 @@ const typeDefs = gql`
     message: String!,
   }
 
+  input FollowInput {
+    userId: String!,
+  }
+
   type Query {
     userCount: Int!
     getUser(input: UserInput): User
@@ -131,6 +135,8 @@ const typeDefs = gql`
     deletePost(input: PictureIdInput): Boolean
     toggleLike(input: PictureIdInput): Like
     addComment(input: CommentInput): Comment
+
+    followUser(input: FollowInput): User
   }
 `;
 
