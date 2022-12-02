@@ -125,7 +125,7 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
                   <img
                     alt="cover pic"
                     className="accounts__imageUploadFlex__coverPhoto"
-                    src={userData.coverPhoto}
+                    src={userData.coverPhoto.imageString}
                   />
                 )
               ) : (
@@ -133,7 +133,7 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
                   <img
                     alt="profile pic"
                     className="accounts__imageUploadFlex__profilePhoto"
-                    src={userData.profilePhoto}
+                    src={userData.profilePhoto.imageString}
                   />
                 )
               )}

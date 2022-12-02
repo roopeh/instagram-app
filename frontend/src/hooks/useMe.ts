@@ -1,13 +1,23 @@
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { ME } from "../graphql/queries";
+import { User } from "../types";
 
-const useMe = () => {
+export const useMe = () => {
   const { data, error, loading } = useQuery(ME, {
     fetchPolicy: "cache-and-network",
   });
 
-  const me = data && data.me ? data.me : null;
+  const me: User | null = data && data.me ? data.me : null;
   return { me, error, loading };
 };
 
-export default useMe;
+export const useLazyMe = () => {
+  const [getMe, { data, error, loading }] = useLazyQuery(ME, {
+    fetchPolicy: "cache-and-network",
+  });
+
+  const me: User | null = data && data.me ? data.me : null;
+  return {
+    getMe, me, error, loading,
+  };
+};

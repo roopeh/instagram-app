@@ -516,11 +516,8 @@ const resolvers = {
           handleCatchError(err, args);
         }
 
-        await followUser.populate({
-          path: "followers",
-          populate: { path: "profilePhoto" },
-          options: { sort: { username: 1 } },
-        });
+        await followUser.populate(PopulateFollowers);
+        await followUser.populate(PopulateFollowing);
         return followUser;
       }
 
@@ -537,11 +534,8 @@ const resolvers = {
         handleCatchError(err, args);
       }
 
-      await followUser.populate({
-        path: "followers",
-        populate: { path: "profilePhoto" },
-        options: { sort: { username: 1 } },
-      });
+      await followUser.populate(PopulateFollowers);
+      await followUser.populate(PopulateFollowing);
       return followUser;
     },
   },

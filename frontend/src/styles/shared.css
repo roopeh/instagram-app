@@ -89,3 +89,35 @@ html, body {
 .errorModal__return__content {
   margin-top: 25px;
 }
+
+.default__userItem {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 0;
+}
+
+.default__userItem__avatar {
+  --avatarWidth: 35px;
+  flex: 0 0 var(--avatarWidth);
+  width: var(--avatarWidth);
+  height: var(--avatarWidth);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border-radius: 50%;
+}
+
+.default__userItem__textContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.default__userItem__textContainer__username {
+  font-weight: 600;
+}
+
+.default__userItem__textContainer__personname {
+  color: rgb(175, 175, 175);
+}

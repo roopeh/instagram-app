@@ -34,6 +34,22 @@ export const FOLLOWER_FRAGMENT = gql`
   }
 `;
 
+export const FOLLOWING_FRAGMENT = gql`
+  fragment FollowingFragment on User {
+    following {
+      id
+      username
+      firstName
+      lastName
+      profilePhoto {
+        id
+        imageString
+      }
+    }
+    followingCount
+  }
+`;
+
 export const PHOTOS_FRAGMENT = gql`
   fragment PhotosFragment on User {
     photos {

@@ -1,24 +1,28 @@
+import { Photo, User } from "../types";
+
 interface TokenUser {
   id: string,
   username: string,
   firstName: string,
   lastName: string,
   bioText: string,
-  profilePhoto?: string,
-  coverPhoto?: string,
+  profilePhoto?: Photo,
+  coverPhoto?: Photo,
+  following: Array<Pick<User, "id">>,
 }
 
 const USER_KEY = "clientuserdata";
 
-export const saveUserData = (data: any): void => {
+export const saveUserData = (data: TokenUser): void => {
   const userData: TokenUser = {
     id: data.id,
     username: data.username,
     firstName: data.firstName,
     lastName: data.lastName,
     bioText: data.bioText,
-    profilePhoto: data.profilePhoto ? data.profilePhoto.imageString : null,
-    coverPhoto: data.coverPhoto ? data.coverPhoto.imageString : null,
+    profilePhoto: data.profilePhoto,
+    coverPhoto: data.coverPhoto,
+    following: data.following,
   };
   localStorage.setItem(USER_KEY, JSON.stringify(userData));
 };

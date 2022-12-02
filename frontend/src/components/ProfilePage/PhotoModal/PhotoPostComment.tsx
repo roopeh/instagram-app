@@ -47,7 +47,7 @@ const PhotoComments = ({ photo, setError }: CommentProps) => {
             className="photoModal__avatar photoModal__commentFlex__avatar"
             style={{
               backgroundImage: `url(${userData.profilePhoto
-                ? userData.profilePhoto
+                ? userData.profilePhoto.imageString
                 : EmptyProfilePic})`,
             }}
           />

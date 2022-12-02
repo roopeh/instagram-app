@@ -6,7 +6,7 @@ import BioTextForm from "./BioTextForm";
 import PhotoForm from "./PhotoForm";
 import ErrorModal from "../ErrorModal";
 import useLogout from "../../hooks/useLogout";
-import useMe from "../../hooks/useMe";
+import { useMe } from "../../hooks/useMe";
 import { getUserData, saveUserData } from "../../utils/userdata";
 import "../../styles/Accounts.css";
 

@@ -3,23 +3,31 @@ import { useNavigate } from "react-router-dom";
 import FollowModal from "./FollowModal";
 import FollowButton from "./FollowButton";
 import EmptyProfilePic from "../../assets/empty_profile.png";
-import { getUserData } from "../../utils/userdata";
+import { getUserData, saveUserData } from "../../utils/userdata";
 import { User } from "../../types";
 import useFollowUser from "../../hooks/useFollowUser";
 import ErrorModal from "../ErrorModal";
+import { useLazyMe } from "../../hooks/useMe";
 
 interface ProfileTopProps {
   user: Omit<User, "photos" | "coverPhoto"> | undefined,
+  refetchFunc: () => Promise<void>,
 }
 
 type FollowModalType = "Following" | "Followers";
 
-const ProfilePageTop = ({ user }: ProfileTopProps) => {
+const ProfilePageTop = ({ user, refetchFunc }: ProfileTopProps) => {
   const [followModalOpen, setFollowModalOpen] = useState<boolean>(false);
   const [followModalType, setFollowModalType] = useState<FollowModalType>("Following");
   const [errorText, setErrorText] = useState<string>("");
   const [followUser] = useFollowUser();
+  const {
+    getMe, me: meData, error: meError, loading: meLoading,
+  } = useLazyMe();
   const navigate = useNavigate();
+
+  // Used to force a rerender
+  const [, setTmpUsrData] = useState<User | null>(null);
 
   const {
     id, username, firstName, lastName, bioText, profilePhoto, photoCount,
@@ -31,6 +39,13 @@ const ProfilePageTop = ({ user }: ProfileTopProps) => {
       setFollowModalOpen(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!meError && !meLoading && meData) {
+      saveUserData(meData);
+      setTmpUsrData(meData);
+    }
+  }, [meData, meError, meLoading]);
 
   const openFollowingModal = () => {
     if (!user || !following) {
@@ -51,6 +66,12 @@ const ProfilePageTop = ({ user }: ProfileTopProps) => {
   const handleFollowUser = async (userId: string): Promise<void> => {
     try {
       await followUser({ userId });
+      if (id !== userId) {
+        // If followed from another profile's follow modal,
+        // profile data is not updated without refetching
+        refetchFunc();
+      }
+      await getMe();
     } catch (err) {
       setErrorText(String(err));
     }

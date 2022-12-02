@@ -9,6 +9,9 @@ export const ME = gql`
   query Query {
     me {
       ...UserBasicInfoFragment
+      following {
+        id
+      }
     }
   }
 `;

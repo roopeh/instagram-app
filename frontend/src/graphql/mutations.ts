@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import {
-  COMMENTS_FRAGMENT, FOLLOWER_FRAGMENT, LIKES_FRAGMENT, PHOTOS_FRAGMENT,
+  COMMENTS_FRAGMENT, FOLLOWER_FRAGMENT, FOLLOWING_FRAGMENT, LIKES_FRAGMENT,
+  PHOTOS_FRAGMENT,
   USER_BASIC_INFO_FRAGMENT,
 } from "./fragments";
 
@@ -113,10 +114,12 @@ export const ADD_COMMENT = gql`
 
 export const FOLLOW_USER = gql`
   ${FOLLOWER_FRAGMENT}
+  ${FOLLOWING_FRAGMENT}
   mutation Mutation($input: FollowInput) {
     followUser(input: $input) {
       id
       ...FollowerFragment
+      ...FollowingFragment
     }
   }
 `;

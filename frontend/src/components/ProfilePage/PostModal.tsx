@@ -172,7 +172,7 @@ const PostModal = ({ open, onClose }: PostProps) => {
                 <div className="postModal__textFlex__username">
                   <img
                     src={userData.profilePhoto
-                      ? userData.profilePhoto
+                      ? userData.profilePhoto.imageString
                       : EmptyProfilePic}
                     alt=""
                     className="postModal__textFlex__profilePic"
