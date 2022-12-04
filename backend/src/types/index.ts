@@ -74,6 +74,12 @@ export type UserInput = {
   username: string,
 };
 
+export type UserQueryInput = {
+  username: string,
+  firstName: string,
+  lastName: string,
+};
+
 export type NameInput = {
   firstName: string,
   lastName: string,

@@ -20,6 +20,59 @@
   margin: 10px 0;
 }
 
+.appBar__rightContainer {
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  margin-left: auto;
+}
+
+.appBar__searchButton {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.appBar__searchButton__rounded {
+  display: flex;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20%;
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+}
+
+.appBar__searchContainer {
+  --containerWidth: var(--mainContainerWidth);
+  width: calc(var(--containerWidth) / 2);
+}
+
+.appBar__searchContainer__results {
+  padding: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.appBar__searchContainer__loading {
+  display: flex;
+  justify-content: center;
+}
+
+.appBar__searchContainer__error {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.appBar__searchContainer__results table {
+  width: 100%;
+}
+
+.appBar__searchItem:hover {
+  background-color: rgb(224, 224, 224);
+  cursor: pointer;
+}
+
 .appBar__profile {
   display: flex;
   height: 100%;

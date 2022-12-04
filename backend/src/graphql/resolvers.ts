@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import { ApolloError, AuthenticationError, UserInputError } from "apollo-server";
-import { mongo, Error } from "mongoose";
+import { mongo, Error, FilterQuery } from "mongoose";
 import Photo from "../models/Photo";
 import User from "../models/User";
 import Like from "../models/Like";
 import {
   BioTextInput, IPhoto, IUser, NameInput, PictureInput,
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
-  PictureIdInput, CommentInput, FollowInput,
+  PictureIdInput, CommentInput, FollowInput, UserQueryInput, DbUser,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -102,7 +102,24 @@ const resolvers = {
 
       return photo;
     },
-    allUsers: async (): Promise<Array<IUser>> => User.find({}),
+    allUsers: async (_root: any, args: { input: UserQueryInput }): Promise<Array<IUser>> => {
+      const { username, firstName, lastName } = args.input;
+      if (!username && !firstName && !lastName) {
+        return User.find({}).populate(PopulateProfileAndCoverPhoto);
+      }
+
+      if ((username && username.length < 3)
+        || (firstName && firstName.length < 3)
+        || (lastName && lastName.length < 3)) {
+        throw new UserInputError("Search string must be over 3 characters");
+      }
+
+      const filterQuery: Array<FilterQuery<DbUser>> = [];
+      if (username) filterQuery.push({ username: { $regex: username, $options: "i" } });
+      if (firstName) filterQuery.push({ firstName: { $regex: firstName, $options: "i" } });
+      if (lastName) filterQuery.push({ lastName: { $regex: lastName, $options: "i" } });
+      return User.find({ $or: filterQuery }).populate(PopulateProfileAndCoverPhoto);
+    },
     me: async (_root: any, _args: any, context: any): Promise<IUser | null> => {
       if (!context.req.user) {
         return null;

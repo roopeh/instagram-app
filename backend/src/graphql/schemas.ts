@@ -86,6 +86,12 @@ const typeDefs = gql`
     username: String!
   }
 
+  input UserQueryInput {
+    username: String
+    firstName: String
+    lastName: String
+  }
+
   input NameInput {
     firstName: String!
     lastName: String!
@@ -117,7 +123,7 @@ const typeDefs = gql`
     userCount: Int!
     getUser(input: UserInput): User
     getPhoto(input: PictureQueryInput): Photo
-    allUsers: [User!]!
+    allUsers(input: UserQueryInput): [User!]!
     me: User
   }
 

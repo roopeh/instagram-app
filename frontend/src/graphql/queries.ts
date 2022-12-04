@@ -16,6 +16,21 @@ export const ME = gql`
   }
 `;
 
+export const ALL_USERS = gql`
+  query Query($input: UserQueryInput) {
+    allUsers(input: $input) {
+      id
+      username
+      firstName
+      lastName
+      profilePhoto {
+        id
+        imageString
+      }
+    }
+  }
+`;
+
 export const GET_USER = gql`
   ${USER_BASIC_INFO_FRAGMENT}
   ${PHOTOS_FRAGMENT}
