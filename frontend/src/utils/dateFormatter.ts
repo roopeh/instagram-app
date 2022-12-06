@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 export const formatDateForProfile = (unixDate: number): string => {
   const date = new Date(Number(unixDate));
   const options: Intl.DateTimeFormatOptions = {
@@ -8,7 +9,7 @@ export const formatDateForProfile = (unixDate: number): string => {
   return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1).toLowerCase();
 };
 
-export const formatDateForPhoto = (unixDate: number): [string, string] => {
+export const formatDateForPhoto = (unixDate: number, shortened: boolean): [string, string] => {
   const rawDetailedDate = new Date(Number(unixDate)).toLocaleDateString("en-GB", {
     month: "short", day: "2-digit", year: "numeric",
   });
@@ -17,28 +18,46 @@ export const formatDateForPhoto = (unixDate: number): [string, string] => {
 
   const diffSeconds = Math.abs(Date.now() - unixDate) / 1000;
   if (diffSeconds < 10) {
-    return ["0s", detailedDate];
+    const seconds: string = shortened ? "s" : " seconds ago";
+    return [`0${seconds}`, detailedDate];
   }
   if (diffSeconds < 60) {
-    return [`${Math.round(diffSeconds / 10) * 10}s`, detailedDate];
+    const seconds: string = shortened ? "s" : " seconds ago";
+    return [`${Math.round(diffSeconds / 10) * 10}${seconds}`, detailedDate];
   }
   const diffMinutes = Math.round(diffSeconds / 60);
   if (diffMinutes < 60) {
-    return [`${diffMinutes}m`, detailedDate];
+    const minutes: string = shortened
+      ? "m"
+      : diffMinutes === 1 ? " minute ago" : " minutes ago";
+    return [`${diffMinutes}${minutes}`, detailedDate];
   }
   const diffHours = Math.round(diffMinutes / 60);
   if (diffHours < 24) {
-    return [`${diffHours}h`, detailedDate];
+    const hours: string = shortened
+      ? "h"
+      : diffHours === 1 ? " hour ago" : " hours ago";
+    return [`${diffHours}${hours}`, detailedDate];
   }
   const diffDays = Math.round(diffHours / 24);
   if (diffDays < 7) {
-    return [`${diffDays}d`, detailedDate];
+    const days: string = shortened
+      ? "d"
+      : diffDays === 1 ? " day ago" : " days ago";
+    return [`${diffDays}${days}`, detailedDate];
   }
   const diffWeeks = Math.round(diffDays / 7);
   if (diffWeeks < 51) {
-    return [`${diffWeeks}w`, detailedDate];
+    const weeks: string = shortened
+      ? "w"
+      : diffWeeks === 1 ? " week ago" : " weeks ago";
+    return [`${diffWeeks}${weeks}`, detailedDate];
   }
 
   // Return years
-  return [`${Math.round(diffWeeks / 51)}y`, detailedDate];
+  const diffYears = Math.round(diffWeeks / 51);
+  const years: string = shortened
+    ? "y"
+    : diffYears === 1 ? " year ago" : " years ago";
+  return [`${diffYears}${years}`, detailedDate];
 };

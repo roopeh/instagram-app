@@ -19,6 +19,7 @@ export interface IPhoto {
   author: Types.ObjectId,
   publishDate: number,
   captionText: string,
+  isFeedPhoto: boolean,
   likes: Array<Types.ObjectId>,
   comments: Array<Types.ObjectId>
 }

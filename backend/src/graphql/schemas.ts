@@ -38,6 +38,7 @@ const typeDefs = gql`
     author: User!
     publishDate: String!
     captionText: String
+    isFeedPhoto: Boolean!
     likes: [Like!]
     likesCount: Int!
     comments: [Comment!]
@@ -123,6 +124,7 @@ const typeDefs = gql`
     userCount: Int!
     getUser(input: UserInput): User
     getPhoto(input: PictureQueryInput): Photo
+    getFeedPhotos: [Photo!]
     allUsers(input: UserQueryInput): [User!]!
     me: User
   }

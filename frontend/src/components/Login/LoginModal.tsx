@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import logo from "../../assets/logo.png";
 import "../../styles/LoginRegisterModal.css";
@@ -23,6 +23,7 @@ const LoginModal = ({
   const [error, setError] = useState<string>("");
   const [loggingIn, setLoggingIn] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onSubmit = async (values: any) => {
     setLoggingIn(true);
@@ -37,7 +38,11 @@ const LoginModal = ({
       }
       setLoggingIn(false);
       onClose();
-      navigate("/");
+      if (location.pathname === "/") {
+        navigate(0);
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setLoggingIn(false);
       setError(String(err));

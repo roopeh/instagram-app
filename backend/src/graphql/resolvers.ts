@@ -102,6 +102,25 @@ const resolvers = {
 
       return photo;
     },
+    getFeedPhotos: async (_root: any, _args: any, context: any): Promise<Array<IPhoto> | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const photos = await Photo.find({
+        author: { $in: user.following },
+        isFeedPhoto: true,
+      })
+        .populate(PopulateAuthor)
+        .populate(PopulateLikes)
+        .sort({ publishDate: -1 });
+      return photos;
+    },
     allUsers: async (_root: any, args: { input: UserQueryInput }): Promise<Array<IUser>> => {
       const { username, firstName, lastName } = args.input;
       if (!username && !firstName && !lastName) {
@@ -283,6 +302,7 @@ const resolvers = {
         imageString: args.input.base64,
         author: user._id,
         publishDate: Date.now(),
+        isFeedPhoto: false,
       });
 
       try {
@@ -328,6 +348,7 @@ const resolvers = {
         imageString: args.input.base64,
         author: user._id,
         publishDate: Date.now(),
+        isFeedPhoto: false,
       });
 
       try {
@@ -369,6 +390,7 @@ const resolvers = {
         author: user._id,
         publishDate: Date.now(),
         captionText: args.input.captionText,
+        isFeedPhoto: true,
       });
 
       try {

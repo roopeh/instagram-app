@@ -7,6 +7,7 @@ import { useGetPhotoLikes } from "../../../hooks/useGetPhoto";
 import useToggleLike from "../../../hooks/useToggleLike";
 import { getUserData } from "../../../utils/userdata";
 import { Like } from "../../../types";
+import { beautifyBigNumber } from "../../../utils/numberFormatters";
 
 interface LikesProps {
   username: string,
@@ -50,11 +51,6 @@ const PhotoLikes = ({
     }
   };
 
-  // eslint-disable-next-line arrow-body-style
-  const formatLikes = (like: number): string => {
-    return like >= 1000 ? `${Math.sign(like) * Number((like / 1000).toFixed(1))}k` : like.toString();
-  };
-
   const hasUserLiked: boolean = userData && photo
     ? !(!photo.likes.find((like) => like.user.id === userData.id))
     : false;
@@ -80,7 +76,7 @@ const PhotoLikes = ({
           />
         )}
         <span className="photoModal__topFlex__likeText">
-          {formatLikes(likesCount)}
+          {beautifyBigNumber(likesCount)}
         </span>
       </div>
       <div className="photoModal__topFlex__likers">

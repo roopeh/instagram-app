@@ -44,8 +44,7 @@
 }
 
 .appBar__searchContainer {
-  --containerWidth: var(--mainContainerWidth);
-  width: calc(var(--containerWidth) / 2);
+  width: 100%;
 }
 
 .appBar__searchContainer__results {

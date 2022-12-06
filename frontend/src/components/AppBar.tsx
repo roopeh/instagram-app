@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
@@ -27,6 +27,7 @@ const AppBar = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [logout] = useLogout();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Get user data from local storage
   const userData = getUserData();
@@ -45,9 +46,18 @@ const AppBar = () => {
     }
   };
 
+  const navigateOrReload = (page: string): void => {
+    const currentLocation = location.pathname;
+    if (currentLocation === page) {
+      navigate(0);
+    } else {
+      navigate(page);
+    }
+  };
+
   const handleLogout = async (): Promise<void> => {
     await logout();
-    navigate("/");
+    navigateOrReload("/");
   };
 
   const handleMenuClick = (page: string, value?: string): void => {
@@ -57,13 +67,13 @@ const AppBar = () => {
         handleLogout();
         break;
       case "profile":
-        navigate(`/${value}`);
+        navigateOrReload(`/${value}`);
         break;
       case "messages":
-        navigate(`/accounts/${page}`);
+        navigateOrReload(`/accounts/${page}`);
         break;
       default:
-        navigate(`/${page}`);
+        navigateOrReload(`/${page}`);
         break;
     }
   };
@@ -119,7 +129,7 @@ const AppBar = () => {
                   display: "block",
                   position: "absolute",
                   top: 0,
-                  left: "5%",
+                  left: 14,
                   width: 10,
                   height: 10,
                   bgcolor: "background.paper",

@@ -17,6 +17,10 @@ const schema = new Schema<IPhoto>({
   captionText: {
     type: String,
   },
+  isFeedPhoto: {
+    type: Boolean,
+    required: true,
+  },
   likes: [
     {
       type: Schema.Types.ObjectId,

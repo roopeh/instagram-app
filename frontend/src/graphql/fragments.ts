@@ -62,7 +62,6 @@ export const PHOTOS_FRAGMENT = gql`
 `;
 export const LIKES_FRAGMENT = gql`
   fragment LikesFragment on Photo {
-    id
     likes {
       id
       user {
@@ -80,7 +79,6 @@ export const LIKES_FRAGMENT = gql`
 
 export const COMMENTS_FRAGMENT = gql`
   fragment CommentsFragment on Photo {
-    id
     comments {
       id
       author {

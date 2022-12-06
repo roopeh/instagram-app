@@ -15,7 +15,7 @@ interface PhotoItemProps {
 const PhotoItem = ({
   author, content, unixDate, style,
 }: PhotoItemProps) => {
-  const [formattedDate, detailedDate] = formatDateForPhoto(unixDate);
+  const [formattedDate, detailedDate] = formatDateForPhoto(unixDate, true);
   return (
     <div className="photoModal__textFlex__item" style={style}>
       <Link to={`/${author.username}`}>

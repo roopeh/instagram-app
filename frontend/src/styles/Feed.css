@@ -1,0 +1,129 @@
+:root {
+  --mainContentWidth: calc(var(--mainContainerWidth) - var(--mainContainerPadding) * 2);
+  --feedPadding: 15px;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.feed__item {
+  display: flex;
+  flex-direction: row;
+}
+
+.feed hr {
+  --hrColor: rgb(189, 189, 189);
+  width: calc(100% - 50px);
+  height: 1px;
+  border: 0;
+  margin: 0 25px;
+  color: var(--hrColor);
+  background-color: var(--hrColor);
+  border-color: var(--hrColor);
+}
+
+.feed__userContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  flex: 1;
+  overflow: hidden;
+}
+
+.feed__photoContainer {
+  flex: 0 0 calc(var(--mainContainerWidth));
+  background-color: rgb(224, 224, 224);
+  border-left: 2px solid var(--borderColorDark);
+  border-right: 2px solid var(--borderColorDark);
+}
+
+.feed__emptyContainer {
+  flex: 1;
+}
+
+.feed__loading {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 15%;
+}
+
+.feed__userContent {
+  display: flex;
+  padding-top: var(--feedPadding);
+  padding-right: var(--feedPadding);
+  flex-direction: row-reverse;
+  overflow: hidden;
+}
+
+.feed__userContent__avatar {
+  --avatarWidth: 35px;
+  flex: 0 0 var(--avatarWidth);
+  width: var(--avatarWidth);
+  height: var(--avatarWidth);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border: 1px solid var(--borderColorDark);
+  margin-left: 5px;
+}
+
+.feed__userContent__text {
+  text-align: right;
+  font-weight: 600;
+}
+
+.feed__userContent__textDate {
+  font-size: smaller;
+  color: rgb(168, 168, 168);
+}
+
+.feed__defaultContent {
+  padding: var(--feedPadding);
+  width: 100%;
+}
+
+.feed__photoContent {
+  margin: var(--feedPadding);
+  box-shadow: 0px 0px 8px 5px rgb(182, 182, 182);
+}
+
+.feed__photoContent__photo {
+  width: 100%;
+  aspect-ratio: 1.0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+}
+
+.feed__photoContent__likes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  background-color: rgb(252, 252, 252);
+}
+
+.feed__photoContent__likes__button {
+  border-right: 1px solid var(--borderColorDark);
+}
+
+.feed__photoContent__likes__likers {
+  flex: 1;
+  font-size: small;
+  color: rgb(168, 168, 168);
+  padding: 0 10px;
+}
+
+.feed__photoContent__comments {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: rgb(252, 252, 252);
+  border-top: 1px solid var(--borderColorDark);
+  font-weight: 600;
+  font-size: small;
+}

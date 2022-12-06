@@ -10,33 +10,39 @@ import { User } from "../../types";
 
 interface DefaultProps {
   user: User | undefined,
+  hasCoverPhoto: boolean,
   refetchFunc: () => Promise<void>,
 }
 
-const DefaultProfilePage = ({ user, refetchFunc }: DefaultProps) => (
-  <div>
-    <AppBar />
-    <div className="profilePage__background">
-      <div className="profilePage__background__topMargin" />
-      <div className="profilePage__background__coverPhoto" />
-    </div>
+const DefaultProfilePage = ({ user, hasCoverPhoto, refetchFunc }: DefaultProps) => {
+  const showCoverPhoto = !!user && hasCoverPhoto;
+  return (
+    <div>
+      <AppBar />
+      <div className="profilePage__background">
+        <div className="profilePage__background__topMargin" />
+        <div className="profilePage__background__coverPhoto">
+          {showCoverPhoto && (<img src={user.coverPhoto.imageString} alt="" />)}
+        </div>
+      </div>
 
-    <div className="profilePage__container">
-      <ProfilePageTop user={user} refetchFunc={refetchFunc} />
-      {!user
-        ? (
-          <div className="profilePage__loading">
-            Loading...
-          </div>
-        ) : (
-          <ProfilePageContent
-            username={user.username}
-            photos={user.photos}
-          />
-        )}
+      <div className="profilePage__container">
+        <ProfilePageTop user={user} refetchFunc={refetchFunc} />
+        {!user
+          ? (
+            <div className="profilePage__loading">
+              Loading...
+            </div>
+          ) : (
+            <ProfilePageContent
+              username={user.username}
+              photos={user.photos}
+            />
+          )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ProfilePage = () => {
   const [coverPhotoEnabled, setCoverPhoto] = useState<boolean>(false);
@@ -56,7 +62,13 @@ const ProfilePage = () => {
 
   if (!getUserQuery.user) {
     if (getUserQuery.loading) {
-      return <DefaultProfilePage user={undefined} refetchFunc={handleProfileRefetch} />;
+      return (
+        <DefaultProfilePage
+          user={undefined}
+          hasCoverPhoto={false}
+          refetchFunc={handleProfileRefetch}
+        />
+      );
     }
 
     return <NotFound />;
@@ -81,7 +93,13 @@ const ProfilePage = () => {
   root.style.setProperty("--profileBackgroundMaxHeight", coverPhotoEnabled
     ? "var(--profileBackgroundMaxHeightFormula)" : "var(--profileBackgroundHeightWithoutCoverPhoto)");
 
-  return <DefaultProfilePage user={userInfo} refetchFunc={handleProfileRefetch} />;
+  return (
+    <DefaultProfilePage
+      user={userInfo}
+      hasCoverPhoto={coverPhotoEnabled}
+      refetchFunc={handleProfileRefetch}
+    />
+  );
 };
 
 export default ProfilePage;
