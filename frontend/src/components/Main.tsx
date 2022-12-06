@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import HomeIcon from "@mui/icons-material/Home";
 import AppBar from "./AppBar";
 import useGetFeedPhotos from "../hooks/useGetFeedPhotos";
 import EmptyProfilePic from "../assets/empty_profile.png";
+import PhonePic from "../assets/main_phone.png";
+import Logo from "../assets/logo.png";
 import { getUserData } from "../utils/userdata";
 import "../styles/Feed.css";
 import { Like, Photo } from "../types";
@@ -102,6 +106,70 @@ const EmptyFeed = ({ errorText, clearError, children }: DefaultMainProps) => (
   </DefaultMain>
 );
 
+const NotLoggedIn = () => {
+  const navigate = useNavigate();
+  const buttonStyle: React.CSSProperties = {
+    alignSelf: "center",
+    padding: "6px 10px",
+    backgroundImage: "linear-gradient(rgb(108, 149, 180), rgb(65, 115, 156)",
+    borderColor: "1px solid rgba(0, 0, 0, 0.5)",
+    boxShadow: "0px 0px 3px 0px rgba(0, 0, 0, 0.5)",
+    fontWeight: "600",
+  };
+  return (
+    <div className="main__noAccount">
+      <div className="main__noAccount__container">
+        <div className="main__noAccount__phoneContent">
+          <img src={PhonePic} alt="" />
+        </div>
+        <div className="main__noAccount__textContent">
+          <div className="main__noAccount__logoContainer">
+            <img src={Logo} alt="Instagram" className="main__noAccount__logo" />
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => navigate("/accounts/login")}
+              startIcon={<HomeIcon />}
+              style={buttonStyle}
+            >
+              Log in
+            </Button>
+          </div>
+          <div className="main__noAccount__textBox">
+            <h2>
+              Capture and Share
+              <br />
+              the World&apos;s Moments
+            </h2>
+            <p>
+              Instagram is a
+              {" "}
+              <b>fast</b>
+              {", "}
+              <b>beautiful</b>
+              {" "}
+              and
+              {" "}
+              <b>fun</b>
+              {" "}
+              way to share your
+              life with friends and family.
+            </p>
+            <p>
+              Take a picture or video, choose a filter to transform its look and feel,
+              then post to Instagram — it&apos;s that easy. You can even share to Facebook, Twitter,
+              Tumblr and more. It&apos;s a new way to see the world.
+            </p>
+            <p>
+              Oh yeah, did we mention it&apos;s free?
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Main = () => {
   const [errorText, setErrorText] = useState<string>("");
   const { feedPhotos, error, loading } = useGetFeedPhotos();
@@ -117,11 +185,7 @@ const Main = () => {
 
   const userData = getUserData();
   if (!userData) {
-    return (
-      <EmptyFeed errorText="" clearError={() => null}>
-        todo: not logged in
-      </EmptyFeed>
-    );
+    return <NotLoggedIn />;
   }
 
   if (!userData.following || !userData.following.length) {

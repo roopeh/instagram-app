@@ -3,6 +3,55 @@
   --feedPadding: 15px;
 }
 
+.main__noAccount {
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(
+    rgb(82, 127, 163) 45%,
+    rgb(244, 244, 244) 1%,
+    rgb(244, 244, 244) 54%
+  );
+}
+
+.main__noAccount__container {
+  display: flex;
+  justify-content: center;
+  padding-top: 10%;
+}
+
+.main__noAccount__textContent {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
+.main__noAccount__logoContainer {
+  /* width + textbox paddings */
+  width: calc(350px + 20px * 2);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.main__noAccount__logo {
+  width: 255px;
+}
+
+.main__noAccount__textBox {
+  width: 100%;
+  max-width: 350px;
+  background-color: rgb(244, 244, 244);
+  margin-top: 30px;
+  padding: 20px;
+  padding-top: 0px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
+}
+
+.main__noAccount__textBox h2 {
+  color: rgb(6, 54, 95);
+}
+
 .feed {
   display: flex;
   flex-direction: column;
