@@ -77,9 +77,10 @@
 
 .feed__userContainer {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
+  max-height: var(--mainContainerWidth);
 }
 
 .feed__photoContainer {
@@ -128,6 +129,18 @@
 .feed__userContent__textDate {
   font-size: smaller;
   color: rgb(168, 168, 168);
+}
+
+.feed__captionText {
+  flex: 1;
+  max-width: 250px;
+  align-self: flex-end;
+  padding-top: var(--feedPadding);
+  padding-right: var(--feedPadding);
+  overflow: hidden;
+  font-weight: 600;
+  font-size: smaller;
+  color: rgb(111, 111, 111);
 }
 
 .feed__defaultContent {

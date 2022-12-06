@@ -288,6 +288,9 @@ const Main = () => {
                   {printPhotoDate(photo.publishDate)}
                 </div>
               </div>
+              <div className="feed__captionText">
+                {photo.captionText}
+              </div>
             </div>
             <div className="feed__photoContainer">
               <div className="feed__photoContent">
