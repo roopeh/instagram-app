@@ -7,7 +7,7 @@
   width: 100vw;
   height: 100vh;
   background-image: linear-gradient(
-    rgb(82, 127, 163) 45%,
+    rgb(82, 127, 163) 350px,
     rgb(244, 244, 244) 1%,
     rgb(244, 244, 244) 54%
   );
@@ -16,7 +16,7 @@
 .main__noAccount__container {
   display: flex;
   justify-content: center;
-  padding-top: 10%;
+  padding-top: 150px;
 }
 
 .main__noAccount__textContent {
