@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useApolloClient } from "@apollo/client";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,6 +29,7 @@ const AppBar = () => {
   const [logout] = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
+  const client = useApolloClient();
 
   // Get user data from local storage
   const userData = getUserData();
@@ -57,6 +59,8 @@ const AppBar = () => {
 
   const handleLogout = async (): Promise<void> => {
     await logout();
+    client.clearStore();
+    // client.cache.gc();
     navigateOrReload("/");
   };
 
