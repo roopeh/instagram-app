@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { ApolloError, AuthenticationError, UserInputError } from "apollo-server";
-import { mongo, Error, FilterQuery } from "mongoose";
+import {
+  mongo, Error, FilterQuery, Types,
+} from "mongoose";
 import Photo from "../models/Photo";
 import User from "../models/User";
 import Like from "../models/Like";
@@ -8,11 +10,14 @@ import {
   BioTextInput, IPhoto, IUser, NameInput, PictureInput,
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
   PictureIdInput, CommentInput, FollowInput, UserQueryInput, DbUser,
+  MessageInput, ConversationInput, IConversation,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
 import { setTokens } from "../utils/tokens";
 import Comment from "../models/Comment";
+import Conversation from "../models/Conversation";
+import Message from "../models/Message";
 
 const handleCatchError = (error: unknown, args: any) => {
   if (error instanceof Error.ValidationError
@@ -35,6 +40,13 @@ const firstCharUpperRestLower = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
+const containsAll = (arr1: Array<string>, arr2: Array<string>): boolean => (
+  arr2.every((arr2Item) => arr1.includes(arr2Item))
+);
+const hasSameParticipiants = (arr1: Array<string>, arr2: Array<string>): boolean => (
+  containsAll(arr1, arr2) && containsAll(arr2, arr1)
+);
+
 const PopulateProfileAndCoverPhoto = ["profilePhoto", "coverPhoto"];
 const PopulatePhotos = { path: "photos", options: { sort: { publishDate: -1 } } };
 const PopulateFollowing = {
@@ -47,6 +59,10 @@ const PopulateFollowers = {
   populate: { path: "profilePhoto" },
   options: { sort: { username: 1 } },
 };
+const PopulateUserMessages = {
+  path: "messages",
+  populate: { path: "participiants", populate: { path: "profilePhoto" } },
+};
 const PopulateAuthor = { path: "author", populate: { path: "profilePhoto" } };
 const PopulateLikes = {
   path: "likes",
@@ -58,10 +74,18 @@ const PopulateComments = {
   populate: { path: "author", populate: { path: "profilePhoto" } },
   options: { sort: { date: 1 } },
 };
+const PopulateParticipiants = {
+  path: "participiants",
+  populate: { path: "profilePhoto" },
+};
+const PopulateConversationMessages = {
+  path: "messages",
+  populate: { path: "sender", populate: { path: "profilePhoto" } },
+  options: { sort: { date: 1 } },
+};
 
 const findUser = async (variables: any) => User
   .findOne(variables)
-  // todo: messages
   .populate(PopulateProfileAndCoverPhoto)
   .populate(PopulatePhotos)
   .populate(PopulateFollowing)
@@ -122,11 +146,11 @@ const resolvers = {
       return photos;
     },
     allUsers: async (_root: any, args: { input: UserQueryInput }): Promise<Array<IUser>> => {
-      const { username, firstName, lastName } = args.input;
-      if (!username && !firstName && !lastName) {
+      if (!args.input || (!args.input.username && !args.input.firstName && !args.input.lastName)) {
         return User.find({}).populate(PopulateProfileAndCoverPhoto);
       }
 
+      const { username, firstName, lastName } = args.input;
       if ((username && username.length < 3)
         || (firstName && firstName.length < 3)
         || (lastName && lastName.length < 3)) {
@@ -145,7 +169,26 @@ const resolvers = {
       }
 
       const user = await findUser({ _id: context.req.user.id });
+      if (user) {
+        await user.populate(PopulateUserMessages);
+      }
       return user;
+    },
+    getMessages:
+    async (_root: any, _args: any, context: any): Promise<Array<IConversation> | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const conversations = await Conversation.find({ _id: { $in: user.messages } })
+        .populate(PopulateParticipiants)
+        .populate(PopulateConversationMessages);
+      return conversations;
     },
   },
   Mutation: {
@@ -576,6 +619,174 @@ const resolvers = {
       await followUser.populate(PopulateFollowers);
       await followUser.populate(PopulateFollowing);
       return followUser;
+    },
+    createConversation:
+    async (_: any, args: { input: ConversationInput }, context: any)
+    : Promise<IConversation | null> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id)
+        .populate(PopulateUserMessages);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      if (!args.input.receivers.length) {
+        throw new UserInputError("Conversation cannot be empty");
+      }
+
+      if (args.input.receivers.length === 1) {
+        if (user._id.equals(args.input.receivers.at(0)!)) {
+          throw new UserInputError("You cannot create a conversation with yourself");
+        }
+      }
+
+      // Check if user already has a conversation with exactly same users
+      if (user.messages.length) {
+        const userConversations = await Conversation.find({ _id: { $in: user.messages } });
+        userConversations.forEach((conversation) => {
+          const stringArr: Array<string> = [];
+          conversation.participiants.forEach((itr) => {
+            if (!itr.equals(user._id)) {
+              stringArr.push(itr.toString());
+            }
+          });
+
+          if (hasSameParticipiants(stringArr, args.input.receivers)) {
+            throw new UserInputError("You already have a conversation with these users");
+          }
+        });
+      }
+
+      // Create participiants array and add authorized user into it
+      const participiants: Array<Types.ObjectId> = [];
+      participiants.push(user._id);
+
+      // Add each participiant to the list
+      const allUsers = await User.find({});
+      args.input.receivers.forEach((userId) => {
+        const chatUser = allUsers.find((usr) => usr._id.equals(userId));
+        if (chatUser) {
+          const hasUser = participiants.find((itr) => itr.equals(chatUser._id));
+          if (!hasUser) {
+            participiants.push(chatUser._id);
+          }
+        }
+      });
+
+      if (participiants.length === 1) {
+        if (user._id.equals(participiants.at(0)!)) {
+          throw new UserInputError("Conversation cannot be empty");
+        }
+      }
+
+      // If receiver has already created a conversation with this user
+      // but conversation has no messages yet, new conversation should not be created
+      const existingConversations = await Conversation
+        .find({ participiants: { $in: [user._id] } });
+      if (existingConversations) {
+        const conversation = existingConversations.find((itr) => (
+          hasSameParticipiants(
+            participiants.map((id) => id.toString()),
+            itr.participiants.map((id) => id.toString()),
+          )));
+        if (conversation) {
+          try {
+            user.messages = user.messages.concat(conversation.id);
+            await user.save();
+          } catch (err) {
+            handleCatchError(err, args);
+          }
+
+          await conversation.populate(PopulateParticipiants);
+          return conversation;
+        }
+      }
+
+      const newConversation = new Conversation({ participiants });
+      try {
+        await newConversation.save();
+        // Add conversation only to sender
+        // When first message is sent, then its added to receiver as well
+        user.messages = user.messages.concat(newConversation._id);
+        await user.save();
+      } catch (err) {
+        handleCatchError(err, args);
+      }
+
+      await newConversation.populate(PopulateParticipiants);
+      return newConversation;
+    },
+    sendMessage:
+    async (_root: any, args: { input: MessageInput }, context: any): Promise<IConversation> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      if (!args.input.message.length) {
+        throw new UserInputError("Message can not be empty");
+      }
+
+      const conversation = await Conversation.findById(args.input.conversation)
+        .populate(PopulateParticipiants);
+      if (!conversation) {
+        throw new UserInputError("Conversation does not exist");
+      }
+
+      // Check if user is part of this conversation
+      const isInConversation = conversation.participiants.find((itr) => itr._id.equals(user._id));
+      if (!isInConversation) {
+        throw new UserInputError("You are not part of this conversation");
+      }
+
+      const allParticipiants = conversation.participiants
+        .filter((usr) => !usr._id.equals(user._id));
+
+      const newMessage = new Message({
+        sender: user._id,
+        conversation: conversation._id,
+        date: Date.now(),
+        message: args.input.message,
+        usersUnread: allParticipiants,
+      });
+
+      // Make sure conversation exists in all user's messages
+      allParticipiants.forEach(async (userId) => {
+        const conversationUser = await User.findById(userId);
+        if (!conversationUser) {
+          throw new UserInputError("One of the participiants does not exist");
+        }
+
+        const hasConversation = conversationUser.messages.find(
+          (itr) => itr.equals(conversation._id),
+        );
+        if (!hasConversation) {
+          try {
+            conversationUser.messages = conversationUser.messages.concat(conversation._id);
+            await conversationUser.save();
+          } catch (err) {
+            handleCatchError(err, args);
+          }
+        }
+      });
+
+      try {
+        await newMessage.save();
+        conversation.messages = conversation.messages.concat(newMessage._id);
+        await conversation.save();
+      } catch (err) {
+        handleCatchError(err, args);
+      }
+
+      await conversation.populate(PopulateConversationMessages);
+      return conversation;
     },
   },
 };

@@ -1,6 +1,8 @@
 import { gql } from "@apollo/client";
 import {
   COMMENTS_FRAGMENT, FOLLOWER_FRAGMENT, FOLLOWING_FRAGMENT, LIKES_FRAGMENT,
+  MESSAGES_FRAGMENT,
+  PARTICIPIANTS_FRAGMENT,
   PHOTOS_FRAGMENT,
   USER_BASIC_INFO_FRAGMENT,
 } from "./fragments";
@@ -124,6 +126,30 @@ export const FOLLOW_USER = gql`
       id
       ...FollowerFragment
       ...FollowingFragment
+    }
+  }
+`;
+
+export const CREATE_CONVERSATION = gql`
+  ${PARTICIPIANTS_FRAGMENT}
+  ${MESSAGES_FRAGMENT}
+  mutation Mutation($input: ConversationInput) {
+    createConversation(input: $input) {
+      id
+      ...ParticipiantsFragment
+      ...MessagesFragment
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+  ${PARTICIPIANTS_FRAGMENT}
+  ${MESSAGES_FRAGMENT}
+  mutation Mutation($input: MessageInput) {
+    sendMessage(input: $input) {
+      id
+      ...ParticipiantsFragment
+      ...MessagesFragment
     }
   }
 `;

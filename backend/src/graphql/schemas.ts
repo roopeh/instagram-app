@@ -1,18 +1,18 @@
 import { gql } from "apollo-server";
 
 // TODO: paging
-// Message usersRead => usersUnread?
-// FollowInfo type with date?
 const typeDefs = gql`
   type Message {
     id: ID!
     sender: User!
+    conversation: Conversation!
     date: String!
     message: String!
-    usersRead: [User!]!
+    usersUnread: [User!]!
   }
 
   type Conversation {
+    id: ID!
     participiants: [User!]!
     messages: [Message!]!
   }
@@ -120,6 +120,15 @@ const typeDefs = gql`
     userId: String!,
   }
 
+  input ConversationInput {
+    receivers: [String!]!
+  }
+
+  input MessageInput {
+    conversation: String!,
+    message: String!,
+  }
+
   type Query {
     userCount: Int!
     getUser(input: UserInput): User
@@ -127,6 +136,7 @@ const typeDefs = gql`
     getFeedPhotos: [Photo!]
     allUsers(input: UserQueryInput): [User!]!
     me: User
+    getMessages: [Conversation!]!
   }
 
   type Mutation {
@@ -145,6 +155,9 @@ const typeDefs = gql`
     addComment(input: CommentInput): Photo
 
     followUser(input: FollowInput): User
+
+    createConversation(input: ConversationInput): Conversation
+    sendMessage(input: MessageInput): Conversation
   }
 `;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
-import { Form, Formik } from "formik";
+import { Formik, Form } from "formik";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";

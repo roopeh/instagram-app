@@ -95,3 +95,38 @@ export const COMMENTS_FRAGMENT = gql`
     commentsCount
   }
 `;
+
+export const PARTICIPIANTS_FRAGMENT = gql`
+  fragment ParticipiantsFragment on Conversation {
+    participiants {
+      id
+      username
+      firstName
+      lastName
+      profilePhoto {
+        id
+        imageString
+      }
+    }
+  }
+`;
+
+export const MESSAGES_FRAGMENT = gql`
+  fragment MessagesFragment on Conversation {
+    messages {
+      id
+      sender {
+        id
+        username
+        firstName
+        lastName
+        profilePhoto {
+          id
+          imageString
+        }
+      }
+      date
+      message
+    }
+  }
+`;

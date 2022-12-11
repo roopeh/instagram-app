@@ -1,6 +1,8 @@
 import { gql } from "@apollo/client";
 import {
   COMMENTS_FRAGMENT, FOLLOWER_FRAGMENT, FOLLOWING_FRAGMENT, LIKES_FRAGMENT,
+  MESSAGES_FRAGMENT,
+  PARTICIPIANTS_FRAGMENT,
   PHOTOS_FRAGMENT, USER_BASIC_INFO_FRAGMENT,
 } from "./fragments";
 
@@ -103,6 +105,18 @@ export const GET_FEED_PHOTOS = gql`
       captionText
       ...LikesFragment
       commentsCount
+    }
+  }
+`;
+
+export const GET_CONVERSATIONS = gql`
+  ${PARTICIPIANTS_FRAGMENT}
+  ${MESSAGES_FRAGMENT}
+  query GetMessages {
+    getMessages {
+      id
+      ...ParticipiantsFragment
+      ...MessagesFragment
     }
   }
 `;

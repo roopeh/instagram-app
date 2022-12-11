@@ -8,6 +8,7 @@ import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import "./styles/shared.css";
 import "./styles/App.css";
+import Messages from "./components/Messages";
 
 const App = () => {
   useEffect(() => {
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/accounts" element={<Accounts />} />
         <Route path="/accounts/register" element={<Register />} />
         <Route path="/accounts/login" element={<Login />} />
+        <Route path="/accounts/messages" element={<Messages />} />
         <Route path="/accounts/*" element={<NotFound />} />
         <Route path="/notfound" element={<NotFound />} />
         <Route path="/:userId/*" element={<ProfilePage />} />

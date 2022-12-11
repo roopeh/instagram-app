@@ -59,3 +59,16 @@ export type Photo = {
   comments: Array<Comment>,
   commentsCount: number,
 };
+
+export type Conversation = {
+  id: string,
+  participiants: Array<User>,
+  messages: Array<Message>,
+};
+
+export type Message = {
+  id: string,
+  sender: User,
+  date: number,
+  message: string,
+};

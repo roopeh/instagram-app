@@ -61,3 +61,20 @@ export const formatDateForPhoto = (unixDate: number, shortened: boolean): [strin
     : diffYears === 1 ? " year ago" : " years ago";
   return [`${diffYears}${years}`, detailedDate];
 };
+
+export const formatDateForMessage = (unixDate: number): string => {
+  const diffSeconds = Math.abs(Date.now() - unixDate) / 1000;
+  const date = new Date(Number(unixDate));
+  if (diffSeconds >= (24 * 60 * 60)) {
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric", month: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
+    };
+
+    const formattedDate = date.toLocaleDateString("en-GB", options);
+    return formattedDate;
+  }
+
+  const hours: string = String(date.getHours()).padStart(2, "0");
+  const minutes: string = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
+};

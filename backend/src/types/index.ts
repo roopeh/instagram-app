@@ -44,6 +44,19 @@ export interface DbUser extends IUser {
   isValidPassword: (password: string) => Promise<boolean>,
 }
 
+export interface IMessage {
+  sender: Types.ObjectId,
+  conversation: Types.ObjectId,
+  date: number,
+  message: string,
+  usersUnread: Array<Types.ObjectId>,
+}
+
+export interface IConversation {
+  participiants: Array<Types.ObjectId>,
+  messages: Array<Types.ObjectId>,
+}
+
 export type Cookies = {
   access: [
     type: string,
@@ -113,4 +126,17 @@ export type CommentInput = {
 
 export type FollowInput = {
   userId: string,
+};
+
+export type ConversationInput = {
+  receivers: Array<string>;
+};
+
+export type ConversationQueryInput = {
+  conversationId: string,
+};
+
+export type MessageInput = {
+  conversation: string,
+  message: string,
 };

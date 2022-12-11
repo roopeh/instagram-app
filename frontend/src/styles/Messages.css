@@ -1,0 +1,220 @@
+:root {
+  --messagesHeight: calc(100vh - var(--appBarHeight));
+}
+
+.messages__background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: var(--messagesHeight);
+  max-height: var(--messagesHeight);
+}
+
+.messages__container {
+  width: var(--contentWidthOfScreen);
+  min-width: var(--minContentWidth);
+  max-width: var(--maxContentWidth);
+  height: calc(var(--messagesHeight) - 10%);
+  max-height: calc(var(--messagesHeight) - 10%);
+  margin: 0 auto 0;
+  background-color: rgb(234, 234, 234);
+  border: 2px solid var(--borderColorDark);
+  border-top: 0;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.messages__content {
+  display: flex;
+  flex-direction: row;
+  /* 100% - margins */
+  width: calc(100% - 20px * 2);
+  height: calc(100% - 20px * 2);
+  margin: 20px;
+}
+
+.messages__conversations {
+  flex: 0 0 35%;
+  border-right: 1px solid rgb(204, 204, 204);
+  overflow-x: hidden;
+}
+
+.messages__conversations__flex {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.messages__conversations__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 0 0 50px;
+  font-size: x-large;
+  font-weight: 600;
+}
+
+.messages__conversations__content {
+  flex: 1;
+}
+
+.messages__conversations__content table {
+  width: 100%;
+}
+
+.messages__conversations__content tr:hover {
+  background-color: var(--borderColorLight);
+  cursor: pointer;
+}
+
+.messages__conversation__item {
+  display: flex;
+  flex-direction: row;
+}
+
+.messages__conversation__avatar {
+  --avatarWidth: 45px;
+  flex: 0 0 var(--avatarWidth);
+  width: var(--avatarWidth);
+  height: var(--avatarWidth);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border: 1px solid var(--borderColorDark);
+  border-radius: 50%;
+}
+
+.messages__conversation__name {
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: larger;
+  color: rgb(71, 71, 71);
+}
+
+.messages__conversation__selected {
+  background-color: var(--borderColorDark);
+}
+
+.messages__newConversation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  height: 200px;
+  padding-top: 5px;
+}
+
+.messages__newConversation__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.messages__newConversation__avatar {
+  --avatarWidth: 30px;
+  flex: 0 0 var(--avatarWidth);
+  width: var(--avatarWidth);
+  height: var(--avatarWidth);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border: 1px solid var(--borderColorDark);
+  border-radius: 50%;
+}
+
+.messages__newConversation__buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-around
+}
+
+.messages__messageContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.messages__messageContainer__header {
+  flex: 0 0 50px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  padding: 10px;
+  padding-bottom: 5px;
+}
+
+.messages__messageContainer__content {
+  flex: 1;
+  margin: 10px;
+  overflow-y: scroll;
+}
+
+.messages__messageContainer__content table {
+  width: 100%;
+}
+
+.messages__messageContainer__content td {
+  width: 50%;
+}
+
+.messages__messageContent {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.messages__messageContent__avatar {
+  --avatarWidth: 25px;
+  width: var(--avatarWidth);
+  height: var(--avatarWidth);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: var(--borderColorLight);
+  border: 1px solid var(--borderColorDark);
+  border-radius: 50%;
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+.messages__messageContent__header {
+  text-align: right;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  font-size: small;
+  color: rgb(94, 94, 94);
+}
+
+.messages__messageContent__box {
+  background-color: white;
+  padding: 8px;
+  border-radius: 20px;
+}
+
+.messages__messageContent__date {
+  margin: 0 10px;
+  font-size: small;
+  color: rgb(150, 150, 150);
+}
+
+.messages__messageContainer__bottom {
+  flex: 0 0 30px;
+  width: 100%;
+  padding: 5px;
+}
+
+.messages__bottomFlex {
+  display: flex;
+}
+
+.messages__bottomFlex__input {
+  flex: 1;
+  border: 1px solid var(--borderColorDark);
+  border-radius: 5px;
+}
+
+.messages__bottomFlex__button {
+  display: flex;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+}
