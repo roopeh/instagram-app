@@ -41,7 +41,7 @@ const startServer = async (): Promise<void> => {
   app.use(cookieParser());
   app.use(tokenValidationMiddleware);
 
-  const apolloServer: ApolloServer = createApolloServer();
+  const apolloServer: ApolloServer = createApolloServer(httpServer);
   await apolloServer.start();
 
   // Execution order depends on node environment

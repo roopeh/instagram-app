@@ -1,5 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { ApolloError, AuthenticationError, UserInputError } from "apollo-server";
+import { PubSub } from "graphql-subscriptions";
+import { withFilter } from "graphql-subscriptions/dist/with-filter";
 import {
   mongo, Error, FilterQuery, Types,
 } from "mongoose";
@@ -10,7 +12,8 @@ import {
   BioTextInput, IPhoto, IUser, NameInput, PictureInput,
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
   PictureIdInput, CommentInput, FollowInput, UserQueryInput, DbUser,
-  MessageInput, ConversationInput, IConversation,
+  MessageInput, ConversationInput, IConversation, TypingInput,
+  MessageSubscription, TypingSubscription, MessageSubscriptionInput, TypingSubscriptionInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -96,6 +99,8 @@ const findPhoto = async (variables: any): Promise<IPhoto | null> => Photo
   .populate(PopulateAuthor)
   .populate(PopulateLikes)
   .populate(PopulateComments);
+
+const pubsub = new PubSub();
 
 const resolvers = {
   Photo: {
@@ -785,8 +790,50 @@ const resolvers = {
         handleCatchError(err, args);
       }
 
+      pubsub.publish("NEW_MESSAGE", { newMessage });
+
       await conversation.populate(PopulateConversationMessages);
       return conversation;
+    },
+    userTyping:
+    async (_root: any, args: { input: TypingInput }, context: any): Promise<boolean> => {
+      if (!context.req.user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const user = await User.findById(context.req.user.id);
+      if (!user) {
+        throw new AuthenticationError("You must be logged in");
+      }
+
+      const conversation = await Conversation.findById(args.input.conversationId);
+      if (!conversation) {
+        throw new UserInputError("Conversation does not exist");
+      }
+
+      pubsub.publish("USER_TYPING", {
+        conversationId: conversation._id.toString(),
+        userTyping: user._id,
+      });
+      return true;
+    },
+  },
+  Subscription: {
+    newMessage: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator("NEW_MESSAGE"),
+        (payload: MessageSubscription, variables: MessageSubscriptionInput) => (
+          payload.newMessage.conversation.toString() === variables.conversationId
+        ),
+      ),
+    },
+    userTyping: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator("USER_TYPING"),
+        (payload: TypingSubscription, variables: TypingSubscriptionInput) => (
+          payload.conversationId === variables.conversationId
+        ),
+      ),
     },
   },
 };

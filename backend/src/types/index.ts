@@ -140,3 +140,16 @@ export type MessageInput = {
   conversation: string,
   message: string,
 };
+
+export type TypingInput = {
+  conversationId: string,
+};
+
+export type MessageSubscription = { newMessage: IMessage };
+export type MessageSubscriptionInput = { conversationId: string };
+
+export type TypingSubscription = {
+  conversationId: string,
+  userTyping: Types.ObjectId,
+};
+export type TypingSubscriptionInput = { conversationId: string };

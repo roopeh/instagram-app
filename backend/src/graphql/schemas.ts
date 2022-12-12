@@ -129,6 +129,10 @@ const typeDefs = gql`
     message: String!,
   }
 
+  input TypingInput {
+    conversationId: String!,
+  }
+
   type Query {
     userCount: Int!
     getUser(input: UserInput): User
@@ -158,6 +162,12 @@ const typeDefs = gql`
 
     createConversation(input: ConversationInput): Conversation
     sendMessage(input: MessageInput): Conversation
+    userTyping(input: TypingInput): Boolean!
+  }
+
+  type Subscription {
+    newMessage(conversationId: String!): Message
+    userTyping(conversationId: String!): String
   }
 `;
 
