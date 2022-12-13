@@ -63,9 +63,10 @@ export const formatDateForPhoto = (unixDate: number, shortened: boolean): [strin
 };
 
 export const formatDateForMessage = (unixDate: number): string => {
-  const diffSeconds = Math.abs(Date.now() - unixDate) / 1000;
   const date = new Date(Number(unixDate));
-  if (diffSeconds >= (24 * 60 * 60)) {
+  const dateNow = new Date();
+  const dayDiff = dateNow.getDate() - date.getDate();
+  if (dayDiff >= 2) {
     const options: Intl.DateTimeFormatOptions = {
       day: "numeric", month: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
     };
@@ -74,7 +75,9 @@ export const formatDateForMessage = (unixDate: number): string => {
     return formattedDate;
   }
 
+  const beforeStr = dayDiff === 1 ? "yesterday at " : "";
+
   const hours: string = String(date.getHours()).padStart(2, "0");
   const minutes: string = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
+  return `${beforeStr}${hours}:${minutes}`;
 };

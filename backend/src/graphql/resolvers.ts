@@ -13,7 +13,8 @@ import {
   UserInput, UserLoginInput, UserRegisterInput, PictureQueryInput,
   PictureIdInput, CommentInput, FollowInput, UserQueryInput, DbUser,
   MessageInput, ConversationInput, IConversation, TypingInput,
-  MessageSubscription, TypingSubscription, MessageSubscriptionInput, TypingSubscriptionInput,
+  MessageSubscription, TypingSubscription, TypingSubscriptionInput,
+  MessageSubscriptionInput,
 } from "../types";
 import setTokenCookies from "../utils/cookies";
 import { logError } from "../utils/logger";
@@ -79,6 +80,10 @@ const PopulateComments = {
 };
 const PopulateParticipiants = {
   path: "participiants",
+  populate: { path: "profilePhoto" },
+};
+const PopulateSender = {
+  path: "sender",
   populate: { path: "profilePhoto" },
 };
 const PopulateConversationMessages = {
@@ -739,8 +744,7 @@ const resolvers = {
         throw new UserInputError("Message can not be empty");
       }
 
-      const conversation = await Conversation.findById(args.input.conversation)
-        .populate(PopulateParticipiants);
+      const conversation = await Conversation.findById(args.input.conversation);
       if (!conversation) {
         throw new UserInputError("Conversation does not exist");
       }
@@ -790,9 +794,17 @@ const resolvers = {
         handleCatchError(err, args);
       }
 
-      pubsub.publish("NEW_MESSAGE", { newMessage });
-
+      await newMessage.populate(PopulateSender);
+      await conversation.populate(PopulateParticipiants);
       await conversation.populate(PopulateConversationMessages);
+
+      pubsub.publish("NEW_MESSAGE", {
+        newMessage: {
+          conversation,
+          message: newMessage,
+        },
+      });
+
       return conversation;
     },
     userTyping:
@@ -823,7 +835,8 @@ const resolvers = {
       subscribe: withFilter(
         () => pubsub.asyncIterator("NEW_MESSAGE"),
         (payload: MessageSubscription, variables: MessageSubscriptionInput) => (
-          payload.newMessage.conversation.toString() === variables.conversationId
+          !!payload.newMessage.conversation.participiants.find((itr) => (
+            itr._id.toString() === variables.userId))
         ),
       ),
     },

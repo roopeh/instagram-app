@@ -4,7 +4,7 @@ import { Conversation } from "../types";
 
 const useGetConversations = () => {
   const {
-    data, error, loading, refetch,
+    data, error, loading, refetch, subscribeToMore,
   } = useQuery(GET_CONVERSATIONS, {
     fetchPolicy: "cache-and-network",
   });
@@ -12,8 +12,9 @@ const useGetConversations = () => {
   const conversations: Array<Conversation> | null = data && data.getMessages
     ? data.getMessages
     : null;
+
   return {
-    conversations, error, loading, refetch,
+    conversations, error, loading, refetch, subscribeToMore,
   };
 };
 

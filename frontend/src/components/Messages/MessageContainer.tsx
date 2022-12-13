@@ -61,7 +61,7 @@ const ConversationBody = ({ conversation, selectConversation, handleError }: Bod
       <div className="messages__messageContainer__content">
         <table>
           <tbody>
-            {conversation.messages.map((msg) => {
+            {conversation.messages.map((msg, i) => {
               const isMyMsg: boolean = msg.sender.id === userData.id;
               const wasSenderMe = isSenderMe;
               isSenderMe = isMyMsg;
@@ -77,7 +77,7 @@ const ConversationBody = ({ conversation, selectConversation, handleError }: Bod
                           <MessageItem
                             message={msg}
                             isSenderMe={isMyMsg}
-                            isSameSenderThanPrevious={isSenderMe === wasSenderMe}
+                            isSameSenderThanPrevious={isSenderMe === wasSenderMe && i > 0}
                           />
                         </td>
                       </>
@@ -87,7 +87,7 @@ const ConversationBody = ({ conversation, selectConversation, handleError }: Bod
                           <MessageItem
                             message={msg}
                             isSenderMe={isMyMsg}
-                            isSameSenderThanPrevious={isSenderMe === wasSenderMe}
+                            isSameSenderThanPrevious={isSenderMe === wasSenderMe && i > 0}
                           />
                         </td>
                         <td />

@@ -64,6 +64,11 @@ const typeDefs = gql`
     messages: [Conversation!]!
   }
 
+  type NewMessageSubscribe {
+    conversation: Conversation
+    message: Message
+  }
+
   input UserRegisterInput {
     username: String!
     password: String!
@@ -103,21 +108,21 @@ const typeDefs = gql`
   }
 
   input PictureQueryInput {
-    username: String!,
-    photoId: String!,
+    username: String!
+    photoId: String!
   }
 
   input PictureIdInput {
-    photoId: String!,
+    photoId: String!
   }
 
   input CommentInput {
-    photoId: String!,
-    message: String!,
+    photoId: String!
+    message: String!
   }
 
   input FollowInput {
-    userId: String!,
+    userId: String!
   }
 
   input ConversationInput {
@@ -125,12 +130,12 @@ const typeDefs = gql`
   }
 
   input MessageInput {
-    conversation: String!,
-    message: String!,
+    conversation: String!
+    message: String!
   }
 
   input TypingInput {
-    conversationId: String!,
+    conversationId: String!
   }
 
   type Query {
@@ -166,7 +171,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    newMessage(conversationId: String!): Message
+    newMessage(userId: String!): NewMessageSubscribe
     userTyping(conversationId: String!): String
   }
 `;

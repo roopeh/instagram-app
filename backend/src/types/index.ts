@@ -145,8 +145,13 @@ export type TypingInput = {
   conversationId: string,
 };
 
-export type MessageSubscription = { newMessage: IMessage };
-export type MessageSubscriptionInput = { conversationId: string };
+export type MessageSubscription = {
+  newMessage: {
+    conversation: IConversation,
+    message: IMessage,
+  }
+};
+export type MessageSubscriptionInput = { userId: string };
 
 export type TypingSubscription = {
   conversationId: string,
