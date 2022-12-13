@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
 import { Form, Formik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
@@ -73,7 +74,7 @@ const PhotoForm = ({ title, isCoverPhoto }: PhotoFormProps) => {
       setImageFile(null);
       setUploading(false);
     } catch (err) {
-      setErrorText(String(err));
+      setErrorText(err instanceof ApolloError ? err.message : String(err));
       setUploading(false);
     }
   };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ApolloError } from "@apollo/client";
 import * as yup from "yup";
 import { Formik, Form } from "formik";
 import Modal from "@mui/material/Modal";
@@ -100,7 +101,7 @@ const PostModal = ({ open, onClose }: PostProps) => {
         closeModal();
       }
     } catch (err) {
-      setErrorText(String(err));
+      setErrorText(err instanceof ApolloError ? err.message : String(err));
       setUploading(false);
     }
   };

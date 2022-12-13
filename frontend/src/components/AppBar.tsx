@@ -69,7 +69,6 @@ const AppBar = () => {
     switch (page) {
       case "logout":
         handleLogout();
-        navigateOrReload("/");
         break;
       case "profile":
         navigateOrReload(`/${value}`);

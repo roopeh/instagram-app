@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
 import * as yup from "yup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
@@ -45,7 +46,7 @@ const LoginModal = ({
       }
     } catch (err) {
       setLoggingIn(false);
-      setError(String(err));
+      setError(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

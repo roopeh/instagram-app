@@ -64,9 +64,14 @@ const typeDefs = gql`
     messages: [Conversation!]!
   }
 
-  type NewMessageSubscribe {
+  type NewMessageSubscription {
     conversation: Conversation
     message: Message
+  }
+
+  type UserTypingSubscription {
+    conversationId: String
+    user: User
   }
 
   input UserRegisterInput {
@@ -171,8 +176,8 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    newMessage(userId: String!): NewMessageSubscribe
-    userTyping(conversationId: String!): String
+    newMessage(userId: String!): NewMessageSubscription
+    userTyping(conversationId: String!): UserTypingSubscription
   }
 `;
 

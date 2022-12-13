@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
@@ -38,7 +39,7 @@ const RegisterModal = ({
       navigate("/accounts/login");
     } catch (err) {
       setRegistering(false);
-      setError(String(err));
+      setError(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

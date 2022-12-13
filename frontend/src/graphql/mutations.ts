@@ -153,3 +153,9 @@ export const SEND_MESSAGE = gql`
     }
   }
 `;
+
+export const USER_TYPING = gql`
+  mutation Mutation($input: TypingInput) {
+    userTyping(input: $input)
+  }
+`;

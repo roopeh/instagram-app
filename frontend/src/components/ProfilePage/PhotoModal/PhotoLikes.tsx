@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ApolloError } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -47,7 +48,7 @@ const PhotoLikes = ({
     try {
       await toggleLike({ photoId: photo.id });
     } catch (err) {
-      setError(String(err));
+      setError(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

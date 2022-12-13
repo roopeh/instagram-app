@@ -154,7 +154,9 @@ export type MessageSubscription = {
 export type MessageSubscriptionInput = { userId: string };
 
 export type TypingSubscription = {
-  conversationId: string,
-  userTyping: Types.ObjectId,
+  userTyping: {
+    conversationId: string,
+    user: IUser,
+  }
 };
 export type TypingSubscriptionInput = { conversationId: string };

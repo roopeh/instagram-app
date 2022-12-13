@@ -144,6 +144,8 @@
 }
 
 .messages__messageContainer__content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin: 10px;
   overflow-y: scroll;
@@ -196,9 +198,18 @@
   color: rgb(150, 150, 150);
 }
 
+.messages__messageContent__typing {
+  height: 15px;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  color: rgb(150, 150, 150);
+  font-size: small;
+  font-weight: 600;
+}
+
 .messages__messageContainer__bottom {
   flex: 0 0 30px;
-  width: 100%;
+  width: 98%;
   padding: 5px;
 }
 

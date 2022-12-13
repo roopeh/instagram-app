@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ApolloQueryResult } from "@apollo/client";
+import { ApolloError, ApolloQueryResult } from "@apollo/client";
 import { Form, Formik } from "formik";
 import AsyncSelect from "react-select/async";
 import Button from "@mui/material/Button";
@@ -50,7 +50,7 @@ const NewConversationModal = ({ refetchFunc, closeFunc }: NewConversationProps) 
   let searchResults: Array<UserOption> = [];
 
   if (error) {
-    setErrorText(String(error));
+    setErrorText(error instanceof ApolloError ? error.message : String(error));
   }
   if (!allUsers && loading) {
     return (
@@ -73,7 +73,7 @@ const NewConversationModal = ({ refetchFunc, closeFunc }: NewConversationProps) 
       refetchFunc();
       closeFunc();
     } catch (err) {
-      setErrorText(String(err));
+      setErrorText(err instanceof ApolloError ? err.message : String(err));
       setCreating(false);
     }
   };

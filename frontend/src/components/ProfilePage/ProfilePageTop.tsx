@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ApolloError } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import FollowModal from "./FollowModal";
 import FollowButton from "./FollowButton";
@@ -73,7 +74,7 @@ const ProfilePageTop = ({ user, refetchFunc }: ProfileTopProps) => {
       }
       await getMe();
     } catch (err) {
-      setErrorText(String(err));
+      setErrorText(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

@@ -1,7 +1,6 @@
 import { gql } from "@apollo/client";
 import { MESSAGES_FRAGMENT, PARTICIPIANTS_FRAGMENT } from "./fragments";
 
-// eslint-disable-next-line import/prefer-default-export
 export const MESSAGE_RECEIVED = gql`
   ${PARTICIPIANTS_FRAGMENT}
   ${MESSAGES_FRAGMENT}
@@ -26,6 +25,20 @@ export const MESSAGE_RECEIVED = gql`
         }
         date
         message
+      }
+    }
+  }
+`;
+
+export const USER_TYPING_RECEIVED = gql`
+  subscription UserTyping($conversationId: String!) {
+    userTyping(conversationId: $conversationId) {
+      conversationId
+      user {
+        id
+        username
+        firstName
+        lastName
       }
     }
   }

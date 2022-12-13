@@ -824,9 +824,12 @@ const resolvers = {
       }
 
       pubsub.publish("USER_TYPING", {
-        conversationId: conversation._id.toString(),
-        userTyping: user._id,
+        userTyping: {
+          conversationId: conversation._id.toString(),
+          user,
+        },
       });
+
       return true;
     },
   },
@@ -844,7 +847,7 @@ const resolvers = {
       subscribe: withFilter(
         () => pubsub.asyncIterator("USER_TYPING"),
         (payload: TypingSubscription, variables: TypingSubscriptionInput) => (
-          payload.conversationId === variables.conversationId
+          payload.userTyping.conversationId === variables.conversationId
         ),
       ),
     },

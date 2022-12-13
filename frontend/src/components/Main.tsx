@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ApolloError } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
@@ -244,7 +245,7 @@ const Main = () => {
     try {
       await toggleLike({ photoId: photo.id });
     } catch (err) {
-      setErrorText(String(err));
+      setErrorText(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

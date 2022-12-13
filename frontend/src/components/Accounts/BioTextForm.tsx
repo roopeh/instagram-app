@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
 import { Form, Formik } from "formik";
 import LoadingButton from "../LoadingButton";
 import FormikTextInput from "../FormikTextInput";
@@ -33,7 +34,7 @@ const BioTextForm = () => {
       setUpdating(false);
     } catch (err) {
       setUpdating(false);
-      setErrorText(String(err));
+      setErrorText(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

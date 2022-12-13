@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ApolloError } from "@apollo/client";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Dialog from "@mui/material/Dialog";
@@ -103,7 +104,7 @@ const PhotoModal = ({ username }: PhotoModalProps) => {
       closeModal();
       await deletePost({ photoId: photo.id });
     } catch (err) {
-      handleError(String(err));
+      handleError(err instanceof ApolloError ? err.message : String(err));
     }
   };
 

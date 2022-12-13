@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
 import { Field, Form, Formik } from "formik";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
@@ -30,7 +31,7 @@ const PhotoComments = ({ photo, setError }: CommentProps) => {
       await addComment({ photoId: photo.id, message: comment });
       setUploading(false);
     } catch (err) {
-      setError(String(err));
+      setError(err instanceof ApolloError ? err.message : String(err));
       setUploading(false);
     }
     resetForm();
