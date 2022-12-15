@@ -18,6 +18,7 @@ const createApolloServer = (httpServer: any): ApolloServer => {
   return new ApolloServer({
     schema,
     context: ({ req, res }) => ({ req, res }),
+    cache: "bounded",
     plugins: [
       process.env.NODE_ENV === "development"
         ? ApolloServerPluginLandingPageLocalDefault()

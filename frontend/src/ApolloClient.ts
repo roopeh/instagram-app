@@ -5,6 +5,8 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
 
+const publicWebsocketUrl: string = "wss://instagram-app-2022.fly.dev/graphql";
+
 const httpLink = new HttpLink({
   uri: process.env.NODE_ENV === "production"
     ? "/graphql"
@@ -17,7 +19,7 @@ const httpLink = new HttpLink({
 const websocketLink = new GraphQLWsLink(
   createClient({
     url: process.env.NODE_ENV === "production"
-      ? "/graphql"
+      ? publicWebsocketUrl
       : "ws://localhost:8080/graphql",
   }),
 );

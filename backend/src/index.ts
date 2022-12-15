@@ -9,7 +9,7 @@ import connectToMongo from "./mongo";
 import createApolloServer from "./apolloServer";
 import tokenValidationMiddleware from "./utils/middleware/tokenValidationMiddleware";
 import { logError, logInfo } from "./utils/logger";
-import { APOLLO_PORT } from "./utils/config";
+import { APOLLO_PORT, PUBLIC_URL } from "./utils/config";
 
 const startServer = async (): Promise<void> => {
   // Wait for db connection before continuing
@@ -34,7 +34,7 @@ const startServer = async (): Promise<void> => {
         "http://localhost:3000",
         "https://studio.apollographql.com",
       ] : [
-        "https://instagram-app-2022.fly.dev/",
+        PUBLIC_URL,
       ],
     credentials: true,
   }));
