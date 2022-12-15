@@ -13,6 +13,10 @@ You can check out i.e. Bill Gates' profile [here](https://instagram-app-2022.fly
 
 **Real-time private messages demo**
 
+https://user-images.githubusercontent.com/44685964/207916113-30b367e4-f04e-4b52-9b7c-1764628da015.mp4
+
+###### If video doesn't load open up messages_demo.mp4 in the Git root folder
+
 
 ### How to install your own copy
 **Database**<br/>
